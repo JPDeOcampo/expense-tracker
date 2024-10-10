@@ -37,10 +37,7 @@ export const POST = async (request: Request) => {
       expiresIn: "1h",
     });
 
-    const response = NextResponse.json({ token }, { status: 200 });
-    response.cookies.set("authToken", token, { httpOnly: true, path: "/" }); // Optional: set a cookie
-
-    return NextResponse.redirect("/pages/dashboard");
+    return NextResponse.json({ token }, { status: 200 });
 
   } catch (error) {
     console.log(error);
