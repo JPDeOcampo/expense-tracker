@@ -43,8 +43,3 @@ export const POST = async (request: Request) => {
     console.log(error);
   }
 };
-
-// Optionally handle GET requests if needed
-// export const GET = async (request: Request) => {
-//   return NextResponse.json({ message: 'GET method not supported for login' }, { status: 405 });
-// };
