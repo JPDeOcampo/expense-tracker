@@ -28,6 +28,7 @@ any
       }`}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
+      required
     />
   </div>
 );
