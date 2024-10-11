@@ -3,6 +3,8 @@ import { useState, useContext } from "react";
 import { ShareContext } from "../shared/context/share-state";
 import GroupField from "../shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
 const Register = () => {
   const [isFirstNameFocus, setIsFirstNameFocus] = useState(false);
   const [isLastNameFocus, setIsLastNameFocus] = useState(false);
@@ -43,13 +45,17 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <button className="text-base" onClick={() => setIsCreateAccount(false)}>
-        <span>{"<"}back</span>
-      </button>
-      <h2>Register</h2>
+    <div className="flex flex-col gap-6 p-6 lg:p-8">
+      <div className="w-full">
+        <button className="flex gap-2 items-center text-quaternary hover:text-primary" onClick={() => setIsCreateAccount(false)}>
+          <span className="text-xl"><IoMdArrowRoundBack /></span>
+          <span className="text-base font-medium">Back</span>
+        </button>
+      </div>
 
-      <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
+      <h2 className="text-2xl font-bold text-primary">Register</h2>
+
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
         <GroupField
           label="First Name"
           type="text"
@@ -92,7 +98,15 @@ const Register = () => {
           isFocused={isReEnterFocus}
           setIsFocused={setIsReEnterFocus}
         />
-        <button type="submit">Register</button>
+
+        <div className="w-full mt-3">
+          <button
+            type="submit"
+            className="text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4"
+          >
+            Register
+          </button>
+        </div>
       </form>
     </div>
   );

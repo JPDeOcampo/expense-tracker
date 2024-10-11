@@ -18,13 +18,13 @@ const GroupField = ({
 any
 ) => (
   <div className="group-input">
-    <label>{label}</label>
+    <label className="text-base text-quaternary">{label}</label>
     <input
       type={type}
       name={name}
       value={value}
-      className={`${
-        isFocused ? "border border-black" : "border border-secondary"
+      className={`text-base text-quaternary ${
+        isFocused ? "border border-quaternary" : "border border-secondary"
       }`}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}

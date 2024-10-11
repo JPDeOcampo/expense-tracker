@@ -17,7 +17,7 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <ShareState>
           <NextUIProvider className="brand">
-            <main className="h-lvh min-h-screen">{children}</main>
+            <main className="h-auto lg:h-lvh min-h-screen bg-secondary-50">{children}</main>
           </NextUIProvider>
         </ShareState>
       </body>

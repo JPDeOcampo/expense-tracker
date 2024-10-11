@@ -45,9 +45,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2>Login</h2>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+    <div className="flex flex-col gap-6 p-4">
+      <h2 className="text-2xl font-bold text-primary">Login</h2>
+      <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <GroupField
           label="Email"
           type="email"
@@ -62,9 +62,16 @@ const Login = () => {
           isFocused={isPasswordFocus}
           setIsFocused={setIsPasswordFocus}
         />
-        <button type="submit">Login</button>
+        <div className="w-full mt-3">
+          <button
+            type="submit"
+            className="text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4"
+          >
+            Login
+          </button>
+        </div>
       </form>
-      <button className="text-base" onClick={() => setIsCreateAccount(true)}>
+      <button className="text-base font-medium text-quaternary hover:text-primary mt-4" onClick={() => setIsCreateAccount(true)}>
         Create Account
       </button>
     </div>
