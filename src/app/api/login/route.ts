@@ -37,8 +37,7 @@ export const POST = async (request: Request) => {
       expiresIn: "1h",
     });
 
-    return NextResponse.json({ token }, { status: 200 });
-
+    return NextResponse.json({ token, id: user._id }, { status: 200 });
   } catch (error) {
     console.log(error);
   }
