@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Users from "../../../../models/users";
+import * as cookie from "cookie";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your-secure-default-secret";
 
@@ -37,7 +38,23 @@ export const POST = async (request: Request) => {
       expiresIn: "1h",
     });
 
-    return NextResponse.json({ token, id: user._id }, { status: 200 });
+    const response = NextResponse.json(
+      { token, id: user._id },
+      { status: 200 }
+    );
+    
+    response.headers.set(
+      "Set-Cookie",
+      cookie.serialize("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 3600, // 1 hour
+        sameSite: "strict",
+        path: "/",
+      })
+    );
+
+    return response;
   } catch (error) {
     console.log(error);
   }

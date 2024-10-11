@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import * as jose from "jose";
+import * as cookie from 'cookie';
 
 export const GET = async (req: Request) => {
-  const token = req.headers.get("Authorization")?.split(" ")[1];
+  // const token = req.headers.get("Authorization")?.split(" ")[1];
   const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET);
-
+  const cookies = req.headers.get("cookie");
+  const { token } = cookie.parse(cookies || "");
   if (!token) {
     return NextResponse.json({ message: "No token provided" }, { status: 401 });
   }
