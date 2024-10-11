@@ -1,7 +1,7 @@
 "use client";
 import { useState, useContext } from "react";
-import { ShareContext } from "../shared/context/share-state";
-import GroupField from "../shared/components/group-field";
+import { ShareContext } from "@/components/shared/context/share-state";
+import GroupField from "@/components/shared/components/group-field";
 import { loginService } from "@/service/api/loginService";
 import { useRouter } from "next/navigation";
 import { dashboardService } from "@/service/api/dashboardService";

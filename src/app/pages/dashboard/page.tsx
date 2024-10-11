@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import useAuth from "@/components/layout/shared/hooks/auth";
+import useAuth from "@/components/shared/hooks/auth";
 import MenuDrawer from "@/components/layout/menu-drawer";
 import DashboardContent from "@/components/layout/dashboard-content";
 
