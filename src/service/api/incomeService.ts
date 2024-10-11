@@ -1,3 +1,4 @@
+import { ENDPOINTS } from "../../../apiConfig";
 export const incomeService = async ({
   token,
   userId,
@@ -9,7 +10,7 @@ export const incomeService = async ({
   note,
 }: any) => {
   try {
-    const response = await fetch("/api/dashboard", {
+    const response = await fetch(ENDPOINTS.income, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

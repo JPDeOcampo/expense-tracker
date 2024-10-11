@@ -1,8 +1,8 @@
-import connectMongoDB from "../../../../libs/mongodb";
+import connectMongoDB from "../../../../../libs/mongodb";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Users from "../../../../models/users";
+import Users from "../../../../../models/users";
 import * as cookie from "cookie";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your-secure-default-secret";
@@ -42,7 +42,7 @@ export const POST = async (request: Request) => {
       { token, id: user._id },
       { status: 200 }
     );
-    
+
     response.headers.set(
       "Set-Cookie",
       cookie.serialize("token", token, {

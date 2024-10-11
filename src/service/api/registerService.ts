@@ -1,9 +1,5 @@
-interface LoginParams {
-  firstName: string;
-  lastName: string;
-  email: string; // Add more fields as needed
-  password: string;
-}
+import { ENDPOINTS } from "../../../apiConfig";
+
 export const registerService = async ({
   firstName,
   lastName,
@@ -12,7 +8,7 @@ export const registerService = async ({
   password,
 }: any) => {
   try {
-    const response = await fetch("/api/register", {
+    const response = await fetch(ENDPOINTS.register, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

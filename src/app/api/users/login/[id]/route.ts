@@ -1,5 +1,5 @@
-import connectMongoDB from "../../../../../libs/mongodb";
-import Users from "../../../../../models/users";
+import connectMongoDB from "../../../../../../libs/mongodb";
+import Users from "../../../../../../models/users";
 import { NextResponse } from "next/server";
 
 export const GET = async (
@@ -9,7 +9,6 @@ export const GET = async (
   try {
     const { id } = params;
 
-    // Connect to MongoDB
     await connectMongoDB();
 
     // Find the login entry by ID
