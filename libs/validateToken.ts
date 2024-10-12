@@ -17,7 +17,7 @@ export const validateToken = async (request: Request) => {
   try {
     const { payload } = await jose.jwtVerify(token, SECRET_KEY);
     const userId = payload.id;
-    
+   
     if (!userId) {
       return { error: { message: "Invalid token", status: 401 } };
     }

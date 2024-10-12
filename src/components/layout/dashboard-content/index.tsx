@@ -1,5 +1,6 @@
 import Header from "../header";
 import BalanceSpent from "@/components/shared/components/charts/balance-spent";
+import GenericModal from "@/components/shared/components/generic-modal";
 
 const Card = ({ title, children }: any) => {
   return (
@@ -79,6 +80,7 @@ const DashboardContent = () => {
           </Card>
         </div>
       </div>
+      <GenericModal/>
     </div>
   );
 };
