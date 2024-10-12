@@ -9,6 +9,40 @@ const Card = ({ title, children }: any) => {
     </div>
   );
 };
+
+const BalanceDetails = () => {
+  const balanceItems = [
+    { title: "Net balance", icon: "" },
+    { title: "Total balance", icon: "" },
+    { title: "Loan", icon: "" },
+    { title: "Investment", icon: "" },
+  ];
+  return (
+    <div className="flex flex-col gap-4">
+      <ul>
+        {balanceItems.map((item, index) => {
+          return (
+            <li key={index} className="my-2">
+              <span className="text-base text-quaternary font-medium">
+                {item.title}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="w-full grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
+          <p className="text-base font-medium text-quaternary">Spent</p>
+          <p className="text-base font-medium text-primary">140,00</p>
+        </div>
+        <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
+          <p className="text-base font-medium text-quaternary">Balance</p>
+          <p className="text-base font-medium text-primary">140,00</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 const DashboardContent = () => {
   return (
     <div className="flex flex-col w-full h-full py-6 px-14 gap-4">
@@ -21,7 +55,7 @@ const DashboardContent = () => {
       <div className="flex flex-col gap-6">
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[30%_1fr] gap-6">
           <Card title="Overview">
-            <div></div>
+            <BalanceDetails />
           </Card>
           <Card title="Balance vs spent">
             <BalanceSpent />
