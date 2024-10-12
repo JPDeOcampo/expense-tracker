@@ -10,17 +10,18 @@ const Card = ({ title, children }: any) => {
   );
 };
 
-const BalanceDetails = () => {
-  const balanceItems = [
-    { title: "Net balance", icon: "" },
-    { title: "Total balance", icon: "" },
+const Overview = () => {
+
+  const overviewItems = [
+    { title: "Total Overall balance", icon: "" },
     { title: "Loan", icon: "" },
     { title: "Investment", icon: "" },
   ];
+
   return (
     <div className="flex flex-col gap-4">
       <ul>
-        {balanceItems.map((item, index) => {
+        {overviewItems.map((item, index) => {
           return (
             <li key={index} className="my-2">
               <span className="text-base text-quaternary font-medium">
@@ -32,11 +33,11 @@ const BalanceDetails = () => {
       </ul>
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
-          <p className="text-base font-medium text-quaternary">Spent</p>
+          <p className="text-base font-medium text-quaternary">Total Spent</p>
           <p className="text-base font-medium text-primary">140,00</p>
         </div>
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
-          <p className="text-base font-medium text-quaternary">Balance</p>
+          <p className="text-base font-medium text-quaternary">Current Balance</p>
           <p className="text-base font-medium text-primary">140,00</p>
         </div>
       </div>
@@ -55,7 +56,7 @@ const DashboardContent = () => {
       <div className="flex flex-col gap-6">
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[30%_1fr] gap-6">
           <Card title="Overview">
-            <BalanceDetails />
+            <Overview />
           </Card>
           <Card title="Balance vs spent">
             <BalanceSpent />
