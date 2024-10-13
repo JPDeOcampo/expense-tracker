@@ -5,36 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  font-family: "Inter", "Open-Sans", sans-serif;
-  scroll-behavior: smooth;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #ededed;
-  border-radius: 12px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #989595;
-  border-radius: 12px;
-}
-
-/*GROUP INPUT*/
-.group-input{
-  @apply flex flex-col gap-2;
-}
-.group-input > label{
-  @apply text-base;
-}
-.group-input > input{
-  @apply text-base focus:outline-none py-2 px-3 rounded-md;
-}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -98,4 +68,43 @@ body {
     @apply bg-background text-foreground;
   }
 }
+html,
+body {
+  font-family: "Inter", "Open-Sans", sans-serif;
+  scroll-behavior: smooth;
+}
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ededed;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #989595;
+  border-radius: 12px;
+}
+
+/*GROUP INPUT*/
+.group-input {
+  @apply flex flex-col gap-2;
+}
+.group-input > label {
+  @apply text-base;
+}
+.group-input > input {
+  @apply text-base focus:outline-none py-2 px-3 rounded-md;
+}
+
+/* CARD */
+
+.card {
+  @apply bg-neutral-light p-4 rounded-lg shadow-md flex flex-col gap-6;
+}
+
+.card-header {
+  @apply text-2xl font-semibold text-tertiary-900;
+}

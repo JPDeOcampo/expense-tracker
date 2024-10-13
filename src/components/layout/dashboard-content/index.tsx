@@ -1,26 +1,24 @@
+"use client";
+import { useState } from "react";
 import Header from "../header";
 import BalanceSpent from "@/components/shared/components/charts/balance-spent";
 import GenericModal from "@/components/shared/components/generic-modal";
 
-const Card = ({ title, children }: any) => {
-  return (
-    <div className="bg-neutral-light p-4 rounded-lg shadow-md flex flex-col gap-6">
-      <h2 className="text-2xl font-semibold text-tertiary-900">{title}</h2>
-      {children}
-    </div>
-  );
-};
-
 const Overview = () => {
-
   const overviewItems = [
     { title: "Total Overall balance", icon: "" },
     { title: "Loan", icon: "" },
     { title: "Investment", icon: "" },
   ];
-
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   return (
-    <div className="flex flex-col gap-4">
+    <div className="card flex flex-col gap-4">
+      <div className="w-full flex justify-between">
+        <h2 className="card-header">Overview</h2>
+        <button className="" onClick={() => setIsModalOpen(true)}>
+          Aadd
+        </button>
+      </div>
       <ul>
         {overviewItems.map((item, index) => {
           return (
@@ -38,10 +36,13 @@ const Overview = () => {
           <p className="text-base font-medium text-primary">140,00</p>
         </div>
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
-          <p className="text-base font-medium text-quaternary">Current Balance</p>
+          <p className="text-base font-medium text-quaternary">
+            Current Balance
+          </p>
           <p className="text-base font-medium text-primary">140,00</p>
         </div>
       </div>
+      <GenericModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </div>
   );
 };
@@ -56,31 +57,22 @@ const DashboardContent = () => {
       </div>
       <div className="flex flex-col gap-6">
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[30%_1fr] gap-6">
-          <Card title="Overview">
-            <Overview />
-          </Card>
-          <Card title="Balance vs spent">
-            <BalanceSpent />
-          </Card>
+          <Overview />
+          <BalanceSpent />
         </div>
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card title="Overview">
+          <div className="card">
             <div></div>
-          </Card>
-          <Card title="Balance vs spent">
-            <BalanceSpent />
-          </Card>
+          </div>
+          <BalanceSpent />
         </div>
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card title="Overview">
+          <div className="card">
             <div></div>
-          </Card>
-          <Card title="Balance vs spent">
-            <BalanceSpent />
-          </Card>
+          </div>
+          <BalanceSpent />
         </div>
       </div>
-      <GenericModal/>
     </div>
   );
 };
