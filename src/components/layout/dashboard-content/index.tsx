@@ -16,7 +16,7 @@ const Overview = () => {
       <div className="w-full flex justify-between">
         <h2 className="card-header">Overview</h2>
         <button className="" onClick={() => setIsModalOpen(true)}>
-          Aadd
+          Add
         </button>
       </div>
       <ul>
