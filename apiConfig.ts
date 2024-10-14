@@ -6,6 +6,7 @@ export const ENDPOINTS = {
     login: `${API_USER_URL}/login`,
     logout: `${API_USER_URL}/logout`,
 
-    income: `${API_INCOME_URL}/add-income`,
+    add_income: `${API_INCOME_URL}/add-income`,
+    fetch_income: `${API_INCOME_URL}/fetch-income`,
     dashboard: `api/dashboard`,
 }

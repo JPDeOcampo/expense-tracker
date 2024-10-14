@@ -1,8 +1,8 @@
 import connectMongoDB from "../../../../../libs/mongodb";
 import Income from "../../../../../models/income";
 import { NextResponse } from "next/server";
-
 import { validateToken } from "../../../../../libs/validateToken";
+
 export const GET = async (request: Request) => {
   try {
     const validationResponse = await validateToken(request);

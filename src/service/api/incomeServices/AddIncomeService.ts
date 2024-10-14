@@ -10,7 +10,7 @@ export const AddIncomeService = async ({
   note,
 }: any) => {
   try {
-    const response = await fetch(ENDPOINTS.income, {
+    const response = await fetch(ENDPOINTS.add_income, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

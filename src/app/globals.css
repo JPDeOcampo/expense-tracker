@@ -116,6 +116,25 @@ body {
   @apply text-base focus:outline-none py-2 px-3 !bg-transparent;
 }
 
-.custom-btn{
+.custom-btn {
   @apply text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4;
+}
+
+.custom-container {
+  @apply pl-72 py-6 pr-14 h-auto w-full;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  @apply bg-tertiary;
+}
+
+.fc-h-event {
+  @apply bg-tertiary-100 border-0;
+}
+.fc .fc-button-primary {
+  @apply bg-tertiary border-0;
+}
+
+.fc .fc-button-primary:disabled {
+  @apply bg-tertiary-100 text-primary;
 }
