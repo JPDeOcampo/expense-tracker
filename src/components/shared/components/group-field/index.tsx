@@ -14,6 +14,8 @@ const GroupField = ({
   name,
   isFocused,
   setIsFocused,
+  hasIconFirst,
+  hasIconEnd
 }: 
 any
 ) => (
@@ -23,7 +25,7 @@ any
       type={type}
       name={name}
       value={value}
-      className={`text-base text-quaternary ${
+      className={`text-base text-quaternary ${hasIconFirst ? "pl-6 pr-3" : hasIconEnd ? "pl-3 pr-10" : "px-3"}  ${
         isFocused ? "border border-quaternary" : "border border-secondary"
       }`}
       onFocus={() => setIsFocused(true)}

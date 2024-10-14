@@ -1,6 +1,26 @@
+"use client";
+import { useState } from "react";
 import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
+import GroupField from "../group-field";
 
 const GenericTabs = () => {
+  const [isDateFocus, setIsDateFocus] =useState(false)
+  const Form = () => {
+    return(
+        <div>
+          <form>
+          <GroupField
+          label="date"
+          type="date"
+          name="date"
+          isFocused={isDateFocus}
+          setIsFocused={setIsDateFocus}
+        />
+          </form>
+        </div>
+    );
+  }
+
   let tabs = [
     {
       id: "photos",
@@ -18,7 +38,7 @@ const GenericTabs = () => {
       id: "videos",
       label: "Videos",
       content:
-        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+       <Form />
     },
   ];
 

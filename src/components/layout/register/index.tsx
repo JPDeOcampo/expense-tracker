@@ -4,6 +4,8 @@ import { ShareContext } from "@/components/shared/context/share-state";
 import GroupField from "@/components/shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { EyeFilledIcon } from "../../../../public/images";
+import { EyeSlashFilledIcon } from "../../../../public/images";
 
 const Register = () => {
   const [isFirstNameFocus, setIsFirstNameFocus] = useState(false);
@@ -14,6 +16,10 @@ const Register = () => {
   const [isReEnterFocus, setIsReEnterFocus] = useState(false);
 
   const { setIsCreateAccount } = useContext<any>(ShareContext);
+  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
+  const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
+    useState<boolean>(false);
+ 
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -47,15 +53,23 @@ const Register = () => {
   return (
     <div className="flex flex-col gap-6 p-6 lg:p-8">
       <div className="w-full">
-        <button className="flex gap-2 items-center text-quaternary hover:text-primary" onClick={() => setIsCreateAccount(false)}>
-          <span className="text-xl"><IoMdArrowRoundBack /></span>
+        <button
+          className="flex gap-2 items-center text-quaternary hover:text-primary"
+          onClick={() => setIsCreateAccount(false)}
+        >
+          <span className="text-xl">
+            <IoMdArrowRoundBack />
+          </span>
           <span className="text-base font-medium">Back</span>
         </button>
       </div>
 
       <h2 className="text-2xl font-bold text-primary">Register</h2>
 
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
+      <form
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        onSubmit={handleSubmit}
+      >
         <GroupField
           label="First Name"
           type="text"
@@ -84,21 +98,51 @@ const Register = () => {
           isFocused={isEmailFocus}
           setIsFocused={setIsEmailFocus}
         />
-        <GroupField
-          label="Password"
-          type="password"
-          name="password"
-          isFocused={isPasswordFocus}
-          setIsFocused={setIsPasswordFocus}
-        />
-        <GroupField
-          label="Re-enter password"
-          type="password"
-          name="re-enter-password"
-          isFocused={isReEnterFocus}
-          setIsFocused={setIsReEnterFocus}
-        />
-
+        <div className="relative">
+          <GroupField
+            label="Password"
+            type={isVisiblePassword ? "text" : "password"}
+            name="password"
+            isFocused={isPasswordFocus}
+            setIsFocused={setIsPasswordFocus}
+            hasIconEnd={true}
+          />
+          <button
+            className="absolute top-10 right-3 focus:outline-none"
+            type="button"
+            onClick={() => setIsVisiblePassword(!isVisiblePassword)}
+            aria-label="toggle password visibility"
+          >
+            {isVisiblePassword ? (
+              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
+        </div>
+        <div className="relative">
+          <GroupField
+            label="Re-enter password"
+            type={isVisibleReEnterPassword ? "text" : "password"}
+            name="re-enter-password"
+            isFocused={isReEnterFocus}
+            setIsFocused={setIsReEnterFocus}
+          />
+          <button
+            className="absolute top-10 right-3 focus:outline-none"
+            type="button"
+            onClick={() =>
+              setIsVisibleReEnterPassword(!isVisibleReEnterPassword)
+            }
+            aria-label="toggle password visibility"
+          >
+            {isVisibleReEnterPassword ? (
+              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
+        </div>
         <div className="w-full mt-3">
           <button
             type="submit"

@@ -5,12 +5,18 @@ import GroupField from "@/components/shared/components/group-field";
 import { loginService } from "@/service/api/loginService";
 import { useRouter } from "next/navigation";
 import { dashboardService } from "@/service/api/dashboardService";
+import { EyeFilledIcon } from "../../../../public/images";
+import { EyeSlashFilledIcon } from "../../../../public/images";
 
 const Login = () => {
   const [isEmailFocus, setIsEmailFocus] = useState<boolean>(false);
   const [isPasswordFocus, setIsPasswordFocus] = useState<boolean>(false);
   const { setIsCreateAccount } = useContext<any>(ShareContext);
   const router = useRouter();
+
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   const getDashboard = async (token: any) => {
     try {
@@ -44,6 +50,7 @@ const Login = () => {
     }
   };
 
+
   return (
     <div className="flex flex-col gap-6 p-4">
       <h2 className="text-2xl font-bold text-primary">Login</h2>
@@ -55,13 +62,24 @@ const Login = () => {
           isFocused={isEmailFocus}
           setIsFocused={setIsEmailFocus}
         />
-        <GroupField
-          label="Password"
-          type="password"
-          name="password"
-          isFocused={isPasswordFocus}
-          setIsFocused={setIsPasswordFocus}
-        />
+        <div className="relative">
+          <GroupField
+            label="Password"
+            type={isVisible ? "text" : "password"}
+            name="password"
+            isFocused={isPasswordFocus}
+            setIsFocused={setIsPasswordFocus}
+            hasIconEnd={true}
+          />
+          <button className="absolute top-10 right-3 focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+          {isVisible ? (
+            <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+          ) : (
+            <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+          )}
+        </button>
+        </div>
+
         <div className="w-full mt-3">
           <button
             type="submit"
@@ -71,7 +89,10 @@ const Login = () => {
           </button>
         </div>
       </form>
-      <button className="text-base font-medium text-quaternary hover:text-primary mt-4" onClick={() => setIsCreateAccount(true)}>
+      <button
+        className="text-base font-medium text-quaternary hover:text-primary mt-4"
+        onClick={() => setIsCreateAccount(true)}
+      >
         Create Account
       </button>
     </div>
