@@ -3,15 +3,14 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button,
 } from "@nextui-org/react";
+
 import GenericTabs from "../generic-tabs";
 const GenericModal = ({ isModalOpen, setIsModalOpen }: any) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
+ 
   return (
     <div className="flex flex-col gap-2">
       <Modal
@@ -24,20 +23,8 @@ const GenericModal = ({ isModalOpen, setIsModalOpen }: any) => {
             <>
               <ModalHeader className="flex flex-col gap-1">Add</ModalHeader>
               <ModalBody>
-                <GenericTabs />
+                <GenericTabs handleCloseModal={handleCloseModal} />
               </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onClick={handleCloseModal}
-                >
-                  Close
-                </Button>
-                <Button color="primary" onClick={handleCloseModal}>
-                  Save
-                </Button>
-              </ModalFooter>
             </>
           )}
         </ModalContent>

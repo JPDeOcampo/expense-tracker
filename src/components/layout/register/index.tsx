@@ -8,14 +8,8 @@ import { EyeFilledIcon } from "../../../../public/images";
 import { EyeSlashFilledIcon } from "../../../../public/images";
 
 const Register = () => {
-  const [isFirstNameFocus, setIsFirstNameFocus] = useState(false);
-  const [isLastNameFocus, setIsLastNameFocus] = useState(false);
-  const [isUsernameFocus, setIsUsernameFocus] = useState(false);
-  const [isEmailFocus, setIsEmailFocus] = useState(false);
-  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
-  const [isReEnterFocus, setIsReEnterFocus] = useState(false);
 
-  const { setIsCreateAccount } = useContext<any>(ShareContext);
+  const { setIsCreateAccount, focusState, handleFocus, handleBlur } = useContext<any>(ShareContext);
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
     useState<boolean>(false);
@@ -74,37 +68,47 @@ const Register = () => {
           label="First Name"
           type="text"
           name="firstName"
-          isFocused={isFirstNameFocus}
-          setIsFocused={setIsFirstNameFocus}
+          isRequired={true}
+          isFocused={focusState.firstName}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
         />
         <GroupField
           label="Last Name"
           type="text"
           name="lastName"
-          isFocused={isLastNameFocus}
-          setIsFocused={setIsLastNameFocus}
+          isRequired={true}
+          isFocused={focusState.lastName}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
         />
         <GroupField
           label="Username"
           type="text"
           name="username"
-          isFocused={isUsernameFocus}
-          setIsFocused={setIsUsernameFocus}
+          isRequired={true}
+          isFocused={focusState.username}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
         />
         <GroupField
           label="Email"
           type="email"
           name="email"
-          isFocused={isEmailFocus}
-          setIsFocused={setIsEmailFocus}
+          isRequired={true}
+          isFocused={focusState.email}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
         />
         <div className="relative">
           <GroupField
             label="Password"
             type={isVisiblePassword ? "text" : "password"}
             name="password"
-            isFocused={isPasswordFocus}
-            setIsFocused={setIsPasswordFocus}
+            isRequired={true}
+            isFocused={focusState.password}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
             hasIconEnd={true}
           />
           <button
@@ -124,9 +128,11 @@ const Register = () => {
           <GroupField
             label="Re-enter password"
             type={isVisibleReEnterPassword ? "text" : "password"}
-            name="re-enter-password"
-            isFocused={isReEnterFocus}
-            setIsFocused={setIsReEnterFocus}
+            name="reEnterPassword"
+            isRequired={true}
+            isFocused={focusState.reEnterPassword}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
           />
           <button
             className="absolute top-10 right-3 focus:outline-none"
@@ -146,7 +152,7 @@ const Register = () => {
         <div className="w-full mt-3">
           <button
             type="submit"
-            className="text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4"
+            className="custom-btn"
           >
             Register
           </button>

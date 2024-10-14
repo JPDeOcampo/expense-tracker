@@ -1,5 +1,5 @@
-import { ENDPOINTS } from "../../../apiConfig";
-export const incomeService = async ({
+import { ENDPOINTS } from "../../../../apiConfig";
+export const AddIncomeService = async ({
   token,
   userId,
   date,
@@ -14,7 +14,6 @@ export const incomeService = async ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         userId: userId,

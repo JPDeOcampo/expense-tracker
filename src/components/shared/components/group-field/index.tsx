@@ -13,9 +13,11 @@ const GroupField = ({
   value,
   name,
   isFocused,
-  setIsFocused,
+  handleFocus,
+  handleBlur,
   hasIconFirst,
-  hasIconEnd
+  hasIconEnd,
+  isRequired
 }: 
 any
 ) => (
@@ -28,9 +30,9 @@ any
       className={`text-base text-quaternary ${hasIconFirst ? "pl-6 pr-3" : hasIconEnd ? "pl-3 pr-10" : "px-3"}  ${
         isFocused ? "border border-quaternary" : "border border-secondary"
       }`}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      required
+      onFocus={() => handleFocus(name)}
+      onBlur={() => handleBlur(name)}
+      required={isRequired}
     />
   </div>
 );

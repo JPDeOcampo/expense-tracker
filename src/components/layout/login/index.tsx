@@ -9,9 +9,7 @@ import { EyeFilledIcon } from "../../../../public/images";
 import { EyeSlashFilledIcon } from "../../../../public/images";
 
 const Login = () => {
-  const [isEmailFocus, setIsEmailFocus] = useState<boolean>(false);
-  const [isPasswordFocus, setIsPasswordFocus] = useState<boolean>(false);
-  const { setIsCreateAccount } = useContext<any>(ShareContext);
+  const { setIsCreateAccount,  focusState, handleFocus, handleBlur } = useContext<any>(ShareContext);
   const router = useRouter();
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -59,16 +57,20 @@ const Login = () => {
           label="Email"
           type="email"
           name="email"
-          isFocused={isEmailFocus}
-          setIsFocused={setIsEmailFocus}
+          isRequired={true}
+          isFocused={focusState.email}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
         />
         <div className="relative">
           <GroupField
             label="Password"
             type={isVisible ? "text" : "password"}
             name="password"
-            isFocused={isPasswordFocus}
-            setIsFocused={setIsPasswordFocus}
+            isRequired={true}
+            isFocused={focusState.password}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
             hasIconEnd={true}
           />
           <button className="absolute top-10 right-3 focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
@@ -83,7 +85,7 @@ const Login = () => {
         <div className="w-full mt-3">
           <button
             type="submit"
-            className="text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4"
+            className="custom-btn"
           >
             Login
           </button>
