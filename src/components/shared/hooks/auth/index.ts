@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const useAuth = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isValidating, setIsValidating] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -12,14 +12,14 @@ const useAuth = () => {
       if (!response.ok) {
         router.push("/");
       } else {
-        setLoading(false);
+        setIsValidating(false);
       }
     };
 
     checkAuth();
   }, [router]);
 
-  return loading;
+  return isValidating;
 };
 
 export default useAuth;

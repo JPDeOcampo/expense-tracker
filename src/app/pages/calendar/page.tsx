@@ -1,7 +1,7 @@
 "use client";
 import DashboardContent from "@/components/layout/dashboard-content";
 
-const Dashboard = () => {
+const Calendar = () => {
   return (
     <div className="pl-72 py-6 pr-14 h-full w-full">
       <DashboardContent />
@@ -9,4 +9,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Calendar;

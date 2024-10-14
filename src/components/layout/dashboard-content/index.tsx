@@ -48,13 +48,8 @@ const Overview = () => {
 };
 const DashboardContent = () => {
   return (
-    <div className="flex flex-col w-full h-full py-6 px-14 gap-4">
-      <div className="flex flex-col gap-6">
-        <div className="w-full flex justify-end">
-          <Header />
-        </div>
-        <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
-      </div>
+    <div className="flex flex-col w-full h-full gap-4">
+      <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
       <div className="flex flex-col gap-6">
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[30%_1fr] gap-6">
           <Overview />

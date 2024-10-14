@@ -9,6 +9,7 @@ export const ShareContext = createContext<ShareContextType | undefined>(
 
 const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [isCreateAccount, setIsCreateAccount] = useState<boolean>(false);
+  const [isDashboardState, setIsDashboardState] = useState<string>("dashboard");
 
   const [focusState, setFocusState] = useState({
     firstName: false,
@@ -23,7 +24,6 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     frequency: false,
     paymentMethod: false,
     note: false,
-   
   });
 
   const handleFocus = (field: string) => {
@@ -42,6 +42,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setFocusState,
       handleFocus,
       handleBlur,
+      isDashboardState,
+      setIsDashboardState,
     }),
     [
       isCreateAccount,
@@ -50,6 +52,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setFocusState,
       handleFocus,
       handleBlur,
+      isDashboardState,
+      setIsDashboardState,
     ]
   );
   return (

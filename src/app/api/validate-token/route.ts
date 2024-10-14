@@ -4,7 +4,7 @@ import { validateToken } from "../../../../libs/validateToken";
 export const GET = async (req: Request) => {
   try {
     const validationResponse = await validateToken(req);
-    console.log(validationResponse);
+   
     if (validationResponse.error) {
       return NextResponse.json(validationResponse.error, { status: validationResponse.error.status });
     }
