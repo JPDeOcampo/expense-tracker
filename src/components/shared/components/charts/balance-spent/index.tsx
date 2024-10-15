@@ -1,4 +1,5 @@
 "use client";
+import { useContext } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -8,21 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const chartData = [
-  { month: "January", balance: 186, spent: 80 },
-  { month: "February", balance: 305, spent: 200 },
-  { month: "March", balance: 237, spent: 120 },
-  { month: "April", balance: 73, spent: 190 },
-  { month: "May", balance: 209, spent: 130 },
-  { month: "June", balance: 214, spent: 140 },
-  { month: "July", balance: 214, spent: 140 },
-  { month: "August", balance: 214, spent: 140 },
-  { month: "September", balance: 214, spent: 140 },
-  { month: "October", balance: 214, spent: 140 },
-  { month: "November", balance: 214, spent: 140 },
-  { month: "December", balance: 214, spent: 140 },
-];
+import { ShareContext } from "@/components/shared/context/share-state";
 
 const chartConfig = {
   balance: {
@@ -36,9 +23,40 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const BalanceSpent = () => {
+  const { combinedData } = useContext<any>(ShareContext);
+  
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+ 
+  const chartData = months.map(month => {
+    let totalIncome = 0;
+    let totalExpenses = 0;
+  
+    const monthIndex = months.indexOf(month);
+  
+    const monthlyEntries = combinedData.filter((entry:any) => new Date(entry.date).getMonth() === monthIndex);
+  
+    monthlyEntries.forEach((entry:any) => {
+        if (entry.type === 'income') {
+            totalIncome += entry.amount;
+        } else if (entry.type === 'expense') {
+            totalExpenses += entry.amount;
+        }
+    });
+  
+    return {
+        month: month,
+        balance: totalIncome - totalExpenses,
+        spent: totalExpenses
+    };
+  });
+  
+  console.log(combinedData);
   return (
     <div className="card">
-       <h2 className="card-header">Balance vs Spent</h2>
+      <h2 className="card-header">Balance vs Spent</h2>
       <ChartContainer config={chartConfig} className="h-[200px] w-full">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />

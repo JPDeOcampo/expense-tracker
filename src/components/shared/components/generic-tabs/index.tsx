@@ -22,7 +22,8 @@ interface FormProps {
 }
 
 const Form = ({ onTabs, handleCloseModal }: FormProps) => {
-  const { focusState, handleFocus, handleBlur } = useContext<any>(ShareContext);
+  const { focusState, handleFocus, handleBlur, setIncomeData, setExpenseData } =
+    useContext<any>(ShareContext);
 
   const categories = {
     income: [
@@ -84,13 +85,23 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     }
 
     try {
-      const response =
-        onTabs === "income"
-          ? await AddIncomeService(formData)
-          : onTabs === "expense"
-          ? await AddExpenseService(formData)
-          : null;
-      console.log(response);
+      if (onTabs === "income") {
+        const response = await AddIncomeService(formData);
+        if (response?.ok) {
+          setIncomeData((prev: any) => ([
+            ...prev,
+            {...formData},
+          ]));
+        }
+      } else if (onTabs === "expense") {
+        const response = await AddExpenseService(formData);
+        if (response?.ok) {
+          setExpenseData((prev: any) => ([
+            ...prev,
+            {...formData},
+          ]));
+        }
+      }
     } catch (error) {
       console.error(error);
     }

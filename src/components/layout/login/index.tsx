@@ -4,28 +4,19 @@ import { ShareContext } from "@/components/shared/context/share-state";
 import GroupField from "@/components/shared/components/group-field";
 import { loginService } from "@/service/api/loginService";
 import { useRouter } from "next/navigation";
-import { dashboardService } from "@/service/api/dashboardService";
 import { EyeFilledIcon } from "../../../../public/images";
 import { EyeSlashFilledIcon } from "../../../../public/images";
+import { GlobalContext } from "@/components/shared/context/global-provider";
 
 const Login = () => {
-  const { setIsCreateAccount,  focusState, handleFocus, handleBlur } = useContext<any>(ShareContext);
+  const { setIsCreateAccount, focusState, handleFocus, handleBlur } =
+    useContext<any>(ShareContext);
+  const { fetchIncome, fetchExpense } = useContext<any>(GlobalContext);
   const router = useRouter();
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const getDashboard = async (token: any) => {
-    try {
-      const response = await dashboardService(token);
-      if (response?.ok) {
-        router.push("/pages/dashboard");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -37,17 +28,15 @@ const Login = () => {
 
     try {
       const response = await loginService(formData);
-      const responseData = await response?.json();
-
       if (response?.ok) {
-        getDashboard(responseData?.token);
-        console.log(response);
+        router.push("/pages/dashboard");
+        fetchIncome();
+        fetchExpense();
       }
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <div className="flex flex-col gap-6 p-4">
@@ -73,20 +62,22 @@ const Login = () => {
             handleBlur={handleBlur}
             hasIconEnd={true}
           />
-          <button className="absolute top-10 right-3 focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-          {isVisible ? (
-            <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-          ) : (
-            <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-          )}
-        </button>
+          <button
+            className="absolute top-10 right-3 focus:outline-none"
+            type="button"
+            onClick={toggleVisibility}
+            aria-label="toggle password visibility"
+          >
+            {isVisible ? (
+              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
         </div>
 
         <div className="w-full mt-3">
-          <button
-            type="submit"
-            className="custom-btn"
-          >
+          <button type="submit" className="custom-btn">
             Login
           </button>
         </div>

@@ -9,7 +9,13 @@ export const ShareContext = createContext<ShareContextType | undefined>(
 
 const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [isCreateAccount, setIsCreateAccount] = useState<boolean>(false);
-  const [isDashboardState, setIsDashboardState] = useState<string>("dashboard");
+  const [incomeData, setIncomeData] = useState([]);
+  const [expenseData, setExpenseData] = useState([]);
+
+  const [overAllIncomeData, setOverAllIncomeData] = useState();
+  const [currentBalance, setCurrentBalance] = useState();
+  const [overAllExpenseData, setOverAllExpenseData] = useState();
+  console.log(incomeData, expenseData);
 
   const [focusState, setFocusState] = useState({
     firstName: false,
@@ -26,6 +32,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     note: false,
   });
 
+  // Textfield Focus
   const handleFocus = (field: string) => {
     setFocusState((prev) => ({ ...prev, [field]: true }));
   };
@@ -33,6 +40,16 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const handleBlur = (field: string) => {
     setFocusState((prev) => ({ ...prev, [field]: false }));
   };
+
+  // Combine income and expense data
+  const combinedData = [
+    ...(Array.isArray(incomeData)
+      ? incomeData.map((event: any) => ({ ...event, type: "income" }))
+      : []),
+    ...(Array.isArray(expenseData)
+      ? expenseData.map((event: any) => ({ ...event, type: "expense" }))
+      : []),
+  ];
 
   const contextValue = useMemo(
     () => ({
@@ -42,8 +59,17 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setFocusState,
       handleFocus,
       handleBlur,
-      isDashboardState,
-      setIsDashboardState,
+      incomeData,
+      setIncomeData,
+      expenseData,
+      setExpenseData,
+      combinedData,
+      overAllIncomeData,
+      setOverAllIncomeData,
+      currentBalance,
+      setCurrentBalance,
+      overAllExpenseData,
+      setOverAllExpenseData,
     }),
     [
       isCreateAccount,
@@ -52,8 +78,13 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setFocusState,
       handleFocus,
       handleBlur,
-      isDashboardState,
-      setIsDashboardState,
+      incomeData,
+      setIncomeData,
+      expenseData,
+      setExpenseData,
+      combinedData,
+      overAllExpenseData,
+      setOverAllExpenseData,
     ]
   );
   return (

@@ -124,6 +124,7 @@ body {
   @apply pl-72 py-6 pr-14 h-auto w-full;
 }
 
+/* CALENDAR */
 .fc .fc-daygrid-day.fc-day-today {
   @apply bg-tertiary;
 }
@@ -137,4 +138,13 @@ body {
 
 .fc .fc-button-primary:disabled {
   @apply bg-tertiary-100 text-primary;
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event:hover {
+  @apply bg-transparent;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+  @apply overflow-y-auto mr-1 h-[140px] relative;
 }

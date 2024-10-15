@@ -1,14 +1,15 @@
 "use client";
-import { useState } from "react";
-import Header from "../header";
+import { useState, useContext } from "react";
+import { ShareContext } from "@/components/shared/context/share-state";
 import BalanceSpent from "@/components/shared/components/charts/balance-spent";
 import GenericModal from "@/components/shared/components/generic-modal";
 
 const Overview = () => {
+  const { overAllIncomeData, currentBalance, overAllExpenseData } = useContext<any>(ShareContext);
   const overviewItems = [
-    { title: "Total Overall balance", icon: "" },
-    { title: "Loan", icon: "" },
-    { title: "Investment", icon: "" },
+    { title: "Total Overall balance", value: overAllIncomeData, icon: "" },
+    { title: "Loan", value: "", icon: "" },
+    { title: "Investment", value: "", icon: "" },
   ];
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   return (
@@ -22,9 +23,12 @@ const Overview = () => {
       <ul>
         {overviewItems.map((item, index) => {
           return (
-            <li key={index} className="my-2">
+            <li key={index} className="my-2 flex justify-between w-full">
               <span className="text-base text-quaternary font-medium">
                 {item.title}
+              </span>
+              <span className="text-base text-quaternary font-medium">
+                {item.value}
               </span>
             </li>
           );
@@ -33,13 +37,13 @@ const Overview = () => {
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
           <p className="text-base font-medium text-quaternary">Total Spent</p>
-          <p className="text-base font-medium text-primary">140,00</p>
+          <p className="text-base font-medium text-primary">{overAllExpenseData}</p>
         </div>
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
           <p className="text-base font-medium text-quaternary">
             Current Balance
           </p>
-          <p className="text-base font-medium text-primary">140,00</p>
+          <p className="text-base font-medium text-primary">{currentBalance}</p>
         </div>
       </div>
       <GenericModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />

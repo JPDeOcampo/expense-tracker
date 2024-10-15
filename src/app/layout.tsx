@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ShareState from "@/components/shared/context/share-state";
+import GlobalProvider from "@/components/shared/context/global-provider";
 import InnerLayout from "@/components/layout/inner-layout";
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <ShareState>
-          <InnerLayout>{children}</InnerLayout>
+          <GlobalProvider>
+            <InnerLayout>{children}</InnerLayout>
+          </GlobalProvider>
         </ShareState>
       </body>
     </html>
