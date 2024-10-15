@@ -14,50 +14,91 @@ import {
 } from "@nextui-org/react";
 
 import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService";
+import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseService";
 
-const Form = ({ onTabs, handleCloseModal }: any) => {
+interface FormProps {
+  onTabs: string;
+  handleCloseModal: () => void;
+}
+
+const Form = ({ onTabs, handleCloseModal }: FormProps) => {
   const { focusState, handleFocus, handleBlur } = useContext<any>(ShareContext);
-  const category = [
-    { label: "Allowance", value: "allowance" },
-    { label: "Salary", value: "salary" },
-    { label: "Petty cash", value: "Petty cash" },
-    { label: "Bonus", value: "bonus" },
-    { label: "Other", value: "Other" },
-  ];
+
+  const categories = {
+    income: [
+      { label: "Allowance", value: "allowance" },
+      { label: "Salary", value: "salary" },
+      { label: "Petty cash", value: "petty_cash" },
+      { label: "Bonus", value: "bonus" },
+      { label: "Other", value: "other" },
+    ],
+    expense: [
+      { label: "Food", value: "food" },
+      { label: "Transport", value: "transport" },
+      { label: "Social Life", value: "social_life" },
+      { label: "Culture", value: "culture" },
+      { label: "Apparel", value: "apparel" },
+      { label: "Beauty", value: "beauty" },
+      { label: "Health", value: "health" },
+      { label: "Education", value: "education" },
+      { label: "Gift", value: "gift" },
+      { label: "Other", value: "other" },
+    ],
+  };
+
   const paymentMethod = [
     { label: "Bank", value: "bank" },
     { label: "Cash", value: "cash" },
+    { label: "Card", value: "card" },
   ];
+
   const frequency = [
     { label: "Daily", value: "daily" },
     { label: "Weekly", value: "weekly" },
     { label: "Monthly", value: "monthly" },
     { label: "Other", value: "other" },
   ];
-  const handleSubmitIncome = async (event: any) => {
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    const formData = {
-      date: event.target.date.value,
-      amount: event.target.amount.value,
-      category: event.target.category.value,
-      frequency: event.target.frequency.value,
-      paymentMethod: event.target.paymentMethod.value,
-      note: event.target.note.value,
+    const { date, amount, category, frequency, paymentMethod, note } =
+      event.currentTarget;
+
+    const formData: any = {
+      date: date.value,
+      amount: amount.value,
+      note: note.value,
     };
-    console.log(formData)
+
+    if (onTabs === "income") {
+      formData.frequency = frequency.value;
+      formData.category = category.value;
+      formData.paymentMethod = paymentMethod.value;
+    } else if (onTabs === "expense") {
+      formData.category = category.value;
+      formData.paymentMethod = paymentMethod.value;
+    } else {
+      formData.to = category.value;
+      formData.from = paymentMethod.value;
+    }
 
     try {
-      const response = await AddIncomeService(formData);
+      const response =
+        onTabs === "income"
+          ? await AddIncomeService(formData)
+          : onTabs === "expense"
+          ? await AddExpenseService(formData)
+          : null;
       console.log(response);
     } catch (error) {
       console.error(error);
     }
     console.log("Form Data:", formData);
   };
-  console.log(onTabs)
+
   return (
-    <form className="flex flex-col gap-4" onSubmit={onTabs === 'income'? handleSubmitIncome : onTabs === 'expense' ? handleSubmitIncome : handleSubmitIncome}>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <GroupField
         label="Date"
         type="date"
@@ -86,44 +127,48 @@ const Form = ({ onTabs, handleCloseModal }: any) => {
           }
         />
       </div>
-      <div className="group-input">
-        <label className="text-base text-quaternary">Category</label>
-        <Autocomplete
-          className={`custom-auto-complete rounded-md ${
-            focusState.category
-              ? "border border-quaternary"
-              : "border border-secondary"
-          }`}
-          name="category"
-          onFocus={() => handleFocus("category")}
-          onBlur={() => handleBlur("category")}
-        >
-          {category.map((item) => (
-            <AutocompleteItem key={item.value} value={item.value}>
-              {item.label}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
-      </div>
-      <div className="group-input">
-        <label className="text-base text-quaternary">Frequency</label>
-        <Autocomplete
-          className={`custom-auto-complete rounded-md ${
-            focusState.frequency
-              ? "border border-quaternary"
-              : "border border-secondary"
-          }`}
-          name="frequency"
-          onFocus={() => handleFocus("frequency")}
-          onBlur={() => handleBlur("frequency")}
-        >
-          {frequency.map((item) => (
-            <AutocompleteItem key={item.value} value={item.value}>
-              {item.label}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
-      </div>
+      {(onTabs === "income" || onTabs === "expense") && (
+        <div className="group-input">
+          <label className="text-base text-quaternary">Category</label>
+          <Autocomplete
+            className={`custom-auto-complete rounded-md ${
+              focusState.category
+                ? "border border-quaternary"
+                : "border border-secondary"
+            }`}
+            name="category"
+            onFocus={() => handleFocus("category")}
+            onBlur={() => handleBlur("category")}
+          >
+            {categories[onTabs].map((item) => (
+              <AutocompleteItem key={item.value} value={item.value}>
+                {item.label}
+              </AutocompleteItem>
+            ))}
+          </Autocomplete>
+        </div>
+      )}
+      {onTabs === "income" && (
+        <div className="group-input">
+          <label className="text-base text-quaternary">Frequency</label>
+          <Autocomplete
+            className={`custom-auto-complete rounded-md ${
+              focusState.frequency
+                ? "border border-quaternary"
+                : "border border-secondary"
+            }`}
+            name="frequency"
+            onFocus={() => handleFocus("frequency")}
+            onBlur={() => handleBlur("frequency")}
+          >
+            {frequency.map((item) => (
+              <AutocompleteItem key={item.value} value={item.value}>
+                {item.label}
+              </AutocompleteItem>
+            ))}
+          </Autocomplete>
+        </div>
+      )}
       <div className="group-input">
         <label className="text-base text-quaternary">Payment Method</label>
         <Autocomplete
@@ -182,13 +227,13 @@ const GenericTabs = ({
             onSelectionChange={setSelected}
           >
             <Tab key="income" title="Income">
-              <Form handleCloseModal={handleCloseModal} onTabs="income"/>
+              <Form handleCloseModal={handleCloseModal} onTabs="income" />
             </Tab>
             <Tab key="expense" title="Expense">
-              <Form handleCloseModal={handleCloseModal} onTabs="expense"/>
+              <Form handleCloseModal={handleCloseModal} onTabs="expense" />
             </Tab>
             <Tab key="transfer" title="Transfer">
-              <Form handleCloseModal={handleCloseModal} onTabs="transfer"/>
+              <Form handleCloseModal={handleCloseModal} onTabs="transfer" />
             </Tab>
           </Tabs>
         </CardBody>

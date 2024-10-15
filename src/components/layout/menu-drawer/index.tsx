@@ -10,7 +10,7 @@ const MenuItem = ({ icon, name, route }: any) => {
     e.preventDefault();
     router.push(route);
   };
-  console.log(route === pathname, route, pathname)
+
   return (
     <a
       className={`flex gap-2 items-center py-2 px-4 font-semibold cursor-pointer ${
@@ -25,6 +25,7 @@ const MenuItem = ({ icon, name, route }: any) => {
     </a>
   );
 };
+
 const MenuDrawer = () => {
   return (
     <ValidateContainer>
