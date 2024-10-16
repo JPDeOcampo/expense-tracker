@@ -1,4 +1,5 @@
 "use client";
+import { error } from "console";
 import { createContext, useState, useMemo, FC, ReactNode } from "react";
 
 type ShareContextType = Record<string, any>;
@@ -15,7 +16,26 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [overAllIncomeData, setOverAllIncomeData] = useState();
   const [currentBalance, setCurrentBalance] = useState();
   const [overAllExpenseData, setOverAllExpenseData] = useState();
-  console.log(incomeData, expenseData);
+
+  const [isError, setIsError] = useState({
+    error: false,
+    message: "",
+  });
+  const [formValues, setFormValues] = useState({
+    firstName: '',
+    lastName: '',
+    username: '',
+    emailLogin: '',
+    passwordLogin: '',
+    passwordRegister: '',
+    reEnterPassword: '',
+    date: '',
+    amount: '',
+    category: '',
+    frequency: '',
+    paymentMethod: '',
+    note: '',
+  });
 
   const [focusState, setFocusState] = useState({
     firstName: false,
@@ -30,6 +50,10 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     frequency: false,
     paymentMethod: false,
     note: false,
+    errorEmailLogin: false,
+    errorPasswordLogin: false,
+    errorEmailRegister: false,
+    errorReEnterRegister: false,
   });
 
   // Textfield Focus
@@ -70,6 +94,10 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setCurrentBalance,
       overAllExpenseData,
       setOverAllExpenseData,
+      isError,
+      setIsError,
+      formValues,
+      setFormValues,
     }),
     [
       isCreateAccount,
@@ -83,8 +111,14 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       expenseData,
       setExpenseData,
       combinedData,
+      currentBalance,
+      setCurrentBalance,
       overAllExpenseData,
       setOverAllExpenseData,
+      isError,
+      setIsError,
+      formValues,
+      setFormValues,
     ]
   );
   return (

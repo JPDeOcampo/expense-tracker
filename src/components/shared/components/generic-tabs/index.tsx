@@ -88,18 +88,12 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
       if (onTabs === "income") {
         const response = await AddIncomeService(formData);
         if (response?.ok) {
-          setIncomeData((prev: any) => ([
-            ...prev,
-            {...formData},
-          ]));
+          setIncomeData((prev: any) => [...prev, { ...formData }]);
         }
       } else if (onTabs === "expense") {
         const response = await AddExpenseService(formData);
         if (response?.ok) {
-          setExpenseData((prev: any) => ([
-            ...prev,
-            {...formData},
-          ]));
+          setExpenseData((prev: any) => [...prev, { ...formData }]);
         }
       }
     } catch (error) {
@@ -118,88 +112,50 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
         handleFocus={handleFocus}
         handleBlur={handleBlur}
       />
-      <div className="group-input">
-        <label className="text-base text-quaternary">Amount</label>
-        <Input
-          type="number"
+     
+      <GroupField
+          label="Amount"
           name="amount"
-          placeholder="0.00"
-          className={`custom-input-number rounded-md ${
-            focusState.amount
-              ? "border border-quaternary"
-              : "border border-secondary"
-          }`}
-          onFocus={() => handleFocus("amount")}
-          onBlur={() => handleBlur("amount")}
-          startContent={
-            <div className="pointer-events-none flex items-center">
-              <span className="text-default-400 text-small">$</span>
-            </div>
-          }
+          type="number"
+           placeholder="0.00"
+          isFocused={focusState.amount}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
+          isCustomNumber={true}
         />
-      </div>
       {(onTabs === "income" || onTabs === "expense") && (
-        <div className="group-input">
-          <label className="text-base text-quaternary">Category</label>
-          <Autocomplete
-            className={`custom-auto-complete rounded-md ${
-              focusState.category
-                ? "border border-quaternary"
-                : "border border-secondary"
-            }`}
-            name="category"
-            onFocus={() => handleFocus("category")}
-            onBlur={() => handleBlur("category")}
-          >
-            {categories[onTabs].map((item) => (
-              <AutocompleteItem key={item.value} value={item.value}>
-                {item.label}
-              </AutocompleteItem>
-            ))}
-          </Autocomplete>
-        </div>
+        <GroupField
+          label="Category"
+          name="category"
+          items={categories[onTabs]}
+          isFocused={focusState.category}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
+          isAutoComplete={true}
+        />
       )}
       {onTabs === "income" && (
-        <div className="group-input">
-          <label className="text-base text-quaternary">Frequency</label>
-          <Autocomplete
-            className={`custom-auto-complete rounded-md ${
-              focusState.frequency
-                ? "border border-quaternary"
-                : "border border-secondary"
-            }`}
-            name="frequency"
-            onFocus={() => handleFocus("frequency")}
-            onBlur={() => handleBlur("frequency")}
-          >
-            {frequency.map((item) => (
-              <AutocompleteItem key={item.value} value={item.value}>
-                {item.label}
-              </AutocompleteItem>
-            ))}
-          </Autocomplete>
-        </div>
+        <GroupField
+          label="Frequency"
+          name="frequency"
+          items={frequency}
+          isFocused={focusState.frequency}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
+          isAutoComplete={true}
+        />
       )}
-      <div className="group-input">
-        <label className="text-base text-quaternary">Payment Method</label>
-        <Autocomplete
-          className={`custom-auto-complete rounded-md ${
-            focusState.paymentMethod
-              ? "border border-quaternary"
-              : "border border-secondary"
-          }`}
-          name="paymentMethod"
-          onFocus={() => handleFocus("paymentMethod")}
-          onBlur={() => handleBlur("paymentMethod")}
-        >
-          {paymentMethod.map((item) => (
-            <AutocompleteItem key={item.value} value={item.value}>
-              {item.label}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
-      </div>
 
+      <GroupField
+        label="Payment Method"
+        type="text"
+        name="paymentMethod"
+        items={paymentMethod}
+        isFocused={focusState.paymentMethod}
+        handleFocus={handleFocus}
+        handleBlur={handleBlur}
+        isAutoComplete={true}
+      />
       <GroupField
         label="Note"
         type="text"

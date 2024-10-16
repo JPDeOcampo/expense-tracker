@@ -112,12 +112,18 @@ body {
 .custom-input-number > div > div {
   @apply text-base focus:outline-none py-2 px-3 !bg-transparent;
 }
+
 .custom-auto-complete > div > div > div {
   @apply text-base focus:outline-none py-2 px-3 !bg-transparent;
 }
 
+/* BUTTON */
 .custom-btn {
-  @apply text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4;
+  @apply text-base font-medium bg-primary hover:bg-primary-100 text-neutral-light py-2 px-4 rounded-md;
+}
+
+.button-spinner {
+  @apply pl-2 [&>div]:w-4 [&>div]:h-4;
 }
 
 .custom-container {

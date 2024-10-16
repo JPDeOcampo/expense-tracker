@@ -21,7 +21,7 @@ export const POST = async (request: Request) => {
     const user = await Users.findOne({ email });
     if (!user) {
       return NextResponse.json(
-        { message: "Invalid credentials" },
+        { message: "Invalid Email" },
         { status: 401 }
       );
     }
@@ -29,7 +29,7 @@ export const POST = async (request: Request) => {
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       return NextResponse.json(
-        { message: "Invalid credentials" },
+        { message: "Invalid Password" },
         { status: 401 }
       );
     }
