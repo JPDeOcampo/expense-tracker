@@ -6,6 +6,7 @@ export const registerService = async ({
   email,
   username,
   password,
+  reEnterPassword,
 }: any) => {
   try {
     const response = await fetch(ENDPOINTS.register, {
@@ -19,8 +20,16 @@ export const registerService = async ({
         email: email,
         username: username,
         password: password,
+        reEnterPassword: reEnterPassword,
       }),
     });
-    return response;
-  } catch (error) {console.log(error)}
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      return response;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };

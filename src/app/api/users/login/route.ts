@@ -21,16 +21,14 @@ export const POST = async (request: Request) => {
     const user = await Users.findOne({ email });
     if (!user) {
       return NextResponse.json(
-        { message: "Invalid Email" },
-        { status: 401 }
+        { message: "Invalid Email", invalidEmail: true },
       );
     }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       return NextResponse.json(
-        { message: "Invalid Password" },
-        { status: 401 }
+        { message: "Invalid Password", invalidPassword: true},
       );
     }
 

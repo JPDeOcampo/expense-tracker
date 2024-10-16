@@ -1,13 +1,13 @@
 import connectMongoDB from "../../../../../libs/mongodb";
 import Users from "../../../../../models/users";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
 export const POST = async (request: Request) => {
   try {
-    const { firstName, lastName, email, username, password } = await request.json();
+    const { firstName, lastName, email, username, password, reEnterPassword } =
+      await request.json();
 
-  
     if (!firstName || !lastName || !email || !username || !password) {
       return NextResponse.json(
         { message: "All fields are required" },
@@ -20,8 +20,12 @@ export const POST = async (request: Request) => {
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
-        { message: "Email already in use" },
-        { status: 409 }
+        { message: "Email already in use", invalidEmail: true }
+      );
+    }
+    if (password !== reEnterPassword) {
+      return NextResponse.json(
+        { message: "Password not match", invalidPassword: true },
       );
     }
 
@@ -34,7 +38,7 @@ export const POST = async (request: Request) => {
       username,
       password: hashedPassword,
     });
-    
+
     await newUser.save();
 
     return NextResponse.json(
@@ -49,4 +53,3 @@ export const POST = async (request: Request) => {
     );
   }
 };
-

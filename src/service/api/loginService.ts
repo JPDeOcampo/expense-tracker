@@ -12,7 +12,12 @@ export const loginService = async ({ email, password }: any) => {
         password: password,
       }),
     });
-    return response;
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    } else {
+      return response;
+    }
   } catch (error) {
     console.log(error);
   }

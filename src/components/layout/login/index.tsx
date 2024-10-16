@@ -9,6 +9,7 @@ import { EyeSlashFilledIcon } from "../../../../public/images";
 import { GlobalContext } from "@/components/shared/context/global-provider";
 import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
+import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 const Login = () => {
   const {
@@ -29,18 +30,13 @@ const Login = () => {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  const { handleResetFormValues, handleResetErrorFocus, handleSetError } = useGlobalHooks();
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true);
-    setIsError((prev: any) => ({ ...prev, error: false }));
-    setFocusState((prev: any) => {
-      const resetState = Object.keys(prev).reduce((acc: any, key: any) => {
-        acc[key] = false;
-        return acc;
-      }, {});
+    handleResetErrorFocus();
 
-      return { ...resetState, focusState: true }; // or whatever you want to keep true
-    });
     const formData = {
       email: event.target.email.value,
       password: event.target.password.value,
@@ -48,34 +44,29 @@ const Login = () => {
 
     try {
       const response = await loginService(formData);
-      const data = await response?.json();
 
-      if (response?.ok) {
+      if (response?.invalidEmail) {
+        setFocusState((prev: any) => ({ ...prev, errorEmailLogin: true }));
+        handleSetError("login-error", response?.message);
+      } else if (response?.invalidPassword) {
+        setFocusState((prev: any) => ({ ...prev, errorPasswordLogin: true }));
+        handleSetError("login-error", response?.message);
+      } else {
         router.push("/pages/dashboard");
         fetchIncome();
-        setLoading(false);
-        setIsError((prev: any) => ({ ...prev, error: false }));
-      } else {
-        if (data.message === "Invalid Email") {
-          setFocusState((prev: any) => ({ ...prev, errorEmailLogin: true }));
-        } else {
-          setFocusState((prev: any) => ({ ...prev, errorPasswordLogin: true }));
-        }
-        setLoading(false);
-        setIsError((prev: any) => ({
-          ...prev,
-          error: true,
-          message: data.message,
-        }));
+        handleResetFormValues();
       }
+
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col gap-6 p-4">
-      {isError.error && (
+      {isError.error === "login-error" && (
         <GenericToast defaultToast={true} message={isError.message} />
       )}
       <h2 className="text-2xl font-bold text-primary">Login</h2>

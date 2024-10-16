@@ -18,23 +18,24 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [overAllExpenseData, setOverAllExpenseData] = useState();
 
   const [isError, setIsError] = useState({
-    error: false,
+    error: "",
     message: "",
   });
+
   const [formValues, setFormValues] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    emailLogin: '',
-    passwordLogin: '',
-    passwordRegister: '',
-    reEnterPassword: '',
-    date: '',
-    amount: '',
-    category: '',
-    frequency: '',
-    paymentMethod: '',
-    note: '',
+    firstName: "",
+    lastName: "",
+    username: "",
+    emailLogin: "",
+    passwordLogin: "",
+    passwordRegister: "",
+    reEnterPassword: "",
+    date: "",
+    amount: "",
+    category: "",
+    frequency: "",
+    paymentMethod: "",
+    note: "",
   });
 
   const [focusState, setFocusState] = useState({

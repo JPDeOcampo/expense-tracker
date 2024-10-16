@@ -2,16 +2,7 @@
 import { useContext } from "react";
 import { ShareContext } from "../../context/share-state";
 import { Dispatch, SetStateAction } from "react";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Tabs,
-  Tab,
-  Input,
-  Card,
-  CardBody,
-  Button,
-} from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 
 interface TypeComponents {
   label: string;
@@ -32,9 +23,12 @@ const GroupField = ({
   handleBlur,
   hasIconFirst,
   hasIconEnd,
+  autoComplete,
   isRequired,
   isEmailLogin,
+  isEmailRegister,
   isPasswordLogin,
+  isReEnterRegister,
   isAutoComplete,
   isCustomNumber,
   items,
@@ -45,11 +39,15 @@ const GroupField = ({
   const handleOnChange = (e: any, name: string) => {
     e.preventDefault();
     let hasError = "";
-    console.log(name, "name");
+
     if (isEmailLogin) {
       hasError = "errorEmailLogin";
     } else if (isPasswordLogin) {
       hasError = "errorPasswordLogin";
+    } else if (isEmailRegister) {
+      hasError = "errorEmailRegister";
+    } else if (isReEnterRegister) {
+      hasError = "errorReEnterRegister";
     }
 
     if (hasError) {
@@ -61,8 +59,10 @@ const GroupField = ({
 
   const isError =
     (isEmailLogin && focusState.errorEmailLogin) ||
+    (isEmailRegister && focusState.errorEmailRegister) ||
+    (isReEnterRegister && focusState.errorReEnterRegister) ||
     (isPasswordLogin && focusState.errorPasswordLogin);
-  console.log(formValues);
+  
   return (
     <>
       {isAutoComplete ? (
@@ -77,7 +77,9 @@ const GroupField = ({
             onBlur={() => handleBlur(name)}
             defaultItems={items}
             selectedKey={formValues[value || name]}
-            onSelectionChange={() =>  setFormValues((prev: any) => ({ ...prev, [name]: value}))}
+            onSelectionChange={() =>
+              setFormValues((prev: any) => ({ ...prev, [name]: value }))
+            }
           >
             {items.map((item: any) => (
               <AutocompleteItem key={item.value} value={item.value}>
@@ -124,7 +126,7 @@ const GroupField = ({
             type={type}
             name={name}
             placeholder={placeholder}
-            value={formValues[value || name]}
+            value={formValues[value || name] ?? ""}
             className={`text-base text-quaternary ${
               hasIconFirst ? "pl-6 pr-3" : hasIconEnd ? "pl-3 pr-10" : "px-3"
             } ${
@@ -138,6 +140,7 @@ const GroupField = ({
             onFocus={() => handleFocus(name)}
             onBlur={() => handleBlur(name)}
             required={isRequired}
+            autoComplete={autoComplete}
           />
         </div>
       )}

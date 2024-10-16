@@ -6,23 +6,33 @@ import { registerService } from "@/service/api/registerService";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { EyeFilledIcon } from "../../../../public/images";
 import { EyeSlashFilledIcon } from "../../../../public/images";
+import { Spinner } from "@nextui-org/react";
+import GenericToast from "@/components/shared/components/generic-toast";
+import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 const Register = () => {
+  const {
+    setIsCreateAccount,
+    focusState,
+    handleFocus,
+    handleBlur,
+    setFocusState,
+    isError,
+  } = useContext<any>(ShareContext);
 
-  const { setIsCreateAccount, focusState, handleFocus, handleBlur } = useContext<any>(ShareContext);
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
     useState<boolean>(false);
- 
+
+  const [loading, setLoading] = useState(false);
+
+  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
+    useGlobalHooks();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
-    if (
-      event.target.password.value !== event.target["re-enter-password"].value
-    ) {
-      return;
-    }
+    setLoading(true);
+    handleResetErrorFocus();
 
     const formData = {
       firstName: event.target.firstName.value,
@@ -30,18 +40,30 @@ const Register = () => {
       username: event.target.username.value,
       email: event.target.email.value,
       password: event.target.password.value,
+      reEnterPassword: event.target.reEnterPassword.value,
     };
 
     try {
       const response = await registerService(formData);
-      console.log(response);
-      if (response?.ok) {
+
+      if (response?.invalidEmail) {
+        setFocusState((prev: any) => ({ ...prev, errorEmailRegister: true }));
+        handleSetError("register-error", response?.message);
+      } else if (response?.invalidPassword) {
+        setFocusState((prev: any) => ({
+          ...prev,
+          errorReEnterRegister: true,
+        }));
+        handleSetError("register-error", response?.message);
+      } else {
         setIsCreateAccount(false);
+        handleResetFormValues();
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-    console.log("Form Data:", formData);
   };
 
   return (
@@ -57,7 +79,9 @@ const Register = () => {
           <span className="text-base font-medium">Back</span>
         </button>
       </div>
-
+      {isError.error === "register-error" && (
+        <GenericToast defaultToast={true} message={isError.message} />
+      )}
       <h2 className="text-2xl font-bold text-primary">Register</h2>
 
       <form
@@ -99,6 +123,7 @@ const Register = () => {
           isFocused={focusState.email}
           handleFocus={handleFocus}
           handleBlur={handleBlur}
+          isEmailRegister={true}
         />
         <div className="relative">
           <GroupField
@@ -133,6 +158,7 @@ const Register = () => {
             isFocused={focusState.reEnterPassword}
             handleFocus={handleFocus}
             handleBlur={handleBlur}
+            isReEnterRegister={true}
           />
           <button
             className="absolute top-10 right-3 focus:outline-none"
@@ -150,11 +176,9 @@ const Register = () => {
           </button>
         </div>
         <div className="w-full mt-3">
-          <button
-            type="submit"
-            className="custom-btn"
-          >
+          <button type="submit" className="custom-btn">
             Register
+            {loading && <Spinner className="button-spinner" color="default" />}
           </button>
         </div>
       </form>

@@ -25,7 +25,6 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setIncomeData,
     setExpenseData,
     setOverAllIncomeData,
-    // currentBalance,
     setOverAllExpenseData,
     setCurrentBalance,
   } = useContext<any>(ShareContext);
@@ -33,7 +32,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { getTotalAmount } = useTotalHooks();
 
   const pathname = usePathname();
-  // console.log(currentBalance);
+ 
   const fetchExpense = async (currentBalance: any) => {
     console.log(currentBalance);
     try {
@@ -42,9 +41,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (response?.ok) {
         setExpenseData(data.expense);
         const overAllAmount = getTotalAmount(data.expense);
-
         setOverAllExpenseData(overAllAmount);
-        // setCurrentBalance(currentBalance - overAllAmount);
         if (typeof currentBalance === 'number' && overAllAmount !== undefined) {
           setCurrentBalance(currentBalance - overAllAmount);
         }

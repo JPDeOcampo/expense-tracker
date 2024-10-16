@@ -11,11 +11,8 @@ const ValidateContainer = ({ children }: any) => {
       try {
         const response = await fetch("/api/validate-token");
         if (!response.ok) {
-            console.log('ll')
-            router.push("/");
-            // location.reload(); 
+          router.push("/");
         } else {
-         
           setIsValidating(false);
         }
       } catch (error) {
