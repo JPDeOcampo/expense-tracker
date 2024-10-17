@@ -1,13 +1,13 @@
 "use client";
-import useShareContext from "@/components/shared/hooks/share-state-hooks";
+import useContextHooks from "@/components/shared/hooks/context-hooks";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { logoutService } from "@/service/api/logoutService";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
   const router = useRouter();
-
-  const { user } = useShareContext();
+  const { shareContext } = useContextHooks();
+  const { user } = shareContext;
 
   const handleLogout = async () => {
     try {

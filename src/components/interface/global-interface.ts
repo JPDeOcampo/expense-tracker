@@ -18,6 +18,9 @@ export interface IFrequencyDataType extends ICategoryDataType {
 export interface ICombinedDataType extends IFrequencyDataType {
   type: string;
 }
+export interface ITableDataType extends ICombinedDataType {
+  [key: string]: any;
+}
 export interface FocusStateType {
   firstName: boolean;
   lastName: boolean;
@@ -72,9 +75,9 @@ export interface ShareContextType {
   setIncomeData: (data: ICombinedDataType[]) => void;
   expenseData: ICombinedDataType[];
   setExpenseData: (data: ICombinedDataType[]) => void;
-  setOverAllIncomeData: (data: any) => void;
+  setOverAllIncomeData: (data: string) => void;
   setCurrentBalance: (balance: number) => void;
-  setOverAllExpenseData: (data: any) => void;
+  setOverAllExpenseData: (data: string) => void;
   isError: {
     error: string;
     message: string;
@@ -83,6 +86,6 @@ export interface ShareContextType {
   formValues: Record<string, string>;
   setFormValues: (values: Record<string, string>) => void;
   setCurrency: (currency: string | null) => void;
-  user: any;
-  setUser: (user: any) => void;
+  user: string;
+  setUser: (user: string) => void;
 }

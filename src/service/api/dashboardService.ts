@@ -1,6 +1,6 @@
 import { ENDPOINTS } from "../../../apiConfig";
 
-export const dashboardService = async (token: any) => {
+export const dashboardService = async (token: string) => {
   try {
     const response = await fetch(ENDPOINTS.dashboard, {
       method: "GET",

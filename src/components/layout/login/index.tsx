@@ -1,17 +1,17 @@
 "use client";
 import { useState, useContext } from "react";
-import { ShareContext } from "@/components/shared/context/share-state";
+import useContextHooks from "@/components/shared/hooks/context-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { loginService } from "@/service/api/loginService";
 import { useRouter } from "next/navigation";
 import { EyeFilledIcon } from "../../../../public/images";
 import { EyeSlashFilledIcon } from "../../../../public/images";
-import { GlobalContext } from "@/components/shared/context/global-provider";
 import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
-
+import { GlobalContext } from "@/components/shared/context/global-provider";
 const Login = () => {
+  const { shareContext } = useContextHooks();
   const {
     setIsCreateAccount,
     focusState,
@@ -19,8 +19,9 @@ const Login = () => {
     handleBlur,
     setFocusState,
     isError,
-  } = useContext<any>(ShareContext);
-  const { fetchIncome, fetchUser } = useContext<any>(GlobalContext);
+  } = shareContext;
+  const { fetchIncome, fetchUser, a } = useContext<any>(GlobalContext);
+  console.log(a)
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -29,7 +30,8 @@ const Login = () => {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const { handleResetFormValues, handleResetErrorFocus, handleSetError } = useGlobalHooks();
+  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
+    useGlobalHooks();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -43,7 +45,7 @@ const Login = () => {
 
     try {
       const response = await loginService(formData);
-      console.log(response)
+      console.log(response);
       if (response?.invalidEmail) {
         setFocusState((prev: any) => ({ ...prev, errorEmailLogin: true }));
         handleSetError("login-error", response?.message);
@@ -56,7 +58,6 @@ const Login = () => {
         fetchUser(response?.id);
         handleResetFormValues();
       }
-
     } catch (error) {
       console.error(error);
     } finally {

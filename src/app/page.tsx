@@ -1,11 +1,11 @@
 "use client";
-import { useContext } from "react";
-import { ShareContext } from "@/components/shared/context/share-state";
+import useContextHooks from "@/components/shared/hooks/context-hooks";
 import Login from "@/components/layout/login";
 import Register from "@/components/layout/register";
 
 const App = () => {
-  const { isCreateAccount } = useContext<any>(ShareContext);
+  const { shareContext } = useContextHooks();
+  const { isCreateAccount } = shareContext;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 h-auto lg:h-lvh w-full">

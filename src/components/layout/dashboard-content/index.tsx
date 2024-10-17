@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import useShareContext from "@/components/shared/hooks/share-state-hooks";
+import useContextHooks from "@/components/shared/hooks/context-hooks";
 import BalanceSpent from "@/components/shared/components/charts/balance-spent";
 import GenericModal from "@/components/shared/components/generic-modal";
 import { FaPlus } from "react-icons/fa";
@@ -15,10 +15,11 @@ import {
 } from "@nextui-org/react";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
-
+import { ITableDataType } from "@/components/interface/global-interface";
 const Overview = () => {
+  const { shareContext } = useContextHooks();
   const { overAllIncomeData, currentBalance, overAllExpenseData } =
-    useShareContext();
+    shareContext;
 
   const overviewItems = [
     { title: "Total Overall balance", value: overAllIncomeData, icon: "" },
@@ -72,7 +73,8 @@ const Overview = () => {
 };
 
 const RecentTransaction = () => {
-  const { combinedData, currency } = useShareContext();
+  const { shareContext } = useContextHooks();
+  const { combinedData, currency } = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
   const [page, setPage] = useState(1);
   const { handleFormatAmount } = useGlobalHooks();
@@ -125,7 +127,7 @@ const RecentTransaction = () => {
           <TableColumn key="date">Date</TableColumn>
         </TableHeader>
         <TableBody>
-          {sortedData.map((item: any) => (
+          {sortedData.map((item: ITableDataType) => (
             <TableRow key={item._id}>
               {(columnKey) => (
                 <TableCell className="h-6">

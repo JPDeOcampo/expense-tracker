@@ -8,7 +8,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import useShareContext from "@/components/shared/hooks/share-state-hooks";
+import useContextHooks from "@/components/shared/hooks/context-hooks";
+import { ICombinedDataType } from "@/components/interface/global-interface";
 
 const chartConfig = {
   balance: {
@@ -20,9 +21,13 @@ const chartConfig = {
     color: "#60a5fa",
   },
 } satisfies ChartConfig;
-
+interface IType {
+  type: string,
+  amount: string | number | any,
+}
 const BalanceSpent = () => {
-  const { combinedData } = useShareContext();
+  const { shareContext } = useContextHooks();
+  const { combinedData } = shareContext;
 
   const months = [
     "January",
@@ -46,10 +51,10 @@ const BalanceSpent = () => {
     const monthIndex = months.indexOf(month);
 
     const monthlyEntries = combinedData.filter(
-      (entry: any) => new Date(entry.date).getMonth() === monthIndex
+      (entry: ICombinedDataType) => new Date(entry.date).getMonth() === monthIndex
     );
 
-    monthlyEntries.forEach((entry: any) => {
+    monthlyEntries.forEach((entry: IType) => {
       if (entry.type === "income") {
         totalIncome += entry.amount;
       } else if (entry.type === "expense") {

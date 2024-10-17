@@ -3,13 +3,23 @@ import ValidateContainer from "@/components/shared/components/validate-container
 import { MdOutlineDashboard, MdOutlineCategory } from "react-icons/md";
 import { useRouter, usePathname } from "next/navigation";
 
-const MenuItem = ({ icon, name, route }: any) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const handleMenuLink = ({ e, route }: any) => {
-    e.preventDefault();
-    router.push(route);
-  };
+import { MouseEvent } from 'react';
+
+
+interface MenuItemProps {
+    icon: JSX.Element; // Adjust if your icon is a string or a specific component
+    name: string;
+    route: string;
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({ icon, name, route }) => {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleMenuLink = (e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        router.push(route);
+    };
 
   return (
     <a
@@ -18,7 +28,7 @@ const MenuItem = ({ icon, name, route }: any) => {
           ? "border-l-5 border-tertiary-500 bg-primary-500 text-neutral-light"
           : "hover:text-primary"
       }`}
-      onClick={(e) => handleMenuLink({ e, route })}
+      onClick={handleMenuLink}
     >
       <span className="text-xl">{icon}</span>
       <span className="text-base">{name}</span>
@@ -51,7 +61,7 @@ const MenuDrawer = () => {
             name="Categories"
             route="cat"
           />
-          <MenuItem icon="" name="Export" route="ex" />
+          <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" />
         </div>
       </div>
     </ValidateContainer>

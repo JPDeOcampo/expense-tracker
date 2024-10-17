@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import useShareContext from "../../hooks/share-state-hooks";
+import useContextHooks from "../../hooks/context-hooks";
 import GroupField from "../group-field";
 import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
 
@@ -13,8 +13,9 @@ interface FormProps {
 }
 
 const Form = ({ onTabs, handleCloseModal }: FormProps) => {
+  const { shareContext } = useContextHooks();
   const { focusState, handleFocus, handleBlur, setIncomeData, setExpenseData } =
-    useShareContext();
+    shareContext;
 
   const categories = {
     income: [

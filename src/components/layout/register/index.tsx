@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import useShareContext from "@/components/shared/hooks/share-state-hooks";
+import useContextHooks from "@/components/shared/hooks/context-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -11,6 +11,7 @@ import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
 const Register = () => {
+  const { shareContext } = useContextHooks();
   const {
     setIsCreateAccount,
     focusState,
@@ -18,7 +19,7 @@ const Register = () => {
     handleBlur,
     setFocusState,
     isError,
-  } = useShareContext();
+  } = shareContext;
 
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
@@ -48,7 +49,10 @@ const Register = () => {
       const response = await registerService(data);
 
       if (response?.invalidEmail) {
-        setFocusState((prev: FocusStateType) => ({ ...prev, errorEmailRegister: true }));
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorEmailRegister: true,
+        }));
         handleSetError("register-error", response?.message);
       } else if (response?.invalidPassword) {
         setFocusState((prev: FocusStateType) => ({

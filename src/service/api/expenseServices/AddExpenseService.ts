@@ -17,7 +17,7 @@ export const AddExpenseService = async ({
   category,
   paymentMethod,
   note,
-}: any) => {
+}: IPropTypes) => {
   try {
     const response = await fetch(ENDPOINTS.add_expense, {
       method: "POST",
