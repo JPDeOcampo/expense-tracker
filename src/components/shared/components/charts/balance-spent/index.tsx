@@ -1,5 +1,4 @@
 "use client";
-import { useContext } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -9,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { ShareContext } from "@/components/shared/context/share-state";
+import useShareContext from "@/components/shared/hooks/share-state-hooks";
 
 const chartConfig = {
   balance: {
@@ -23,37 +22,48 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const BalanceSpent = () => {
-  const { combinedData } = useContext<any>(ShareContext);
-  
+  const { combinedData } = useShareContext();
+
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
- 
-  const chartData = months.map(month => {
+
+  const chartData = months.map((month) => {
     let totalIncome = 0;
     let totalExpenses = 0;
-  
+
     const monthIndex = months.indexOf(month);
-  
-    const monthlyEntries = combinedData.filter((entry:any) => new Date(entry.date).getMonth() === monthIndex);
-  
-    monthlyEntries.forEach((entry:any) => {
-        if (entry.type === 'income') {
-            totalIncome += entry.amount;
-        } else if (entry.type === 'expense') {
-            totalExpenses += entry.amount;
-        }
+
+    const monthlyEntries = combinedData.filter(
+      (entry: any) => new Date(entry.date).getMonth() === monthIndex
+    );
+
+    monthlyEntries.forEach((entry: any) => {
+      if (entry.type === "income") {
+        totalIncome += entry.amount;
+      } else if (entry.type === "expense") {
+        totalExpenses += entry.amount;
+      }
     });
-  
+
     return {
-        month: month,
-        balance: totalIncome - totalExpenses,
-        spent: totalExpenses
+      month: month,
+      balance: totalIncome - totalExpenses,
+      spent: totalExpenses,
     };
   });
-  
-  console.log(combinedData);
+
   return (
     <div className="card">
       <h2 className="card-header">Balance vs Spent</h2>

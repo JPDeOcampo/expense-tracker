@@ -1,6 +1,16 @@
 import { ENDPOINTS } from "../../../../apiConfig";
+
+interface IPropTypes {
+  userId: string;
+  date: string;
+  amount: string;
+  category: string;
+  frequency: string;
+  paymentMethod: string;
+  note: string;
+}
+
 export const AddIncomeService = async ({
-  token,
   userId,
   date,
   amount,
@@ -8,7 +18,7 @@ export const AddIncomeService = async ({
   frequency,
   paymentMethod,
   note,
-}: any) => {
+}: IPropTypes) => {
   try {
     const response = await fetch(ENDPOINTS.add_income, {
       method: "POST",

@@ -1,5 +1,12 @@
 import { ENDPOINTS } from "../../../apiConfig";
-
+interface IPropTypes {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  reEnterPassword: string;
+}
 export const registerService = async ({
   firstName,
   lastName,
@@ -7,7 +14,7 @@ export const registerService = async ({
   username,
   password,
   reEnterPassword,
-}: any) => {
+}: IPropTypes) => {
   try {
     const response = await fetch(ENDPOINTS.register, {
       method: "POST",

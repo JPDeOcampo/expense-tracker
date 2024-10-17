@@ -1,6 +1,6 @@
 "use client";
-import { useState, useContext } from "react";
-import { ShareContext } from "@/components/shared/context/share-state";
+import { useState } from "react";
+import useShareContext from "@/components/shared/hooks/share-state-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -9,7 +9,7 @@ import { EyeSlashFilledIcon } from "../../../../public/images";
 import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
-
+import { FocusStateType } from "@/components/interface/global-interface";
 const Register = () => {
   const {
     setIsCreateAccount,
@@ -18,39 +18,40 @@ const Register = () => {
     handleBlur,
     setFocusState,
     isError,
-  } = useContext<any>(ShareContext);
+  } = useShareContext();
 
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
     useState<boolean>(false);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
     useGlobalHooks();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     handleResetErrorFocus();
 
-    const formData = {
-      firstName: event.target.firstName.value,
-      lastName: event.target.lastName.value,
-      username: event.target.username.value,
-      email: event.target.email.value,
-      password: event.target.password.value,
-      reEnterPassword: event.target.reEnterPassword.value,
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
+      username: formData.get("username") as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      reEnterPassword: formData.get("reEnterPassword") as string,
     };
 
     try {
-      const response = await registerService(formData);
+      const response = await registerService(data);
 
       if (response?.invalidEmail) {
-        setFocusState((prev: any) => ({ ...prev, errorEmailRegister: true }));
+        setFocusState((prev: FocusStateType) => ({ ...prev, errorEmailRegister: true }));
         handleSetError("register-error", response?.message);
       } else if (response?.invalidPassword) {
-        setFocusState((prev: any) => ({
+        setFocusState((prev: FocusStateType) => ({
           ...prev,
           errorReEnterRegister: true,
         }));

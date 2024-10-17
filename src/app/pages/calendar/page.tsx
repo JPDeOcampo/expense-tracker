@@ -10,10 +10,27 @@ import {
   Button,
 } from "@nextui-org/react";
 
-const Calendar = () => {
-  const { combinedData } = useContext<any>(ShareContext);
+interface EventExtendedProps {
+  type: string;
+  amount: number;
+  category: string;
+  frequency: string;
+  paymentMethod: string;
+  note: string;
+}
 
-  function renderEventContent(eventInfo: any) {
+interface Event {
+  extendedProps: EventExtendedProps;
+}
+
+interface EventInfo {
+  event: Event; 
+}
+
+const Calendar = () => {
+  const { combinedData } = useContext(ShareContext) ?? { combinedData: [] }; 
+
+  const renderEventContent = (eventInfo: EventInfo ) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
 

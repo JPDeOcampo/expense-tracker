@@ -1,4 +1,15 @@
 import { ENDPOINTS } from "../../../../apiConfig";
+
+interface IPropTypes {
+  userId: string;
+  date: string;
+  amount: string;
+  category: string;
+  paymentMethod: string;
+  note: string;
+}
+
+
 export const AddExpenseService = async ({
   userId,
   date,

@@ -19,7 +19,6 @@ const Login = () => {
     handleBlur,
     setFocusState,
     isError,
-    setIsError,
   } = useContext<any>(ShareContext);
   const { fetchIncome, fetchUser } = useContext<any>(GlobalContext);
   const [loading, setLoading] = useState(false);

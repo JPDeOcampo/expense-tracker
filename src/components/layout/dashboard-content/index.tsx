@@ -1,6 +1,6 @@
 "use client";
-import { useState, useContext, useEffect } from "react";
-import { ShareContext } from "@/components/shared/context/share-state";
+import { useState, useEffect } from "react";
+import useShareContext from "@/components/shared/hooks/share-state-hooks";
 import BalanceSpent from "@/components/shared/components/charts/balance-spent";
 import GenericModal from "@/components/shared/components/generic-modal";
 import { FaPlus } from "react-icons/fa";
@@ -14,16 +14,20 @@ import {
   Button,
 } from "@nextui-org/react";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
+import { ICombinedDataType } from "@/components/interface/global-interface";
 
 const Overview = () => {
   const { overAllIncomeData, currentBalance, overAllExpenseData } =
-    useContext<any>(ShareContext);
+    useShareContext();
+
   const overviewItems = [
     { title: "Total Overall balance", value: overAllIncomeData, icon: "" },
     { title: "Loan", value: "", icon: "" },
     { title: "Investment", value: "", icon: "" },
   ];
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   return (
     <div className="card flex flex-col gap-4">
       <div className="w-full flex justify-between">
@@ -68,15 +72,15 @@ const Overview = () => {
 };
 
 const RecentTransaction = () => {
-  const { combinedData, currency } = useContext<any>(ShareContext);
-  const [displayedData, setDisplayedData] = useState([]);
+  const { combinedData, currency } = useShareContext();
+  const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
   const [page, setPage] = useState(1);
   const { handleFormatAmount } = useGlobalHooks();
 
   const itemsPerPage = 9;
 
   useEffect(() => {
-    const updatedData = combinedData.map((item: any) => ({
+    const updatedData = combinedData.map((item: ICombinedDataType) => ({
       ...item,
       amount: handleFormatAmount(item.amount, currency),
       date: new Date(item.date).toISOString().split("T")[0],
@@ -90,7 +94,7 @@ const RecentTransaction = () => {
     setPage((prev) => prev + 1);
   };
 
-  const sortedData = displayedData.sort((a: any, b: any) => {
+  const sortedData = displayedData.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 

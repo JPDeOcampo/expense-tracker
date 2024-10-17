@@ -1,17 +1,8 @@
 "use client";
-import { useState, useContext } from "react";
-import { ShareContext } from "../../context/share-state";
+import { useState } from "react";
+import useShareContext from "../../hooks/share-state-hooks";
 import GroupField from "../group-field";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Tabs,
-  Tab,
-  Input,
-  Card,
-  CardBody,
-  Button,
-} from "@nextui-org/react";
+import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
 
 import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService";
 import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseService";
@@ -23,7 +14,7 @@ interface FormProps {
 
 const Form = ({ onTabs, handleCloseModal }: FormProps) => {
   const { focusState, handleFocus, handleBlur, setIncomeData, setExpenseData } =
-    useContext<any>(ShareContext);
+    useShareContext();
 
   const categories = {
     income: [
@@ -112,17 +103,17 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
         handleFocus={handleFocus}
         handleBlur={handleBlur}
       />
-     
+
       <GroupField
-          label="Amount"
-          name="amount"
-          type="number"
-           placeholder="0.00"
-          isFocused={focusState.amount}
-          handleFocus={handleFocus}
-          handleBlur={handleBlur}
-          isCustomNumber={true}
-        />
+        label="Amount"
+        name="amount"
+        type="number"
+        placeholder="0.00"
+        isFocused={focusState.amount}
+        handleFocus={handleFocus}
+        handleBlur={handleBlur}
+        isCustomNumber={true}
+      />
       {(onTabs === "income" || onTabs === "expense") && (
         <GroupField
           label="Category"

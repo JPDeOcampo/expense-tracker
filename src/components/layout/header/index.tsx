@@ -1,15 +1,13 @@
 "use client";
-import { useContext } from "react";
-import { ShareContext } from "@/components/shared/context/share-state";
+import useShareContext from "@/components/shared/hooks/share-state-hooks";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { logoutService } from "@/service/api/logoutService";
 import { useRouter } from "next/navigation";
-import { FaUserCircle } from "react-icons/fa";
 
 const Header = () => {
   const router = useRouter();
 
-  const { user } = useContext<any>(ShareContext);
+  const { user } = useShareContext();
 
   const handleLogout = async () => {
     try {

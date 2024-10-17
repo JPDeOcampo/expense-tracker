@@ -11,6 +11,6 @@ export const GET = async (req: Request) => {
 
     return NextResponse.json({ message: "Token is valid" }, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    return NextResponse.json({ message: err}, { status: 401 });
   }
 };

@@ -1,6 +1,5 @@
 "use client";
-import { useContext } from "react";
-import { ShareContext } from "../../context/share-state";
+import useShareContext from "../../hooks/share-state-hooks";
 import { Dispatch, SetStateAction } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 
@@ -34,7 +33,7 @@ const GroupField = ({
   items,
 }: any) => {
   const { focusState, setFocusState, formValues, setFormValues } =
-    useContext<any>(ShareContext);
+    useShareContext();
 
   const handleOnChange = (e: any, name: string) => {
     e.preventDefault();
@@ -62,7 +61,7 @@ const GroupField = ({
     (isEmailRegister && focusState.errorEmailRegister) ||
     (isReEnterRegister && focusState.errorReEnterRegister) ||
     (isPasswordLogin && focusState.errorPasswordLogin);
-  
+
   return (
     <>
       {isAutoComplete ? (
@@ -118,7 +117,7 @@ const GroupField = ({
       ) : (
         <div className="group-input">
           <label
-          htmlFor={name} 
+            htmlFor={name}
             className={`text-base ${
               isError ? "text-red-500" : "text-quaternary"
             }`}

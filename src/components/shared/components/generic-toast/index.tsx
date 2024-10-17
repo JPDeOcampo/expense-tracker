@@ -1,5 +1,3 @@
-import React from "react";
-
 const GenericToast = ({ defaultToast, message }: any) => {
   return (
     <>
