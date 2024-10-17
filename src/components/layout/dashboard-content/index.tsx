@@ -28,10 +28,7 @@ const Overview = () => {
     <div className="card flex flex-col gap-4">
       <div className="w-full flex justify-between">
         <h2 className="card-header">Overview</h2>
-        <button
-          className="custom-btn"
-          onClick={() => setIsModalOpen(true)}
-        >
+        <button className="custom-btn" onClick={() => setIsModalOpen(true)}>
           <span className="text-neutral-light">
             <FaPlus />
           </span>
@@ -99,21 +96,22 @@ const RecentTransaction = () => {
 
   return (
     <div className="card">
+      <h2 className="card-header">Transaction History</h2>
       <Table
         isHeaderSticky
         aria-label="transaction-history"
         bottomContent={
           hasMore ? (
             <div className="flex w-full justify-center">
-              <Button  className="custom-btn" variant="flat" onPress={loadMore}>
+              <Button className="custom-btn" variant="flat" onPress={loadMore}>
                 Load More
               </Button>
             </div>
           ) : null
         }
         classNames={{
-          base: "max-h-[520px] overflow-auto",
-          table: "min-h-[420px]",
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none",
+          table: "min-h-[320px]",
         }}
       >
         <TableHeader>
@@ -126,7 +124,7 @@ const RecentTransaction = () => {
           {sortedData.map((item: any) => (
             <TableRow key={item._id}>
               {(columnKey) => (
-                <TableCell>
+                <TableCell className="h-6">
                   <p className="capitalize text-base text-quaternary">
                     {item[columnKey]}
                   </p>

@@ -21,7 +21,7 @@ const Login = () => {
     isError,
     setIsError,
   } = useContext<any>(ShareContext);
-  const { fetchIncome } = useContext<any>(GlobalContext);
+  const { fetchIncome, fetchUser } = useContext<any>(GlobalContext);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -44,7 +44,7 @@ const Login = () => {
 
     try {
       const response = await loginService(formData);
-
+      console.log(response)
       if (response?.invalidEmail) {
         setFocusState((prev: any) => ({ ...prev, errorEmailLogin: true }));
         handleSetError("login-error", response?.message);
@@ -54,6 +54,7 @@ const Login = () => {
       } else {
         router.push("/pages/dashboard");
         fetchIncome();
+        fetchUser(response?.id);
         handleResetFormValues();
       }
 

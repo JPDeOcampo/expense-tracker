@@ -13,6 +13,7 @@ import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeServ
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
 import { usePathname } from "next/navigation";
 import useTotalHooks from "../../hooks/total-hooks";
+import { fetchUserService } from "@/service/api/fetchUserService";
 
 type GlobalContextType = Record<string, any>;
 
@@ -27,12 +28,13 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setOverAllIncomeData,
     setOverAllExpenseData,
     setCurrentBalance,
+    setUser,
   } = useContext<any>(ShareContext);
 
   const { getTotalAmount } = useTotalHooks();
 
   const pathname = usePathname();
- 
+
   const fetchExpense = async (currentBalance: any) => {
     console.log(currentBalance);
     try {
@@ -42,7 +44,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setExpenseData(data.expense);
         const overAllAmount = getTotalAmount(data.expense);
         setOverAllExpenseData(overAllAmount);
-        if (typeof currentBalance === 'number' && overAllAmount !== undefined) {
+        if (typeof currentBalance === "number" && overAllAmount !== undefined) {
           setCurrentBalance(currentBalance - overAllAmount);
         }
         return response;
@@ -69,14 +71,28 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const fetchUser = async (id: number) => {
+    try {
+      const response = await fetchUserService(id);
+      sessionStorage.setItem("user", JSON.stringify(response.login));
+      setUser(response.login);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (pathname === "/") return;
     fetchIncome();
+    let user = JSON.parse(sessionStorage.getItem("user") ?? 'null');
+    setUser(user);
+    
   }, []);
 
   const contextValue = useMemo(
-    () => ({ fetchIncome, fetchExpense }),
-    [fetchIncome, fetchExpense]
+    () => ({ fetchIncome, fetchExpense, fetchUser }),
+    [fetchIncome, fetchExpense, fetchUser]
   );
   return (
     <GlobalContext.Provider value={contextValue}>

@@ -1,17 +1,13 @@
 import { ENDPOINTS } from "../../../apiConfig";
 
-export const loginService = async ({ email, password }: any) => {
-
+export const fetchUserService = async (id: number) => {
+    console.log(id, 'id')
   try {
-    const response = await fetch(ENDPOINTS.login, {
-      method: "POST",
+    const response = await fetch(`${ENDPOINTS.login}/${id}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
     });
     const data = await response.json();
     if (response.ok) {

@@ -1,5 +1,4 @@
 "use client";
-import { error } from "console";
 import { createContext, useState, useMemo, FC, ReactNode } from "react";
 
 type ShareContextType = Record<string, any>;
@@ -13,6 +12,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [incomeData, setIncomeData] = useState([]);
   const [expenseData, setExpenseData] = useState([]);
 
+  const [user, setUser] = useState();
+console.log(user)
   const [overAllIncomeData, setOverAllIncomeData] = useState();
   const [currentBalance, setCurrentBalance] = useState();
   const [overAllExpenseData, setOverAllExpenseData] = useState();
@@ -103,6 +104,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setFormValues,
       currency,
       setCurrency,
+      user,
+      setUser,
     }),
     [
       isCreateAccount,
@@ -126,6 +129,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setFormValues,
       currency,
       setCurrency,
+      user,
+      setUser,
     ]
   );
   return (
