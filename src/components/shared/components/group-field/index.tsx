@@ -73,6 +73,7 @@ const GroupField = ({
               isFocused ? "border border-quaternary" : "border border-secondary"
             }`}
             name={name}
+            aria-labelledby={name}
             onFocus={() => handleFocus(name)}
             onBlur={() => handleBlur(name)}
             defaultItems={items}
@@ -101,6 +102,7 @@ const GroupField = ({
                   : "border border-secondary"
               }`}
               name={name}
+              aria-labelledby={name}
               value={formValues[value || name]}
               onFocus={() => handleFocus(name)}
               onBlur={() => handleBlur(name)}
@@ -116,6 +118,7 @@ const GroupField = ({
       ) : (
         <div className="group-input">
           <label
+          htmlFor={name} 
             className={`text-base ${
               isError ? "text-red-500" : "text-quaternary"
             }`}
@@ -125,6 +128,8 @@ const GroupField = ({
           <input
             type={type}
             name={name}
+            id={name}
+            aria-labelledby={name}
             placeholder={placeholder}
             value={formValues[value || name] ?? ""}
             className={`text-base text-quaternary ${

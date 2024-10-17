@@ -17,6 +17,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [currentBalance, setCurrentBalance] = useState();
   const [overAllExpenseData, setOverAllExpenseData] = useState();
 
+  const [currency, setCurrency] = useState("PHP");
+
   const [isError, setIsError] = useState({
     error: "",
     message: "",
@@ -99,6 +101,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsError,
       formValues,
       setFormValues,
+      currency,
+      setCurrency,
     }),
     [
       isCreateAccount,
@@ -120,6 +124,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsError,
       formValues,
       setFormValues,
+      currency,
+      setCurrency,
     ]
   );
   return (

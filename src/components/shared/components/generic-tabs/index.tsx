@@ -164,7 +164,7 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
         handleFocus={handleFocus}
         handleBlur={handleBlur}
       />
-      <div className="w-full flex gap-3">
+      <div className="w-full flex gap-3 mt-4 justify-end">
         <Button color="danger" variant="light" onClick={handleCloseModal}>
           Close
         </Button>

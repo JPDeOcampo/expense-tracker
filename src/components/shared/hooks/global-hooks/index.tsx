@@ -14,7 +14,7 @@ const useGlobalHooks = () => {
       return newValues;
     });
   };
-  const handleSetError = ( error: any, message : any) => {
+  const handleSetError = (error: any, message: any) => {
     setIsError((prev: any) => ({
       ...prev,
       error: error,
@@ -32,10 +32,21 @@ const useGlobalHooks = () => {
       return { ...resetState, focusState: true };
     });
   };
+
+  const handleFormatAmount = (amount: any, currency: any) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  };
+
   return {
     handleResetFormValues,
     handleResetErrorFocus,
     handleSetError,
+    handleFormatAmount,
   };
 };
 
