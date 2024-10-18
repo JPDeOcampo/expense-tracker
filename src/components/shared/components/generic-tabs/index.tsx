@@ -1,19 +1,19 @@
 "use client";
-import { useState, FormEvent, Dispatch, SetStateAction } from "react";
-import useContextHooks from "../../hooks/context-hooks";
+import { useState, FormEvent } from "react";
+import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 import GroupField from "../group-field";
 import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
-
 import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService";
 import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseService";
-import { ICombinedDataType, IAddFormTypes, IMainData } from "@/components/interface/global-interface";
+import { ICombinedDataType } from "@/components/interface/global-interface";
+
 interface FormProps {
   onTabs: string;
   handleCloseModal: () => void;
 }
 
 const Form = ({ onTabs, handleCloseModal }: FormProps) => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { focusState, handleFocus, handleBlur, setIncomeData, setExpenseData } =
     shareContext;
 
@@ -58,10 +58,14 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     const { date, amount, category, frequency, paymentMethod, note } =
       event.currentTarget;
 
-    const formData: IAddFormTypes = {
+    const formData: ICombinedDataType  = {
       date: date.value,
       amount: amount.value,
       note: note.value,
+      frequency: frequency?.value ?? '',
+      category: category?.value ?? '',
+      paymentMethod: paymentMethod?.value ?? '',
+      userId: '',
     };
    
     if (onTabs === "income") {
@@ -80,12 +84,12 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
       if (onTabs === "income") {
         const response = await AddIncomeService(formData);
         if (response?.ok) {
-          setIncomeData((prev: any) => [...prev, { ...formData }]);
+          setIncomeData((prev: ICombinedDataType[]) => [...prev, { ...formData }]);
         }
       } else if (onTabs === "expense") {
         const response = await AddExpenseService(formData);
         if (response?.ok) {
-          setExpenseData((prev: any) => [...prev, { ...formData }]);
+          setExpenseData((prev: ICombinedDataType[]) => [...prev, { ...formData }]);
         }
       }
     } catch (error) {
@@ -172,7 +176,7 @@ const GenericTabs = ({
 }: {
   handleCloseModal: () => void;
 }) => {
-  const [selected, setSelected] = useState<any>("expense");
+  const [selected, setSelected] = useState<string>("expense");
 
   return (
     <div className="flex flex-col w-full">
@@ -183,7 +187,7 @@ const GenericTabs = ({
             size="md"
             aria-label="Tabs form"
             selectedKey={selected}
-            onSelectionChange={setSelected}
+            onSelectionChange={(newSelected) => setSelected(newSelected as string)}
           >
             <Tab key="income" title="Income">
               <Form handleCloseModal={handleCloseModal} onTabs="income" />

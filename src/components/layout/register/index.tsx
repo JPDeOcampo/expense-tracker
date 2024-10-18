@@ -1,6 +1,6 @@
 "use client";
 import { useState, FormEvent } from "react";
-import useContextHooks from "@/components/shared/hooks/context-hooks";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -11,7 +11,7 @@ import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
 const Register = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const {
     setIsCreateAccount,
     focusState,

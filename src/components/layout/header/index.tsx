@@ -1,12 +1,12 @@
 "use client";
-import useContextHooks from "@/components/shared/hooks/context-hooks";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import { logoutService } from "@/service/api/logoutService";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
   const router = useRouter();
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { user } = shareContext;
 
   const handleLogout = async () => {
@@ -20,7 +20,7 @@ const Header = () => {
       console.error(error);
     }
   };
-  const firstLetter = user?.firstName?.charAt(0);
+  const firstLetter = (user as { firstName: string; })?.firstName?.charAt(0);
   return (
     <header className="w-full flex justify-end pr-14 py-6 bg-secondary-50">
       <Popover placement="bottom-end" showArrow={true}>

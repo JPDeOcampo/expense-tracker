@@ -1,5 +1,5 @@
 "use client";
-import useContextHooks from "../context-hooks";
+import useShareContextHooks from "../context-hooks/share-state-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
 
 interface FocusState extends FocusStateType {
@@ -7,7 +7,7 @@ interface FocusState extends FocusStateType {
   focusState: boolean;
 }
 const useGlobalHooks = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { setFormValues, setIsError, setFocusState } = shareContext;
 
   const handleResetFormValues = () => {

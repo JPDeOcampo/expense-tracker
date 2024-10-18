@@ -1,5 +1,5 @@
 "use client";
-import useContextHooks from "../../hooks/context-hooks";
+import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { FocusStateType, IFieldValueTypes } from "@/components/interface/global-interface";
@@ -49,7 +49,7 @@ const GroupField = ({
   isCustomNumber,
   items,
 }: IGroupFieldTypes) => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { focusState, setFocusState, formValues, setFormValues } = shareContext;
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>, name: string) => {

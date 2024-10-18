@@ -1,10 +1,10 @@
 "use client";
-import useContextHooks from "@/components/shared/hooks/context-hooks";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import Login from "@/components/layout/login";
 import Register from "@/components/layout/register";
 
 const App = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { isCreateAccount } = shareContext;
 
   return (

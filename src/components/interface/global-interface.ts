@@ -1,11 +1,12 @@
+import { Dispatch, SetStateAction } from "react";
 export interface IMainData {
   amount: number | string;
   date: string;
   note: string;
   paymentMethod: string;
   userId: string;
-  _id: string;
-  __v: number;
+  _id?: string;
+  __v?: number;
 }
 export interface ICategoryDataType extends IMainData {
   category: string;
@@ -16,12 +17,12 @@ export interface IFrequencyDataType extends ICategoryDataType {
 }
 
 export interface ICombinedDataType extends IFrequencyDataType {
-  type: string;
+  type?: string;
   to?: string;
   from?: string;
 }
 export interface ITableDataType extends ICombinedDataType {
-  key: string;
+  [key: string]: string | number | undefined;
 }
 export interface FocusStateType {
   firstName: boolean;
@@ -43,68 +44,50 @@ export interface FocusStateType {
   focusState?: boolean;
 }
 export interface IFieldValueTypes {
-  firstName: string,
-  lastName: string,
-  username: string,
-  emailLogin: string,
-  passwordLogin: string,
-  passwordRegister: string,
-  reEnterPassword: string,
-  date: string,
-  amount: string,
-  category: string,
-  frequency: string,
-  paymentMethod: string,
-  note: string,
+  firstName: string;
+  lastName: string;
+  username: string;
+  emailLogin: string;
+  passwordLogin: string;
+  passwordRegister: string;
+  reEnterPassword: string;
+  date: string;
+  amount: string;
+  category: string;
+  frequency: string;
+  paymentMethod: string;
+  note: string;
 }
 export interface ShareContextType {
   combinedData: ICombinedDataType[] | [];
-  currency: null;
-  overAllIncomeData: number | string;
-  currentBalance: number | string;
-  overAllExpenseData: number | string;
   isCreateAccount: boolean;
 
-  //   setIsCreateAccount: (value: boolean) => void;
-  //   focusState: any; // Replace with the actual type
-  //   setFocusState: (value: any) => void; // Replace with the actual type
-  //   handleFocus: () => void;
-  //   handleBlur: () => void;
-  //   incomeData: any[]; // Replace with the actual type
-  //   setIncomeData: (data: any[]) => void; // Replace with the actual type
-  //   expenseData: any[]; // Replace with the actual type
-  //   setExpenseData: (data: any[]) => void; // Replace with the actual type
-  //   setCurrentBalance: (balance: number) => void;
-  //   isError: boolean;
-  //   setIsError: (error: boolean) => void;
-  //   formValues: Record<string, any>; // Replace with the actual type
-  //   setFormValues: (values: Record<string, any>) => void; // Replace with the actual type
-
-  //   setCurrency: (currency: string) => void;
-  //   user: any; // Replace with the actual type
-  //   setUser: (user: any) => void; // Replace with the actual type
   setIsCreateAccount: (value: boolean) => void;
   focusState: FocusStateType;
-  setFocusState: (state: FocusStateType) => void;
+  setFocusState: Dispatch<SetStateAction<FocusStateType>>;
   handleFocus: (field: string) => void;
   handleBlur: (field: string) => void;
   incomeData: ICombinedDataType[];
-  setIncomeData: (data: ICombinedDataType[]) => void;
+  setIncomeData: Dispatch<SetStateAction<ICombinedDataType[]>>;
   expenseData: ICombinedDataType[];
-  setExpenseData: (data: ICombinedDataType[]) => void;
-  setOverAllIncomeData: (data: string) => void;
+  setExpenseData: Dispatch<SetStateAction<ICombinedDataType[]>>;
+  overAllIncomeData: string | number;
+  setOverAllIncomeData: (data: number) => void;
+  currentBalance: number | undefined;
   setCurrentBalance: (balance: number) => void;
-  setOverAllExpenseData: (data: string) => void;
+  overAllExpenseData: string | number;
+  setOverAllExpenseData: (data: number) => void;
   isError: {
     error: string;
     message: string;
   };
   setIsError: (error: { error: string; message: string }) => void;
   formValues: Record<string, string>;
-  setFormValues: (values: Record<string, string>) => void;
+  setFormValues: Dispatch<SetStateAction<Record<string, string>>>;
+  currency: string | null;
   setCurrency: (currency: string | null) => void;
-  user: string;
-  setUser: (user: string) => void;
+  user: { firstName: string } | (string | number);
+  setUser: (user: string | number) => void;
 }
 
 // Income, Expense, and Transfer

@@ -5,45 +5,15 @@ import {
   useMemo,
   FC,
   ReactNode,
-  Dispatch,
-  SetStateAction,
 } from "react";
 import {
   ICombinedDataType,
   FocusStateType,
+  ShareContextType
 } from "@/components/interface/global-interface";
 // type ShareContextType = Record<string, any>;
 
-interface ShareContextType {
-  isCreateAccount: boolean;
-  setIsCreateAccount: (value: boolean) => void;
-  focusState: FocusStateType;
-  setFocusState: Dispatch<SetStateAction<FocusStateType>>;
-  handleFocus: (field: string) => void;
-  handleBlur: (field: string) => void;
-  incomeData: ICombinedDataType[];
-  setIncomeData: Dispatch<SetStateAction<ICombinedDataType[]>>;
-  expenseData: ICombinedDataType[];
-  setExpenseData: Dispatch<SetStateAction<ICombinedDataType[]>>;
-  combinedData: ICombinedDataType[];
-  overAllIncomeData: string | number;
-  setOverAllIncomeData: (data: number) => void;
-  currentBalance: number | undefined;
-  setCurrentBalance: (balance: number) => void;
-  overAllExpenseData: string | number;
-  setOverAllExpenseData: (data: number) => void;
-  isError: {
-    error: string;
-    message: string;
-  };
-  setIsError: (error: { error: string ; message: string }) => void;
-  formValues: Record<string, string>;
-  setFormValues: Dispatch<SetStateAction<Record<string, string>>>;
-  currency: string | null;
-  setCurrency: (currency: string | null) => void;
-  user: string | number;
-  setUser: (user: string | number) => void;
-}
+
 const initialFocusState: FocusStateType = {
   firstName: false,
   lastName: false,
@@ -62,33 +32,6 @@ const initialFocusState: FocusStateType = {
   errorEmailRegister: false,
   errorReEnterRegister: false,
 };
-// const defaultContextValue: ShareContextType = {
-//   isCreateAccount: false,
-//   setIsCreateAccount: () => {},
-//   focusState: initialFocusState,
-//   setFocusState: () => {},
-//   handleFocus: () => {},
-//   handleBlur: () => {},
-//   incomeData: [],
-//   setIncomeData: () => {},
-//   expenseData: [],
-//   setExpenseData: () => {},
-//   combinedData: [],
-//   overAllIncomeData: 0,
-//   setOverAllIncomeData: () => {},
-//   currentBalance: undefined,
-//   setCurrentBalance: () => {},
-//   overAllExpenseData: 0,
-//   setOverAllExpenseData: () => {},
-//   isError: { error: '', message: '' },
-//   setIsError: () => {},
-//   formValues: {},
-//   setFormValues: () => {},
-//   currency: null,
-//   setCurrency: () => {},
-//   user: '',
-//   setUser: () => {},
-// };
 
 export const ShareContext = createContext<ShareContextType | null>(null);
 

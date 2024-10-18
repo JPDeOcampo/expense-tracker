@@ -1,25 +1,30 @@
 "use client";
-import { createContext, useMemo, FC, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  useMemo,
+  FC,
+  ReactNode,
+  useEffect,
+  useContext
+} from "react";
 import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeService";
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
 import { usePathname } from "next/navigation";
 import useTotalHooks from "../../hooks/total-hooks";
 import { fetchUserService } from "@/service/api/fetchUserService";
-import useContextHooks from "../../hooks/context-hooks";
+import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 
-type GlobalContextType = Record<string, any>;
-// interface GlobalContextType {
-//   fetchIncome: () => Promise<Response | undefined>;
-//   fetchExpense: (currentBalance: number) => Promise<Response | undefined>;
-//   fetchUser: (id: number) => Promise<Response | undefined>;
-//   pathname: string;
-// }
+interface GlobalContextType {
+  fetchIncome: () => Promise<Response | undefined>;
+  fetchExpense: (currentBalance: number) => Promise<Response | undefined>;
+  fetchUser: (id: number) => Promise<Response | undefined>;
+}
 export const GlobalContext = createContext<GlobalContextType | undefined>(
   undefined
 );
 
 const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const {
     setIncomeData,
     setExpenseData,
@@ -33,7 +38,9 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const pathname = usePathname();
 
-  const fetchExpense = async (currentBalance: number) => {
+  const fetchExpense = async (
+    currentBalance: number
+  ): Promise<Response | undefined> => {
     try {
       const response = await fetchExpenseService();
       const data = await response?.json();
@@ -51,7 +58,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const fetchIncome = async () => {
+  const fetchIncome = async (): Promise<Response | undefined> => {
     try {
       const response = await fetchIncomeService();
       const data = await response?.json();
@@ -68,7 +75,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const fetchUser = async (id: number) => {
+  const fetchUser = async (id: number): Promise<Response | undefined> => {
     try {
       const response = await fetchUserService(id);
       sessionStorage.setItem("user", JSON.stringify(response.login));
@@ -85,11 +92,12 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const user = JSON.parse(sessionStorage.getItem("user") ?? "null");
     setUser(user);
   }, []);
-  const [a] = useState("lol");
+
   const contextValue = useMemo(
-    () => ({ fetchIncome, fetchExpense, fetchUser, pathname, a }),
-    [fetchIncome, fetchExpense, fetchUser, pathname, a]
+    () => ({ fetchIncome, fetchExpense, fetchUser }),
+    [fetchIncome, fetchExpense, fetchUser]
   );
+  
   return (
     <GlobalContext.Provider value={contextValue}>
       {children}

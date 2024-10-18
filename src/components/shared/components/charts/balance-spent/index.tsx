@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import useContextHooks from "@/components/shared/hooks/context-hooks";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 
 const chartConfig = {
@@ -22,12 +22,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 interface IEntry {
-  type: string;
+  type?: string;
   amount: string | number;
 }
 
 const BalanceSpent = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { combinedData } = shareContext;
 
   const months = [

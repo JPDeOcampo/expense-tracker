@@ -1,6 +1,6 @@
 "use client";
-import { useState, useContext, FormEvent } from "react";
-import useContextHooks from "@/components/shared/hooks/context-hooks";
+import { useState, FormEvent } from "react";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { loginService } from "@/service/api/loginService";
 import { useRouter } from "next/navigation";
@@ -9,10 +9,12 @@ import { EyeSlashFilledIcon } from "../../../../public/images";
 import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
-import { GlobalContext } from "@/components/shared/context/global-provider";
 import { FocusStateType } from "@/components/interface/global-interface";
+import useGlobalContextHooks from "@/components/shared/hooks/context-hooks/global-context-hooks";
+
 const Login = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext} = useShareContextHooks();
+  const { globalContext } = useGlobalContextHooks();
   const {
     setIsCreateAccount,
     focusState,
@@ -21,8 +23,8 @@ const Login = () => {
     setFocusState,
     isError,
   } = shareContext;
-  const { fetchIncome, fetchUser, a } = useContext<any>(GlobalContext);
-  console.log(a)
+  const { fetchIncome, fetchUser } = globalContext;
+
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -48,10 +50,16 @@ const Login = () => {
       const response = await loginService(data);
       console.log(response);
       if (response?.invalidEmail) {
-        setFocusState((prev: FocusStateType) => ({ ...prev, errorEmailLogin: true }));
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorEmailLogin: true,
+        }));
         handleSetError("login-error", response?.message);
       } else if (response?.invalidPassword) {
-        setFocusState((prev: FocusStateType) => ({ ...prev, errorPasswordLogin: true }));
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorPasswordLogin: true,
+        }));
         handleSetError("login-error", response?.message);
       } else {
         router.push("/pages/dashboard");

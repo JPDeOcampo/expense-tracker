@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import useContextHooks from "@/components/shared/hooks/context-hooks";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import BalanceSpent from "@/components/shared/components/charts/balance-spent";
 import GenericModal from "@/components/shared/components/generic-modal";
 import { FaPlus } from "react-icons/fa";
@@ -16,8 +16,9 @@ import {
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 import { ITableDataType } from "@/components/interface/global-interface";
+
 const Overview = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { overAllIncomeData, currentBalance, overAllExpenseData } =
     shareContext;
 
@@ -73,7 +74,7 @@ const Overview = () => {
 };
 
 const RecentTransaction = () => {
-  const { shareContext } = useContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { combinedData, currency } = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
   const [page, setPage] = useState(1);
@@ -84,7 +85,7 @@ const RecentTransaction = () => {
   useEffect(() => {
     const updatedData = combinedData.map((item: ICombinedDataType) => ({
       ...item,
-      amount: handleFormatAmount(item.amount, currency),
+      amount: handleFormatAmount(Number(item.amount), String(currency)),
       date: new Date(item.date).toISOString().split("T")[0],
     }));
     const newData = updatedData.slice(0, page * itemsPerPage);
@@ -98,7 +99,7 @@ const RecentTransaction = () => {
 
   const sortedData = displayedData.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  }) as ITableDataType[];
 
   return (
     <div className="card">
