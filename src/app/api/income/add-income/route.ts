@@ -1,9 +1,9 @@
 import connectMongoDB from "../../../../../libs/mongodb";
 import Income from "../../../../../models/income";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { validateToken } from "@/middleware";
 
-export const POST = async (request: Request) => {
+export const POST = async (request: NextRequest) => {
   try {
     const { date, amount, category, frequency, paymentMethod, note } =
       await request.json();

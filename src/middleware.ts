@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import * as jose from "jose";
 import * as cookie from "cookie";
 
@@ -6,8 +6,8 @@ const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secure-default-secret"
 );
 
-export const validateToken = async (request: Request) => {
-  const cookies = request.headers.get("cookie");
+export const validateToken = async (request: NextRequest) => {
+  const cookies = request.cookies.get("token");
   
   if (!cookies) {
     return {
@@ -15,7 +15,7 @@ export const validateToken = async (request: Request) => {
     };
   }
 
-  const { token } = cookie.parse(cookies || "");
+  const token = cookies.value; 
   if (!token) {
     return { error: { message: "Token not found", invalidToken: true } };
   }
@@ -34,7 +34,7 @@ export const validateToken = async (request: Request) => {
   }
 };
 
-export async function middleware(request: Request) {
+export async function middleware(request: NextRequest) {
   const validationResult = await validateToken(request);
 
   if (validationResult.error) {
