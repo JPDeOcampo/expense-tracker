@@ -1,6 +1,5 @@
 "use client";
 import { createContext, useMemo, FC, ReactNode, useEffect, useState } from "react";
-import { ShareContext } from "../share-state";
 import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeService";
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
 import { usePathname } from "next/navigation";
@@ -83,7 +82,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (pathname === "/") return;
     fetchIncome();
-    let user = JSON.parse(sessionStorage.getItem("user") ?? "null");
+    const user = JSON.parse(sessionStorage.getItem("user") ?? "null");
     setUser(user);
   }, []);
   const [a] = useState("lol");

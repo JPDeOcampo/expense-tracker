@@ -1,23 +1,14 @@
 import { ENDPOINTS } from "../../../../apiConfig";
-
-interface IPropTypes {
-  userId: string;
-  date: string;
-  amount: string;
-  category: string;
-  paymentMethod: string;
-  note: string;
-}
-
+import { IAddFormTypes } from "@/components/interface/global-interface";
 
 export const AddExpenseService = async ({
-  userId,
+  // userId,
   date,
   amount,
   category,
   paymentMethod,
   note,
-}: IPropTypes) => {
+}: IAddFormTypes) => {
   try {
     const response = await fetch(ENDPOINTS.add_expense, {
       method: "POST",
@@ -25,7 +16,7 @@ export const AddExpenseService = async ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: userId,
+        // userId: userId,
         date: date,
         amount: amount,
         category: category,

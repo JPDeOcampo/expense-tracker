@@ -1,4 +1,8 @@
-const GenericToast = ({ defaultToast, message }: any) => {
+interface IPropTypes {
+  defaultToast: boolean;
+  message: string;
+}
+const GenericToast = ({ defaultToast, message }: IPropTypes) => {
   return (
     <>
       {defaultToast ? (

@@ -27,21 +27,21 @@ interface ShareContextType {
   setExpenseData: Dispatch<SetStateAction<ICombinedDataType[]>>;
   combinedData: ICombinedDataType[];
   overAllIncomeData: string | number;
-  setOverAllIncomeData: (data: any) => void;
+  setOverAllIncomeData: (data: number) => void;
   currentBalance: number | undefined;
   setCurrentBalance: (balance: number) => void;
   overAllExpenseData: string | number;
-  setOverAllExpenseData: (data: any) => void;
+  setOverAllExpenseData: (data: number) => void;
   isError: {
     error: string;
     message: string;
   };
-  setIsError: (error: { error: string; message: string }) => void;
+  setIsError: (error: { error: string ; message: string }) => void;
   formValues: Record<string, string>;
   setFormValues: Dispatch<SetStateAction<Record<string, string>>>;
   currency: string | null;
   setCurrency: (currency: string | null) => void;
-  user: any;
+  user: string | number;
   setUser: (user: string | number) => void;
 }
 const initialFocusState: FocusStateType = {
@@ -96,10 +96,10 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [isCreateAccount, setIsCreateAccount] = useState<boolean>(false);
   const [incomeData, setIncomeData] = useState<ICombinedDataType[]>([]);
   const [expenseData, setExpenseData] = useState<ICombinedDataType[]>([]);
-  const [user, setUser] = useState<any>("");
-  const [overAllIncomeData, setOverAllIncomeData] = useState<any>(0);
+  const [user, setUser] = useState<string | number>("");
+  const [overAllIncomeData, setOverAllIncomeData] = useState<number>(0);
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
-  const [overAllExpenseData, setOverAllExpenseData] = useState<any>(0);
+  const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
   const [currency, setCurrency] = useState<string | null>("PHP");
   const [isError, setIsError] = useState<{ error: string; message: string }>({
     error: "",

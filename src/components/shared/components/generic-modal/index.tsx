@@ -1,16 +1,16 @@
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-} from "@nextui-org/react";
+import { Dispatch, SetStateAction } from "react";
+import { Modal, ModalContent, ModalHeader, ModalBody } from "@nextui-org/react";
 
 import GenericTabs from "../generic-tabs";
-const GenericModal = ({ isModalOpen, setIsModalOpen }: any) => {
+interface IPropTypes {
+  isModalOpen: boolean;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+const GenericModal = ({ isModalOpen, setIsModalOpen }: IPropTypes) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
- 
+
   return (
     <div className="flex flex-col gap-2">
       <Modal

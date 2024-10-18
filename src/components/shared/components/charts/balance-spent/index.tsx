@@ -21,10 +21,11 @@ const chartConfig = {
     color: "#60a5fa",
   },
 } satisfies ChartConfig;
-interface IType {
-  type: string,
-  amount: string | number | any,
+interface IEntry {
+  type: string;
+  amount: string | number;
 }
+
 const BalanceSpent = () => {
   const { shareContext } = useContextHooks();
   const { combinedData } = shareContext;
@@ -43,32 +44,38 @@ const BalanceSpent = () => {
     "November",
     "December",
   ];
-
+  
+  const toNumber = (value: string | number): number => {
+    const num = typeof value === "number" ? value : parseFloat(value);
+    return isNaN(num) ? 0 : num; 
+  };
+  
   const chartData = months.map((month) => {
     let totalIncome = 0;
     let totalExpenses = 0;
-
+  
     const monthIndex = months.indexOf(month);
-
+  
     const monthlyEntries = combinedData.filter(
-      (entry: ICombinedDataType) => new Date(entry.date).getMonth() === monthIndex
+      (entry: ICombinedDataType) =>
+        new Date(entry.date).getMonth() === monthIndex
     );
-
-    monthlyEntries.forEach((entry: IType) => {
+  
+    monthlyEntries.forEach((entry: IEntry) => {
       if (entry.type === "income") {
-        totalIncome += entry.amount;
+        totalIncome += toNumber(entry.amount); 
       } else if (entry.type === "expense") {
-        totalExpenses += entry.amount;
+        totalExpenses += toNumber(entry.amount);
       }
     });
-
+  
     return {
       month: month,
       balance: totalIncome - totalExpenses,
       spent: totalExpenses,
     };
   });
-
+  
   return (
     <div className="card">
       <h2 className="card-header">Balance vs Spent</h2>

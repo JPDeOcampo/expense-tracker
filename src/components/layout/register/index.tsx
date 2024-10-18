@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import useContextHooks from "@/components/shared/hooks/context-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
@@ -30,7 +30,7 @@ const Register = () => {
   const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
     useGlobalHooks();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     handleResetErrorFocus();

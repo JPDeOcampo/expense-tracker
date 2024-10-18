@@ -1,47 +1,50 @@
 "use client";
 import { useContext } from "react";
 import { ShareContext } from "../../context/share-state";
-
+import useContextHooks from "../context-hooks";
+import { FocusStateType } from "@/components/interface/global-interface";
 interface ErrorState {
-  error: boolean;
+  error: string;
+  message: string;
 }
 
-interface FocusState {
+interface FocusState extends FocusStateType {
   [key: string]: boolean;
-  focusState: boolean; 
+  focusState: boolean;
 }
 const useGlobalHooks = () => {
-  // const {shareContext} = useContextHooks();
-  const { setFormValues, setIsError, setFocusState } =
-    useContext<any>(ShareContext);
+  const { shareContext } = useContextHooks();
+  const { setFormValues, setIsError, setFocusState } = shareContext;
+
   const handleResetFormValues = () => {
-    setFormValues((prev: any) => {
-      const newValues = Object.keys(prev).reduce((acc: any, key: any) => {
+    setFormValues((prev: Record<string, string>) => {
+      return Object.keys(prev).reduce((acc: Record<string, string>, key: string) => {
         acc[key] = "";
         return acc;
       }, {});
-      return newValues;
     });
-  };
-  const handleSetError = (error: any, message: any) => {
-    setIsError((prev: any) => ({
-      ...prev,
+  }
+  const handleSetError = (error: string, message: string) => {
+    setIsError({
       error: error,
       message: message,
-    }));
-  };
-  
-  const handleResetErrorFocus = () => {
-    setIsError((prev: ErrorState) => ({ ...prev, error: false }));
-    setFocusState((prev: FocusState) => {
-        const resetState = Object.keys(prev).reduce<FocusState>((acc, key) => {
-            acc[key] = false;
-            return acc;
-        }, {} as FocusState);
-
-        return { ...resetState, focusState: true };
     });
-};
+  };
+
+  const handleResetErrorFocus = () => {
+    setIsError({
+      error: "",
+      message: "",
+    });
+    setFocusState((prev: FocusStateType): FocusStateType => {
+      const resetState = Object.keys(prev as FocusState).reduce<FocusState>((acc, key) => {
+        acc[key] = false;
+        return acc;
+      }, {} as FocusState);
+      
+      return { ...resetState, focusState: true };
+    });
+  };
 
   const handleFormatAmount = (amount: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {

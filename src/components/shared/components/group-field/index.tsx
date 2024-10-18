@@ -1,15 +1,32 @@
 "use client";
 import useContextHooks from "../../hooks/context-hooks";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, ChangeEvent } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
-
-interface TypeComponents {
+import { FocusStateType, IFieldValueTypes } from "@/components/interface/global-interface";
+interface IGroupFieldTypes {
   label: string;
-  type: string;
+  type?: string;
   name: string;
-  value: any;
-  isFocused: boolean;
-  setIsFocused: Dispatch<SetStateAction<boolean>>;
+  value?: string;
+  placeholder?: string;
+  items?: { value: string; label: string }[];
+  isFocused?: boolean;
+  handleFocus: (field: string) => void;
+  handleBlur: (field: string) => void;
+  hasIconFirst?: boolean;
+  hasIconEnd?: boolean;
+  autoComplete?: string;
+  isRequired?: boolean;
+  isEmailLogin?: boolean;
+  isEmailRegister?: boolean;
+  isPasswordLogin?: boolean;
+  isReEnterRegister?: boolean;
+  isAutoComplete?: boolean;
+  isCustomNumber?: boolean;
+}
+interface AutocompleteItemType {
+  value: string;
+  label: string;
 }
 const GroupField = ({
   label,
@@ -31,12 +48,11 @@ const GroupField = ({
   isAutoComplete,
   isCustomNumber,
   items,
-}: any) => {
-  const {shareContext} = useContextHooks();
-  const { focusState, setFocusState, formValues, setFormValues } =
-    shareContext;
+}: IGroupFieldTypes) => {
+  const { shareContext } = useContextHooks();
+  const { focusState, setFocusState, formValues, setFormValues } = shareContext;
 
-  const handleOnChange = (e: any, name: string) => {
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>, name: string) => {
     e.preventDefault();
     let hasError = "";
 
@@ -51,10 +67,10 @@ const GroupField = ({
     }
 
     if (hasError) {
-      setFocusState((prev: any) => ({ ...prev, [hasError]: false }));
+      setFocusState((prev: FocusStateType) => ({ ...prev, [hasError]: false }));
     }
 
-    setFormValues((prev: any) => ({ ...prev, [name]: e.target.value }));
+    setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: e.target.value }));
   };
 
   const isError =
@@ -62,7 +78,7 @@ const GroupField = ({
     (isEmailRegister && focusState.errorEmailRegister) ||
     (isReEnterRegister && focusState.errorReEnterRegister) ||
     (isPasswordLogin && focusState.errorPasswordLogin);
-
+    const itemList = items ?? [];
   return (
     <>
       {isAutoComplete ? (
@@ -79,10 +95,10 @@ const GroupField = ({
             defaultItems={items}
             selectedKey={formValues[value || name]}
             onSelectionChange={() =>
-              setFormValues((prev: any) => ({ ...prev, [name]: value }))
+              setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: value ?? '' }))
             }
           >
-            {items.map((item: any) => (
+            {itemList.map((item: AutocompleteItemType) => (
               <AutocompleteItem key={item.value} value={item.value}>
                 {item.label}
               </AutocompleteItem>

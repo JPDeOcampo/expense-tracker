@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC, ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-const ValidateContainer = ({ children }: any) => {
+const ValidateContainer: FC<{ children: ReactNode }> = ({ children }) => {
   const [isValidating, setIsValidating] = useState<boolean>(true);
   const router = useRouter();
   const pathname = usePathname();

@@ -17,9 +17,11 @@ export interface IFrequencyDataType extends ICategoryDataType {
 
 export interface ICombinedDataType extends IFrequencyDataType {
   type: string;
+  to?: string;
+  from?: string;
 }
 export interface ITableDataType extends ICombinedDataType {
-  [key: string]: any;
+  key: string;
 }
 export interface FocusStateType {
   firstName: boolean;
@@ -38,8 +40,23 @@ export interface FocusStateType {
   errorPasswordLogin: boolean;
   errorEmailRegister: boolean;
   errorReEnterRegister: boolean;
+  focusState?: boolean;
 }
-
+export interface IFieldValueTypes {
+  firstName: string,
+  lastName: string,
+  username: string,
+  emailLogin: string,
+  passwordLogin: string,
+  passwordRegister: string,
+  reEnterPassword: string,
+  date: string,
+  amount: string,
+  category: string,
+  frequency: string,
+  paymentMethod: string,
+  note: string,
+}
 export interface ShareContextType {
   combinedData: ICombinedDataType[] | [];
   currency: null;
@@ -88,4 +105,16 @@ export interface ShareContextType {
   setCurrency: (currency: string | null) => void;
   user: string;
   setUser: (user: string) => void;
+}
+
+// Income, Expense, and Transfer
+export interface IAddFormTypes {
+  date: string;
+  amount: string | number;
+  note: string;
+  frequency?: string;
+  category?: string | undefined;
+  paymentMethod?: string;
+  to?: string;
+  from?: string;
 }

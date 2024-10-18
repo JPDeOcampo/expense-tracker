@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, FormEvent, Dispatch, SetStateAction } from "react";
 import useContextHooks from "../../hooks/context-hooks";
 import GroupField from "../group-field";
 import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
 
 import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService";
 import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseService";
-
+import { ICombinedDataType, IAddFormTypes, IMainData } from "@/components/interface/global-interface";
 interface FormProps {
   onTabs: string;
   handleCloseModal: () => void;
@@ -52,18 +52,18 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     { label: "Other", value: "other" },
   ];
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const { date, amount, category, frequency, paymentMethod, note } =
       event.currentTarget;
 
-    const formData: any = {
+    const formData: IAddFormTypes = {
       date: date.value,
       amount: amount.value,
       note: note.value,
     };
-
+   
     if (onTabs === "income") {
       formData.frequency = frequency.value;
       formData.category = category.value;

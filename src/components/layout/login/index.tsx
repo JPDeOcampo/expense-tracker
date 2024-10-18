@@ -1,5 +1,5 @@
 "use client";
-import { useState, useContext } from "react";
+import { useState, useContext, FormEvent } from "react";
 import useContextHooks from "@/components/shared/hooks/context-hooks";
 import GroupField from "@/components/shared/components/group-field";
 import { loginService } from "@/service/api/loginService";
@@ -10,6 +10,7 @@ import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { GlobalContext } from "@/components/shared/context/global-provider";
+import { FocusStateType } from "@/components/interface/global-interface";
 const Login = () => {
   const { shareContext } = useContextHooks();
   const {
@@ -33,24 +34,24 @@ const Login = () => {
   const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
     useGlobalHooks();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     handleResetErrorFocus();
-
-    const formData = {
-      email: event.target.email.value,
-      password: event.target.password.value,
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
     };
 
     try {
-      const response = await loginService(formData);
+      const response = await loginService(data);
       console.log(response);
       if (response?.invalidEmail) {
-        setFocusState((prev: any) => ({ ...prev, errorEmailLogin: true }));
+        setFocusState((prev: FocusStateType) => ({ ...prev, errorEmailLogin: true }));
         handleSetError("login-error", response?.message);
       } else if (response?.invalidPassword) {
-        setFocusState((prev: any) => ({ ...prev, errorPasswordLogin: true }));
+        setFocusState((prev: FocusStateType) => ({ ...prev, errorPasswordLogin: true }));
         handleSetError("login-error", response?.message);
       } else {
         router.push("/pages/dashboard");
