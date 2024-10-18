@@ -1,12 +1,6 @@
 "use client";
-import { useContext } from "react";
-import { ShareContext } from "../../context/share-state";
 import useContextHooks from "../context-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
-interface ErrorState {
-  error: string;
-  message: string;
-}
 
 interface FocusState extends FocusStateType {
   [key: string]: boolean;
