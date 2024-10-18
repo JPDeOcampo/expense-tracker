@@ -10,7 +10,9 @@ const ValidateContainer: FC<{ children: ReactNode }> = ({ children }) => {
     const checkAuth = async () => {
       try {
         const response = await fetch("/api/validate-token");
-        if (!response.ok) {
+        const data = await response.json();
+
+        if (data.invalidToken) {
           router.push("/");
         } else {
           setIsValidating(false);

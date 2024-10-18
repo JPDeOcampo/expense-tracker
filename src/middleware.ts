@@ -1,33 +1,54 @@
-import { NextResponse } from 'next/server';
-import * as jose from 'jose';
-import * as cookie from 'cookie';
+import { NextResponse } from "next/server";
+import * as jose from "jose";
+import * as cookie from "cookie";
 
-export async function middleware(req: Request) {
-  console.log('Incoming request to:', req.url);
+const SECRET_KEY = new TextEncoder().encode(
+  process.env.JWT_SECRET || "your-secure-default-secret"
+);
 
-  // Extract JWT from Authorization header
-  // const token = req.headers.get('Authorization')?.split(' ')[1];
-  const cookies = req.headers.get('cookie');
-  const { token } = cookie.parse(cookies || '');
-  
-  if (!token) {
-    console.log('No token found, redirecting to login.');
-    return NextResponse.redirect(new URL('/', req.url)); 
+export const validateToken = async (request: Request) => {
+  const cookies = request.headers.get("cookie");
+  if (!cookies) {
+    return {
+      error: { message: "No authentication token", invalidToken: true },
+    };
   }
 
-  const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "your-secure-default-secret");
+  const { token } = cookie.parse(cookies || "");
+  if (!token) {
+    return { error: { message: "Token not found", invalidToken: true } };
+  }
 
   try {
     const { payload } = await jose.jwtVerify(token, SECRET_KEY);
-    console.log('Token verified:', payload); 
-    return NextResponse.next(); // Allow access to the route
+    const userId = payload.id;
+
+    if (!userId) {
+      return { error: { message: "Invalid token", invalidToken: true } };
+    }
+
+    return { userId };
   } catch (err) {
-    console.error('Token verification failed:', err);
-    return NextResponse.redirect(new URL('/', req.url));
+    return { error: { message: "Token verification failed" } };
   }
+};
+
+export async function middleware(request: Request) {
+  const validationResult = await validateToken(request);
+
+  if (validationResult.error) {
+    return NextResponse.json(validationResult.error);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/api/income', '/api/dashboard'], 
+  matcher: [
+    "/api/dashboard",
+    "/api/income/add-income",
+    "/api/income/fetch-income",
+    "/api/expense/add-expense",
+    "/api/expense/fetch-expense",
+  ],
 };
-

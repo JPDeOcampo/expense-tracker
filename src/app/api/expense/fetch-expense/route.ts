@@ -1,18 +1,19 @@
 import connectMongoDB from "../../../../../libs/mongodb";
 import Expense from "../../../../../models/expense";
 import { NextResponse } from "next/server";
-import { validateToken } from "../../../../../libs/validateToken";
+import { validateToken } from "@/middleware";
 
 export const GET = async (request: Request) => {
+  
   try {
     const validationResponse = await validateToken(request);
     
     if (validationResponse.error) {
-      return NextResponse.json(validationResponse.error, { status: validationResponse.error.status });
+      return NextResponse.json(validationResponse.error);
     }
 
     const { userId } = validationResponse;
-
+console.log(userId, request)
     await connectMongoDB();
 
     const expense = await Expense.find({ userId });
