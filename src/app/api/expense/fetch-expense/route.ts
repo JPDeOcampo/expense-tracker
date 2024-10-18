@@ -13,7 +13,7 @@ export const GET = async (request: Request) => {
     }
 
     const { userId } = validationResponse;
-console.log(userId, request)
+
     await connectMongoDB();
 
     const expense = await Expense.find({ userId });

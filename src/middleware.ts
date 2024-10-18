@@ -8,6 +8,7 @@ const SECRET_KEY = new TextEncoder().encode(
 
 export const validateToken = async (request: Request) => {
   const cookies = request.headers.get("cookie");
+  
   if (!cookies) {
     return {
       error: { message: "No authentication token", invalidToken: true },
