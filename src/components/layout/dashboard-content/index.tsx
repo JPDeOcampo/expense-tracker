@@ -20,7 +20,7 @@ import { ITableDataType } from "@/components/interface/global-interface";
 interface IType extends ICombinedDataType {
   type: string;
   category: string;
-  count: string | number;
+  count: number;
   forEach(callback: (item: IType) => void): void;
 }
 
@@ -80,7 +80,6 @@ const Overview = () => {
   );
 };
 
-
 const Category = () => {
   const { shareContext } = useShareContextHooks();
   const { combinedData } = shareContext;
@@ -105,7 +104,6 @@ const Category = () => {
         }
       });
 
- 
       const formattedOutput = [];
 
       for (const [category, count] of Object.entries(categoryCount.income)) {
@@ -123,7 +121,12 @@ const Category = () => {
           count: count,
         });
       }
-      formattedOutput.sort((a: any, b: any) => b.count - a.count);
+      formattedOutput.sort(
+        (
+          a: { type: string; category: string; count: number },
+          b: { type: string; category: string; count: number }
+        ) => b.count - a.count
+      );
       return formattedOutput;
     };
     const countCat = countCategories(combinedData as IType[]);
