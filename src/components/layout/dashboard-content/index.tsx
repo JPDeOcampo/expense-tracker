@@ -17,6 +17,13 @@ import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 import { ITableDataType } from "@/components/interface/global-interface";
 
+interface IType extends ICombinedDataType {
+  type: string;
+  category: string;
+  count: string | number;
+  forEach(callback: (item: IType) => void): void;
+}
+
 const Overview = () => {
   const { shareContext } = useShareContextHooks();
   const { overAllIncomeData, currentBalance, overAllExpenseData } =
@@ -69,6 +76,106 @@ const Overview = () => {
         </div>
       </div>
       <GenericModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+    </div>
+  );
+};
+
+
+const Category = () => {
+  const { shareContext } = useShareContextHooks();
+  const { combinedData } = shareContext;
+  const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
+  const [page, setPage] = useState(1);
+
+  const itemsPerPage = 9;
+
+  useEffect(() => {
+    const countCategories = (data: IType[]) => {
+      const categoryCount: { [key: string]: { [key: string]: number } } = {
+        income: {},
+        expense: {},
+      };
+      data.forEach((item: IType) => {
+        const type = item.type;
+        const category = item.category;
+
+        if (categoryCount[type]) {
+          categoryCount[type][category] =
+            (categoryCount[type][category] || 0) + 1;
+        }
+      });
+
+ 
+      const formattedOutput = [];
+
+      for (const [category, count] of Object.entries(categoryCount.income)) {
+        formattedOutput.push({
+          type: "income",
+          category: category,
+          count: count,
+        });
+      }
+
+      for (const [category, count] of Object.entries(categoryCount.expense)) {
+        formattedOutput.push({
+          type: "expense",
+          category: category,
+          count: count,
+        });
+      }
+      formattedOutput.sort((a: any, b: any) => b.count - a.count);
+      return formattedOutput;
+    };
+    const countCat = countCategories(combinedData as IType[]);
+    const newData = countCat.slice(0, page * itemsPerPage);
+
+    setDisplayedData(newData as IType[]);
+  }, [combinedData, page]);
+
+  const hasMore = displayedData.length > combinedData.length;
+  const loadMore = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  return (
+    <div className="card">
+      <h2 className="card-header">Transaction History</h2>
+      <Table
+        isHeaderSticky
+        aria-label="transaction-history"
+        bottomContent={
+          hasMore ? (
+            <div className="flex w-full justify-center">
+              <Button className="custom-btn" variant="flat" onPress={loadMore}>
+                Load More
+              </Button>
+            </div>
+          ) : null
+        }
+        classNames={{
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none",
+          table: "min-h-[320px]",
+        }}
+      >
+        <TableHeader>
+          <TableColumn key="type">Type</TableColumn>
+          <TableColumn key="category">Category</TableColumn>
+          <TableColumn key="count">Item no.</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {displayedData.map((item: ICombinedDataType) => (
+            <TableRow key={item._id}>
+              {(columnKey) => (
+                <TableCell className="h-6">
+                  <p className="capitalize text-base text-quaternary">
+                    {item[columnKey as keyof ICombinedDataType]}
+                  </p>
+                </TableCell>
+              )}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
@@ -155,9 +262,7 @@ const DashboardContent = () => {
           <BalanceSpent />
         </div>
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="card">
-            <div></div>
-          </div>
+          <Category />
           <RecentTransaction />
         </div>
       </div>
