@@ -2,7 +2,7 @@
 import ValidateContainer from "@/components/shared/components/validate-container";
 import { MdOutlineDashboard, MdOutlineCategory } from "react-icons/md";
 import { useRouter, usePathname } from "next/navigation";
-
+import { IoIosSettings } from "react-icons/io";
 import { MouseEvent } from 'react';
 
 
@@ -57,8 +57,8 @@ const MenuDrawer = () => {
             route="/pages/calendar"
           />
           <MenuItem
-            icon={<MdOutlineCategory />}
-            name="Categories"
+            icon={<IoIosSettings />}
+            name="Settings"
             route="cat"
           />
           <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" />
