@@ -77,7 +77,7 @@ const Login = () => {
   return (
     <div className="flex flex-col gap-6 p-4">
       {isError.error === "login-error" && (
-        <GenericToast defaultToast={true} message={isError.message} />
+        <GenericToast isToast={'default'} message={isError.message} />
       )}
       <h2 className="text-2xl font-bold text-primary">Login</h2>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>

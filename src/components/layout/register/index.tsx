@@ -10,6 +10,7 @@ import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
+
 const Register = () => {
   const { shareContext } = useShareContextHooks();
   const {
@@ -19,6 +20,7 @@ const Register = () => {
     handleBlur,
     setFocusState,
     isError,
+    updateToast,
   } = shareContext;
 
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
@@ -63,6 +65,14 @@ const Register = () => {
       } else {
         setIsCreateAccount(false);
         handleResetFormValues();
+        updateToast({
+          isToast: "alert-success",
+          toastId: "alert-success",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-success",
+          message: "Successfully created!",
+        });
       }
     } catch (error) {
       console.error(error);
@@ -85,7 +95,7 @@ const Register = () => {
         </button>
       </div>
       {isError.error === "register-error" && (
-        <GenericToast defaultToast={true} message={isError.message} />
+        <GenericToast isToast={'default'} message={isError.message} />
       )}
       <h2 className="text-2xl font-bold text-primary">Register</h2>
 

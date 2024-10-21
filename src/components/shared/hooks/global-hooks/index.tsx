@@ -12,12 +12,15 @@ const useGlobalHooks = () => {
 
   const handleResetFormValues = () => {
     setFormValues((prev: Record<string, string>) => {
-      return Object.keys(prev).reduce((acc: Record<string, string>, key: string) => {
-        acc[key] = "";
-        return acc;
-      }, {});
+      return Object.keys(prev).reduce(
+        (acc: Record<string, string>, key: string) => {
+          acc[key] = "";
+          return acc;
+        },
+        {}
+      );
     });
-  }
+  };
   const handleSetError = (error: string, message: string) => {
     setIsError({
       error: error,
@@ -31,11 +34,14 @@ const useGlobalHooks = () => {
       message: "",
     });
     setFocusState((prev: FocusStateType): FocusStateType => {
-      const resetState = Object.keys(prev as FocusState).reduce<FocusState>((acc, key) => {
-        acc[key] = false;
-        return acc;
-      }, {} as FocusState);
-      
+      const resetState = Object.keys(prev as FocusState).reduce<FocusState>(
+        (acc, key) => {
+          acc[key] = false;
+          return acc;
+        },
+        {} as FocusState
+      );
+
       return { ...resetState, focusState: true };
     });
   };

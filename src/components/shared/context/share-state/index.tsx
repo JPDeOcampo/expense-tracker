@@ -5,15 +5,16 @@ import {
   useMemo,
   FC,
   ReactNode,
-  useEffect
+  useEffect,
 } from "react";
 import {
   ICombinedDataType,
   FocusStateType,
-  ShareContextType
+  ShareContextType,
 } from "@/components/interface/global-interface";
-// type ShareContextType = Record<string, any>;
-
+import GenericToast from "../../components/generic-toast";
+import { IToastTypes } from "@/components/interface/global-interface";
+import toast from "react-hot-toast";
 
 const initialFocusState: FocusStateType = {
   firstName: false,
@@ -45,7 +46,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
   const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
   const [currency, setCurrency] = useState<string | null>("PHP");
-  
+
   const [isError, setIsError] = useState<{ error: string; message: string }>({
     error: "",
     message: "",
@@ -80,20 +81,46 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   // Combine income and expense data
-  const combinedData = useMemo(() => [
-    ...(Array.isArray(incomeData)
-      ? incomeData.map((event: ICombinedDataType) => ({
-          ...event,
-          type: "income",
-        }))
-      : []),
-    ...(Array.isArray(expenseData)
-      ? expenseData.map((event: ICombinedDataType) => ({
-          ...event,
-          type: "expense",
-        }))
-      : []),
-  ], [incomeData, expenseData]);
+  const combinedData = useMemo(
+    () => [
+      ...(Array.isArray(incomeData)
+        ? incomeData.map((event: ICombinedDataType) => ({
+            ...event,
+            type: "income",
+          }))
+        : []),
+      ...(Array.isArray(expenseData)
+        ? expenseData.map((event: ICombinedDataType) => ({
+            ...event,
+            type: "expense",
+          }))
+        : []),
+    ],
+    [incomeData, expenseData]
+  );
+
+  const updateToast = ({
+    isToast,
+    toastId,
+    position,
+    delay,
+    className,
+    message,
+  }: IToastTypes) => {
+
+    toast(
+      <GenericToast
+        isToast={isToast}
+        message={message}
+      />,
+      {
+        position: position,
+        duration: delay,
+        className: `toast ${className}`,
+        id: toastId,
+      }
+    )
+  };
 
   const contextValue = useMemo(
     () => ({
@@ -122,6 +149,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setCurrency,
       user,
       setUser,
+      updateToast,
     }),
     [
       isCreateAccount,
@@ -147,6 +175,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setCurrency,
       user,
       setUser,
+      updateToast,
     ]
   );
   return (

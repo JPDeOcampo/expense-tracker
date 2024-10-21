@@ -5,6 +5,8 @@ import Header from "@/components/layout/header";
 import MenuDrawer from "@/components/layout/menu-drawer";
 import { usePathname } from "next/navigation";
 import ValidateContainer from "@/components/shared/components/validate-container";
+import { Toaster } from "react-hot-toast";
+
 const InnerLayout: FC<{ children: ReactNode }> = ({ children }) => {
   const pathname = usePathname();
   return (
@@ -16,6 +18,7 @@ const InnerLayout: FC<{ children: ReactNode }> = ({ children }) => {
           </>
         )}
         <main className="h-auto min-h-screen bg-secondary-50">{children}</main>
+        <Toaster />
       </NextUIProvider>
     </ValidateContainer>
   );

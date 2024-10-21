@@ -90,6 +90,7 @@ export interface ShareContextType {
   setCurrency: (currency: string | null) => void;
   user: { firstName: string } | (string | number);
   setUser: (user: string | number) => void;
+  updateToast: (props: IToastTypes) => void;
 }
 
 // Income, Expense, and Transfer
@@ -115,4 +116,20 @@ export interface ITransaction {
   note: string;
   __v: number;
   createdAt?: string;
+}
+
+export interface IToastTypes {
+  isToast: string;
+  message: string;
+  position?:
+    | "top-left"
+    | "top-center"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "bottom-right"
+    | undefined;
+  delay?: number | undefined;
+  toastId?: "" | string | undefined;
+  className?: string;
 }

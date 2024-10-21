@@ -44,38 +44,41 @@ const BalanceSpent = () => {
     "November",
     "December",
   ];
-  
+
   const toNumber = (value: string | number): number => {
     const num = typeof value === "number" ? value : parseFloat(value);
-    return isNaN(num) ? 0 : num; 
+    return isNaN(num) ? 0 : num;
   };
-  
+
   const chartData = months.map((month) => {
     let totalIncome = 0;
     let totalExpenses = 0;
-  
+
     const monthIndex = months.indexOf(month);
-  
+
     const monthlyEntries = combinedData.filter(
       (entry: ICombinedDataType) =>
         new Date(entry.date).getMonth() === monthIndex
     );
-  
+
     monthlyEntries.forEach((entry: IEntry) => {
       if (entry.type === "income") {
-        totalIncome += toNumber(entry.amount); 
+        totalIncome += toNumber(entry.amount);
       } else if (entry.type === "expense") {
         totalExpenses += toNumber(entry.amount);
       }
     });
-  
-    return {
-      month: month,
-      balance: totalIncome - totalExpenses,
-      spent: totalExpenses,
-    };
+
+    // Ensure totals are not negative
+    totalIncome = Math.max(totalIncome, 0);
+    totalExpenses = Math.max(totalExpenses, 0);
+    
+    // Calculate balance
+    const balance = totalIncome - totalExpenses;
+
+    return { month, balance: Math.max(balance, 0), spent: totalExpenses };
   });
-  
+
   return (
     <div className="card">
       <h2 className="card-header">Balance vs Spent</h2>

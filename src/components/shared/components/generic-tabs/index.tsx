@@ -8,6 +8,7 @@ import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseServi
 import { ICombinedDataType } from "@/components/interface/global-interface";
 import useTotalHooks from "../../hooks/total-hooks";
 import { ITransaction } from "@/components/interface/global-interface";
+import { Spinner } from "@nextui-org/react";
 interface FormProps {
   onTabs: string;
   handleCloseModal: () => void;
@@ -26,9 +27,11 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     setCurrentBalance,
     incomeData,
     currentBalance,
+    updateToast,
   } = shareContext;
   const { getTotalAmount } = useTotalHooks();
 
+  const [loading, setLoading] = useState(false);
   const categories = {
     income: [
       { label: "Allowance", value: "allowance" },
@@ -66,7 +69,7 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    setLoading(true);
     const { date, amount, category, frequency, paymentMethod, note } =
       event.currentTarget;
 
@@ -128,6 +131,17 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
 
             return updatedData;
           });
+          setLoading(false);
+          updateToast({
+            isToast: "alert-success",
+            toastId: "alert-success",
+            position: "top-center",
+            delay: 4000,
+            className: "toast-success",
+            message: "Successfully added!",
+          });
+
+          handleCloseModal();
         }
       } else if (onTabs === "expense") {
         const response = await AddExpenseService(formData);
@@ -160,12 +174,23 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
 
             return updatedData;
           });
+          setLoading(false);
+          updateToast({
+            isToast: "alert-success",
+            toastId: "alert-success",
+            position: "top-center",
+            delay: 4000,
+            className: "toast-success",
+            message: "Successfully added!",
+          });
+
+          handleCloseModal();
         }
       }
     } catch (error) {
       console.error(error);
     }
-    console.log("Form Data:", formData);
+    
   };
 
   return (
@@ -234,8 +259,9 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
         <Button color="danger" variant="light" onClick={handleCloseModal}>
           Close
         </Button>
-        <Button color="primary" onClick={handleCloseModal} type="submit">
-          Save
+        <Button color="primary" type="submit">
+          Save{" "}
+          {loading && <Spinner className="button-spinner" color="default" />}
         </Button>
       </div>
     </form>
