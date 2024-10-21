@@ -6,7 +6,8 @@ import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
 import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService";
 import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseService";
 import { ICombinedDataType } from "@/components/interface/global-interface";
-
+import useTotalHooks from "../../hooks/total-hooks";
+import { ITransaction } from "@/components/interface/global-interface";
 interface FormProps {
   onTabs: string;
   handleCloseModal: () => void;
@@ -14,8 +15,19 @@ interface FormProps {
 
 const Form = ({ onTabs, handleCloseModal }: FormProps) => {
   const { shareContext } = useShareContextHooks();
-  const { focusState, handleFocus, handleBlur, setIncomeData, setExpenseData } =
-    shareContext;
+  const {
+    focusState,
+    handleFocus,
+    handleBlur,
+    setIncomeData,
+    setExpenseData,
+    setOverAllIncomeData,
+    setOverAllExpenseData,
+    setCurrentBalance,
+    incomeData,
+    currentBalance,
+  } = shareContext;
+  const { getTotalAmount } = useTotalHooks();
 
   const categories = {
     income: [
@@ -89,7 +101,31 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
               { ...formData, createdAt: new Date().toISOString() },
               ...prev,
             ];
+            const newData = [{ ...formData }];
+            // Calculate overall income and expense
+            const overAllIncome = getTotalAmount(updatedData as ITransaction[]);
+            const updateCurrentBalance = getTotalAmount(
+              newData as ITransaction[]
+            );
+
+            // Store the updated data in sessionStorage
             sessionStorage.setItem("income", JSON.stringify(updatedData));
+
+            // Update state with overall income and expense
+            setOverAllIncomeData(overAllIncome);
+            sessionStorage.setItem(
+              "overAllIncome",
+              JSON.stringify(overAllIncome)
+            );
+
+            const addNewBalance = (currentBalance ?? 0) + updateCurrentBalance;
+            // Update state with current balance
+            setCurrentBalance(addNewBalance);
+            sessionStorage.setItem(
+              "currentBalance",
+              JSON.stringify(addNewBalance)
+            );
+
             return updatedData;
           });
         }
@@ -101,7 +137,27 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
               { ...formData, createdAt: new Date().toISOString() },
               ...prev,
             ];
+            const overAllExpense = getTotalAmount(
+              updatedData as ITransaction[]
+            );
             sessionStorage.setItem("expense", JSON.stringify(updatedData));
+
+            const overAllIncome = getTotalAmount(incomeData as ITransaction[]);
+            const subtractExpense = overAllIncome - overAllExpense;
+
+            setOverAllExpenseData(overAllExpense);
+            sessionStorage.setItem(
+              "overAllExpense",
+              JSON.stringify(overAllExpense)
+            );
+
+            // Update state with current balance
+            setCurrentBalance(subtractExpense);
+            sessionStorage.setItem(
+              "currentBalance",
+              JSON.stringify(subtractExpense)
+            );
+
             return updatedData;
           });
         }

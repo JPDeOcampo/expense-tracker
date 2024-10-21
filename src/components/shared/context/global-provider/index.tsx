@@ -70,10 +70,14 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const data = await response?.json();
       if (response?.ok) {
         setIncomeData(data.income);
+
         const overAllAmount = getTotalAmount(data.income);
+
         setOverAllIncomeData(overAllAmount);
         setCurrentBalance(overAllAmount);
+
         fetchExpense(overAllAmount);
+
         sessionStorage.setItem("income", JSON.stringify(data.income));
         sessionStorage.setItem("overAllIncome", JSON.stringify(overAllAmount));
         return response;
@@ -109,12 +113,14 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const overAllExpense = JSON.parse(
       sessionStorage.getItem("overAllExpense") ?? "null"
     );
+
     setUser(user);
     setIncomeData(income);
     setExpenseData(expense);
-    setCurrentBalance(currentBalance);
+
     setOverAllIncomeData(overAllIncome);
     setOverAllExpenseData(overAllExpense);
+    setCurrentBalance(currentBalance);
   }, []);
 
   const contextValue = useMemo(

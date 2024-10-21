@@ -103,3 +103,16 @@ export interface IAddFormTypes {
   to?: string;
   from?: string;
 }
+
+export interface ITransaction {
+  _id: string | number;
+  userId: string;
+  date: string;
+  amount: number;
+  category: string;
+  frequency: string;
+  paymentMethod: string;
+  note: string;
+  __v: number;
+  createdAt?: string;
+}

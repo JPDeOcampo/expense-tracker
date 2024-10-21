@@ -69,12 +69,12 @@ const Overview = () => {
           </p>
         </div>
       </div>
-      {isModalOpen && (
+      {/* {isModalOpen && ( */}
         <GenericModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
         />
-      )}
+      {/* )} */}
     </div>
   );
 };
@@ -234,7 +234,7 @@ const RecentTransaction = () => {
           ) : null
         }
         classNames={{
-          base: "max-h-[520px] overflow-auto [&>div]:shadow-none",
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0",
           table: "min-h-[320px]",
         }}
       >

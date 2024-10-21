@@ -136,14 +136,16 @@ body {
 }
 
 .fc-h-event {
-  @apply bg-tertiary-100 border-0;
+  @apply bg-primary border-0;
 }
 .fc .fc-button-primary {
-  @apply bg-tertiary border-0;
+  @apply bg-primary border-0;
 }
-
+.fc .fc-button-primary:hover {
+  @apply bg-tertiary;
+}
 .fc .fc-button-primary:disabled {
-  @apply bg-tertiary-100 text-primary;
+  @apply bg-primary-500 text-neutral-light80;
 }
 
 .fc-daygrid-dot-event.fc-event-mirror,

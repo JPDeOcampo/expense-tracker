@@ -14,11 +14,11 @@ import { ICombinedDataType } from "@/components/interface/global-interface";
 const chartConfig = {
   balance: {
     label: "Balance",
-    color: "#2563eb",
+    color: "#003366",
   },
   spent: {
     label: "Spent",
-    color: "#60a5fa",
+    color: "#b2e1d6",
   },
 } satisfies ChartConfig;
 interface IEntry {

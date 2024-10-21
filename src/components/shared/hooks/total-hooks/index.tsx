@@ -1,18 +1,8 @@
-export interface Transaction {
-  _id: string;
-  userId: string;
-  date: string;
-  amount: number;
-  category: string;
-  frequency: string;
-  paymentMethod: string;
-  note: string;
-  __v: number;
-}
+import { ITransaction } from "@/components/interface/global-interface";
 const useTotalHooks = () => {
-  const getTotalAmount = (transactions: Transaction[]): number => {
+  const getTotalAmount = (transactions: ITransaction[]): number => {
     return transactions.reduce(
-      (sum, transaction) => sum + transaction.amount,
+      (sum, transaction) => sum +  Number(transaction.amount),
       0
     );
   };

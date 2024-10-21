@@ -25,7 +25,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, name, route }) => {
     <a
       className={`flex gap-2 items-center py-2 px-4 font-semibold cursor-pointer ${
         route === pathname
-          ? "border-l-5 border-tertiary-500 bg-primary-500 text-neutral-light"
+          ? "border-l-5 border-tertiary-500 bg-primary text-neutral-light"
           : "hover:text-primary"
       }`}
       onClick={handleMenuLink}
@@ -59,7 +59,7 @@ const MenuDrawer = () => {
           <MenuItem
             icon={<IoIosSettings />}
             name="Settings"
-            route="settings"
+            route="/pages/settings"
           />
           {/* <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" /> */}
         </div>

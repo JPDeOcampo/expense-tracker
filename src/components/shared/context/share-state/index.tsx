@@ -45,12 +45,15 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
   const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
   const [currency, setCurrency] = useState<string | null>("PHP");
+  
   const [isError, setIsError] = useState<{ error: string; message: string }>({
     error: "",
     message: "",
   });
+
   const [focusState, setFocusState] =
     useState<FocusStateType>(initialFocusState);
+
   const [formValues, setFormValues] = useState<Record<string, string>>({
     firstName: "",
     lastName: "",
@@ -92,10 +95,6 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       : []),
   ], [incomeData, expenseData]);
 
-
-console.log(combinedData, 'comb')
-console.log(currentBalance)
-console.log(incomeData, expenseData, 'kk')
   const contextValue = useMemo(
     () => ({
       isCreateAccount,

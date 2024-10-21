@@ -9,6 +9,7 @@ import {
   PopoverContent,
   Button,
 } from "@nextui-org/react";
+import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 interface EventExtendedProps {
   type: string;
@@ -24,13 +25,22 @@ interface Event {
 }
 
 interface EventInfo {
-  event: Event; 
+  event: Event;
 }
 
 const Calendar = () => {
-  const { combinedData } = useContext(ShareContext) ?? { combinedData: [] }; 
+  const { combinedData, currency } = useContext(ShareContext) ?? {
+    combinedData: [],
+  };
 
-  const renderEventContent = (eventInfo: EventInfo ) => {
+  const sortedData = combinedData.sort((a, b) => {
+    return (
+      new Date(b.createdAt ?? "").getTime() -
+      new Date(a.createdAt ?? "").getTime()
+    );
+  });
+  const { handleFormatAmount } = useGlobalHooks();
+  const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
 
@@ -40,12 +50,14 @@ const Calendar = () => {
       <div className="w-full overflow-auto">
         <Popover placement="top" offset={20} showArrow>
           <PopoverTrigger>
-            <Button className="w-full h-full p-2 border-0 rounded-none justify-start">
+            <Button className="w-full h-full p-2 border-0 rounded-none justify-start bg-primary">
               <div className="w-full h-full flex flex-col items-start gap-0 justify-start">
-                <h5 className="text-sm font-semibold text-quaternary">{`${
+                <h5 className="text-sm font-semibold text-neutral-light">{`${
                   frequency ? frequency : ""
                 } ${title} `}</h5>
-                <h6 className="text-xs font-medium text-quaternary">{`PHP ${amount}`}</h6>
+                <h6 className="text-xs font-medium text-neutral-light">
+                  {handleFormatAmount(amount as number, currency as string)}
+                </h6>
               </div>
             </Button>
           </PopoverTrigger>
@@ -57,17 +69,26 @@ const Calendar = () => {
                     <h5 className="text-base font-bold text-quaternary">{`${
                       frequency ? frequency : ""
                     } ${title} `}</h5>
-                    <h6 className="text-sm font-medium text-quaternary">{`PHP ${amount}`}</h6>
+                    <h6 className="text-sm font-medium text-quaternary">
+                      {" "}
+                      {handleFormatAmount(amount as number, currency as string)}
+                    </h6>
                   </div>
                 </li>
                 <li>
-                  <span className="text-base text-quaternary">Category: {category}</span>
+                  <span className="text-base text-quaternary">
+                    Category: {category}
+                  </span>
                 </li>
                 <li>
-                  <span className="text-base text-quaternary">Payment Method: {paymentMethod}</span>
+                  <span className="text-base text-quaternary">
+                    Payment Method: {paymentMethod}
+                  </span>
                 </li>
                 <li>
-                  <span className="text-base text-quaternary">Note: {note ? note : "N/A"}</span>
+                  <span className="text-base text-quaternary">
+                    Note: {note ? note : "N/A"}
+                  </span>
                 </li>
               </ul>
             </div>
@@ -75,7 +96,7 @@ const Calendar = () => {
         </Popover>
       </div>
     );
-  }
+  };
   return (
     <div className="custom-container flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-primary">Calendar</h1>
@@ -84,7 +105,7 @@ const Calendar = () => {
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
           weekends={false}
-          events={combinedData}
+          events={sortedData}
           eventContent={renderEventContent}
         />
       </div>
