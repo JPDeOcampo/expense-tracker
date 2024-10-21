@@ -10,15 +10,20 @@ export interface IIncome extends Document {
   note: string;
 }
 
-const IncomeSchema: Schema = new Schema({
-  userId: { type: String, required: true },
-  date: { type: Date, required: true },
-  amount: { type: Number, required: true },
-  category: { type: String, required: true },
-  frequency: { type: String, required: true },
-  paymentMethod: { type: String, required: true },
-  note: { type: String },
-});
+const IncomeSchema: Schema = new Schema(
+  {
+    userId: { type: String, required: true },
+    date: { type: Date, required: true },
+    amount: { type: Number, required: true },
+    category: { type: String, required: true },
+    frequency: { type: String, required: true },
+    paymentMethod: { type: String, required: true },
+    note: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Income =
   mongoose.models.Income || mongoose.model<IIncome>("Income", IncomeSchema);

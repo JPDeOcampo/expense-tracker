@@ -21,24 +21,20 @@ interface IType extends ICombinedDataType {
   type: string;
   category: string;
   count: number;
-  forEach(callback: (item: IType) => void): void;
+  // forEach(callback: (item: IType) => void): void;
 }
 
 const Overview = () => {
   const { shareContext } = useShareContextHooks();
-  const { overAllIncomeData, currentBalance, overAllExpenseData } =
+  const { overAllIncomeData, currentBalance, overAllExpenseData, currency } =
     shareContext;
 
-  const overviewItems = [
-    { title: "Total Overall balance", value: overAllIncomeData, icon: "" },
-    { title: "Loan", value: "", icon: "" },
-    { title: "Investment", value: "", icon: "" },
-  ];
+  const { handleFormatAmount } = useGlobalHooks();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
-    <div className="card flex flex-col gap-4">
+    <div className="card flex flex-col justify-between gap-4">
       <div className="w-full flex justify-between">
         <h2 className="card-header">Overview</h2>
         <button className="custom-btn" onClick={() => setIsModalOpen(true)}>
@@ -47,35 +43,38 @@ const Overview = () => {
           </span>
         </button>
       </div>
-      <ul>
-        {overviewItems.map((item, index) => {
-          return (
-            <li key={index} className="my-2 flex justify-between w-full">
-              <span className="text-base text-quaternary font-medium">
-                {item.title}
-              </span>
-              <span className="text-base text-quaternary font-medium">
-                {item.value}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
+      <div className="w-full flex flex-col justify-center items-center">
+        <h3 className="text-4xl font-bold text-quaternary">{handleFormatAmount(currentBalance as number, currency as string)}</h3>
+        <p className="text-secondary-500 text-base font-semibold">Current Balance</p>
+      </div>
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
-          <p className="text-base font-medium text-quaternary">Total Spent</p>
+          <p className="text-base font-semibold text-quaternary">Total Spent</p>
           <p className="text-base font-medium text-primary">
-            {overAllExpenseData}
+            {handleFormatAmount(
+              overAllExpenseData as number,
+              currency as string
+            )}
           </p>
         </div>
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
-          <p className="text-base font-medium text-quaternary">
-            Current Balance
+          <p className="text-base font-semibold text-quaternary">
+            Total Overall Asset
           </p>
-          <p className="text-base font-medium text-primary">{currentBalance}</p>
+          <p className="text-base font-medium text-primary">
+            {handleFormatAmount(
+              overAllIncomeData as number,
+              currency as string
+            )}
+          </p>
         </div>
       </div>
-      <GenericModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      {isModalOpen && (
+        <GenericModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };
@@ -142,7 +141,7 @@ const Category = () => {
 
   return (
     <div className="card">
-      <h2 className="card-header">Transaction History</h2>
+      <h2 className="card-header">Most Category</h2>
       <Table
         isHeaderSticky
         aria-label="transaction-history"
@@ -166,8 +165,8 @@ const Category = () => {
           <TableColumn key="count">Item no.</TableColumn>
         </TableHeader>
         <TableBody>
-          {displayedData.map((item: ICombinedDataType) => (
-            <TableRow key={item._id}>
+          {displayedData.map((item: ICombinedDataType, i) => (
+            <TableRow key={i}>
               {(columnKey) => (
                 <TableCell className="h-6">
                   <p className="capitalize text-base text-quaternary">
@@ -197,8 +196,20 @@ const RecentTransaction = () => {
       ...item,
       amount: handleFormatAmount(Number(item.amount), String(currency)),
       date: new Date(item.date).toISOString().split("T")[0],
+      createdAt: item.createdAt
+        ? new Date(item.createdAt).toLocaleString()
+        : "",
     }));
-    const newData = updatedData.slice(0, page * itemsPerPage);
+
+    const sortedData = updatedData.sort((a, b) => {
+      return (
+        new Date(b.createdAt ?? "").getTime() -
+        new Date(a.createdAt ?? "").getTime()
+      );
+    }) as ITableDataType[];
+
+    const newData = sortedData.slice(0, page * itemsPerPage);
+
     setDisplayedData(newData);
   }, [combinedData, page]);
 
@@ -206,10 +217,6 @@ const RecentTransaction = () => {
   const loadMore = () => {
     setPage((prev) => prev + 1);
   };
-
-  const sortedData = displayedData.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  }) as ITableDataType[];
 
   return (
     <div className="card">
@@ -236,13 +243,18 @@ const RecentTransaction = () => {
           <TableColumn key="category">Category</TableColumn>
           <TableColumn key="amount">Amount</TableColumn>
           <TableColumn key="date">Date</TableColumn>
+          <TableColumn key="createdAt">Created</TableColumn>
         </TableHeader>
         <TableBody>
-          {sortedData.map((item: ITableDataType) => (
-            <TableRow key={item._id}>
+          {displayedData.map((item: ICombinedDataType, i) => (
+            <TableRow key={i}>
               {(columnKey) => (
                 <TableCell className="h-6">
-                  <p className="capitalize text-base text-quaternary">
+                  <p
+                    className={`capitalize text-base text-quaternary ${
+                      columnKey === "createdAt" ? "text-secondary-500" : ""
+                    }`}
+                  >
                     {item[columnKey]}
                   </p>
                 </TableCell>

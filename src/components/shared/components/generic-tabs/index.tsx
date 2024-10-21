@@ -58,16 +58,16 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     const { date, amount, category, frequency, paymentMethod, note } =
       event.currentTarget;
 
-    const formData: ICombinedDataType  = {
+    const formData: ICombinedDataType = {
       date: date.value,
       amount: amount.value,
       note: note.value,
-      frequency: frequency?.value ?? '',
-      category: category?.value ?? '',
-      paymentMethod: paymentMethod?.value ?? '',
-      userId: '',
+      frequency: frequency?.value ?? "",
+      category: category?.value ?? "",
+      paymentMethod: paymentMethod?.value ?? "",
+      userId: "",
     };
-   
+
     if (onTabs === "income") {
       formData.frequency = frequency.value;
       formData.category = category.value;
@@ -84,12 +84,26 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
       if (onTabs === "income") {
         const response = await AddIncomeService(formData);
         if (response?.ok) {
-          setIncomeData((prev: ICombinedDataType[]) => [...prev, { ...formData }]);
+          setIncomeData((prev: ICombinedDataType[]) => {
+            const updatedData = [
+              { ...formData, createdAt: new Date().toISOString() },
+              ...prev,
+            ];
+            sessionStorage.setItem("income", JSON.stringify(updatedData));
+            return updatedData;
+          });
         }
       } else if (onTabs === "expense") {
         const response = await AddExpenseService(formData);
         if (response?.ok) {
-          setExpenseData((prev: ICombinedDataType[]) => [...prev, { ...formData }]);
+          setExpenseData((prev: ICombinedDataType[]) => {
+            const updatedData = [
+              { ...formData, createdAt: new Date().toISOString() },
+              ...prev,
+            ];
+            sessionStorage.setItem("expense", JSON.stringify(updatedData));
+            return updatedData;
+          });
         }
       }
     } catch (error) {
@@ -187,7 +201,9 @@ const GenericTabs = ({
             size="md"
             aria-label="Tabs form"
             selectedKey={selected}
-            onSelectionChange={(newSelected) => setSelected(newSelected as string)}
+            onSelectionChange={(newSelected) =>
+              setSelected(newSelected as string)
+            }
           >
             <Tab key="income" title="Income">
               <Form handleCloseModal={handleCloseModal} onTabs="income" />

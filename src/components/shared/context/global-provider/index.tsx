@@ -5,7 +5,7 @@ import {
   FC,
   ReactNode,
   useEffect,
-  useContext
+  useContext,
 } from "react";
 import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeService";
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
@@ -46,10 +46,16 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const data = await response?.json();
       if (response?.ok) {
         setExpenseData(data.expense);
+        sessionStorage.setItem("expense", JSON.stringify(data.expense));
         const overAllAmount = getTotalAmount(data.expense);
         setOverAllExpenseData(overAllAmount);
+        sessionStorage.setItem("overAllExpense", JSON.stringify(overAllAmount));
         if (typeof currentBalance === "number" && overAllAmount !== undefined) {
           setCurrentBalance(currentBalance - overAllAmount);
+          sessionStorage.setItem(
+            "currentBalance",
+            JSON.stringify(currentBalance - overAllAmount)
+          );
         }
         return response;
       }
@@ -68,6 +74,8 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setOverAllIncomeData(overAllAmount);
         setCurrentBalance(overAllAmount);
         fetchExpense(overAllAmount);
+        sessionStorage.setItem("income", JSON.stringify(data.income));
+        sessionStorage.setItem("overAllIncome", JSON.stringify(overAllAmount));
         return response;
       }
     } catch (error) {
@@ -88,16 +96,32 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (pathname === "/") return;
-    fetchIncome();
+
+    const income = JSON.parse(sessionStorage.getItem("income") ?? "null");
+    const expense = JSON.parse(sessionStorage.getItem("expense") ?? "null");
     const user = JSON.parse(sessionStorage.getItem("user") ?? "null");
+    const currentBalance = JSON.parse(
+      sessionStorage.getItem("currentBalance") ?? "null"
+    );
+    const overAllIncome = JSON.parse(
+      sessionStorage.getItem("overAllIncome") ?? "null"
+    );
+    const overAllExpense = JSON.parse(
+      sessionStorage.getItem("overAllExpense") ?? "null"
+    );
     setUser(user);
+    setIncomeData(income);
+    setExpenseData(expense);
+    setCurrentBalance(currentBalance);
+    setOverAllIncomeData(overAllIncome);
+    setOverAllExpenseData(overAllExpense);
   }, []);
 
   const contextValue = useMemo(
     () => ({ fetchIncome, fetchExpense, fetchUser }),
     [fetchIncome, fetchExpense, fetchUser]
   );
-  
+
   return (
     <GlobalContext.Provider value={contextValue}>
       {children}

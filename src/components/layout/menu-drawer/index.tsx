@@ -59,9 +59,9 @@ const MenuDrawer = () => {
           <MenuItem
             icon={<IoIosSettings />}
             name="Settings"
-            route="cat"
+            route="settings"
           />
-          <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" />
+          {/* <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" /> */}
         </div>
       </div>
     </ValidateContainer>

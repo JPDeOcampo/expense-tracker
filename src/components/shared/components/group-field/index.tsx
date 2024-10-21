@@ -3,6 +3,7 @@ import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { FocusStateType, IFieldValueTypes } from "@/components/interface/global-interface";
+
 interface IGroupFieldTypes {
   label: string;
   type?: string;
@@ -72,7 +73,7 @@ const GroupField = ({
 
     setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: e.target.value }));
   };
-
+console.log(formValues)
   const isError =
     (isEmailLogin && focusState.errorEmailLogin) ||
     (isEmailRegister && focusState.errorEmailRegister) ||
@@ -94,9 +95,9 @@ const GroupField = ({
             onBlur={() => handleBlur(name)}
             defaultItems={items}
             selectedKey={formValues[value || name]}
-            onSelectionChange={() =>
-              setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: value ?? '' }))
-            }
+            onSelectionChange={(selected) =>{
+              setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: selected as string}))
+            }}
           >
             {itemList.map((item: AutocompleteItemType) => (
               <AutocompleteItem key={item.value} value={item.value}>

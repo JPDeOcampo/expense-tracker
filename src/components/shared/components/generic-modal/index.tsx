@@ -17,6 +17,7 @@ const GenericModal = ({ isModalOpen, setIsModalOpen }: IPropTypes) => {
         isOpen={isModalOpen}
         placement={"center"}
         onOpenChange={() => handleCloseModal()}
+        aria-modal="true"
       >
         <ModalContent>
           {() => (

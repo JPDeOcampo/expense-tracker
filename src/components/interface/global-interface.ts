@@ -17,9 +17,11 @@ export interface IFrequencyDataType extends ICategoryDataType {
 }
 
 export interface ICombinedDataType extends IFrequencyDataType {
+  [key: string]: string | number | undefined;
   type?: string;
   to?: string;
   from?: string;
+  createdAt?: string | undefined;
 }
 export interface ITableDataType extends ICombinedDataType {
   [key: string]: string | number | undefined;

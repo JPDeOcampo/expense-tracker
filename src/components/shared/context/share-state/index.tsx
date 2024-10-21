@@ -5,6 +5,7 @@ import {
   useMemo,
   FC,
   ReactNode,
+  useEffect
 } from "react";
 import {
   ICombinedDataType,
@@ -76,7 +77,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   // Combine income and expense data
-  const combinedData: ICombinedDataType[] = [
+  const combinedData = useMemo(() => [
     ...(Array.isArray(incomeData)
       ? incomeData.map((event: ICombinedDataType) => ({
           ...event,
@@ -89,8 +90,12 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
           type: "expense",
         }))
       : []),
-  ];
+  ], [incomeData, expenseData]);
 
+
+console.log(combinedData, 'comb')
+console.log(currentBalance)
+console.log(incomeData, expenseData, 'kk')
   const contextValue = useMemo(
     () => ({
       isCreateAccount,

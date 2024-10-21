@@ -9,14 +9,19 @@ export interface IExpense extends Document {
   note: string;
 }
 
-const ExpenseSchema: Schema = new Schema({
-  userId: { type: String, required: true },
-  date: { type: Date, required: true },
-  amount: { type: Number, required: true },
-  category: { type: String, required: true },
-  paymentMethod: { type: String, required: true },
-  note: { type: String },
-});
+const ExpenseSchema: Schema = new Schema(
+  {
+    userId: { type: String, required: true },
+    date: { type: Date, required: true },
+    amount: { type: Number, required: true },
+    category: { type: String, required: true },
+    paymentMethod: { type: String, required: true },
+    note: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Expense =
   mongoose.models.Expense || mongoose.model<IExpense>("Expense", ExpenseSchema);
