@@ -14,6 +14,7 @@ import { Spinner } from "@nextui-org/react";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import GenericForm from "../generic-form";
 import { updateProfileService } from "@/service/api/updateProfileService";
+import { updatePasswordService } from "@/service/api/updatePassword";
 import { FocusStateType } from "@/components/interface/global-interface";
 import { IUserTypes } from "@/components/interface/global-interface";
 interface IPropTypes {
@@ -26,7 +27,6 @@ interface IPropTypes {
 const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
   const { shareContext } = useShareContextHooks();
   const {
-    isError,
     setFocusState,
     updateToast,
     user,
@@ -68,14 +68,17 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
 
     const formData = new FormData(event.currentTarget);
 
-    const validateEmail = formValues.email !== email ? formData.get("email") as string : undefined;
-    
+    const validateEmail =
+      formValues.email !== email
+        ? (formData.get("email") as string)
+        : undefined;
+
     const data: IUserTypes = {
       firstName: formData.get("firstName") as string,
       lastName: formData.get("lastName") as string,
       username: formData.get("username") as string,
     };
-    
+
     if (validateEmail) {
       data.email = validateEmail;
     }
@@ -88,7 +91,6 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
           ...prev,
           errorEmailRegister: true,
         }));
-        handleSetError("email-error", response?.message);
       } else {
         handleCloseModal();
         handleResetFormValues();
@@ -121,10 +123,17 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
         <Button color="danger" variant="light" onClick={handleCloseModal}>
           Close
         </Button>
-        <Button color="primary" type="submit" disabled={hasChange}>
-          Save{" "}
-          {loading && <Spinner className="button-spinner" color="default" />}
-        </Button>
+        {hasChange ? (
+          <Button color="primary" type="submit">
+            Save{" "}
+            {loading && <Spinner className="button-spinner" color="default" />}
+          </Button>
+        ) : (
+          <Button color="primary" type="submit" isDisabled>
+            Save{" "}
+            {loading && <Spinner className="button-spinner" color="default" />}
+          </Button>
+        )}
       </div>
     </form>
   );
@@ -136,17 +145,66 @@ const ChangePassword = ({
   handleCloseModal: () => void;
 }) => {
   const { shareContext } = useShareContextHooks();
-  const { isError, updateToast, user, setFormValues } = shareContext;
+  const { updateToast, setFocusState, focusState } = shareContext;
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
     useGlobalHooks();
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    handleResetErrorFocus();
+
+    const formData = new FormData(event.currentTarget);
+
+    const data: IUserTypes = {
+      oldPassword: formData.get("password") as string,
+      newPassword: formData.get("newPassword") as string,
+      reEnterPassword: formData.get("reEnterPassword") as string,
+    };
+
+    try {
+      const response = await updatePasswordService(data);
+
+      if (response?.invalidPassword) {
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorOldPassword: true,
+        }));
+      } else if (response?.invalidMatchPassword) {
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorReEnterPassword: true,
+        }));
+      } else {
+        handleCloseModal();
+        handleResetFormValues();
+        updateToast({
+          isToast: "alert-success",
+          toastId: "alert-success",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-success",
+          message: "Successfully updated!",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      <GenericForm isProfileUpdate={true} isChangePass={true} />
+    <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
+      <GenericForm
+        isProfileUpdate={true}
+        isChangePass={true}
+        isPasswordReq={true}
+        isReEnterReq={true}
+      />
       <div className="w-full flex gap-3 mt-4 justify-end">
         <Button color="danger" variant="light" onClick={handleCloseModal}>
           Close
@@ -158,6 +216,13 @@ const ChangePassword = ({
       </div>
     </form>
   );
+};
+
+const Configurations = () => {
+  return <></>;
+};
+const DeleteAccount = () => {
+  return <></>;
 };
 
 const GenericModal = ({
@@ -195,7 +260,11 @@ const GenericModal = ({
                   <MyProfile handleCloseModal={handleCloseModal} />
                 ) : isGenericModal === "Change Password" ? (
                   <ChangePassword handleCloseModal={handleCloseModal} />
-                ) : null}
+                ) : isGenericModal === "Change Password" ? (
+                  <Configurations />
+                ) : (
+                  <DeleteAccount />
+                )}
               </ModalBody>
             </>
           )}

@@ -134,7 +134,7 @@ const GenericForm = ({
 
       {isChangePass && (
         <>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <div className="relative">
               <GroupField
                 label="Old Password"
@@ -145,6 +145,7 @@ const GenericForm = ({
                 handleFocus={handleFocus}
                 handleBlur={handleBlur}
                 hasIconEnd={true}
+                isOldPassword={true}
               />
               <button
                 className="absolute top-10 right-3 focus:outline-none"
@@ -168,7 +169,7 @@ const GenericForm = ({
                 isFocused={focusState.newPassword}
                 handleFocus={handleFocus}
                 handleBlur={handleBlur}
-                isReEnterRegister={true}
+                isNewPassword={true}
               />
               <button
                 className="absolute top-10 right-3 focus:outline-none"
@@ -194,7 +195,7 @@ const GenericForm = ({
                 isFocused={focusState.reEnterPassword}
                 handleFocus={handleFocus}
                 handleBlur={handleBlur}
-                isReEnterRegister={true}
+                isReEnterPassword={true}
               />
               <button
                 className="absolute top-10 right-3 focus:outline-none"

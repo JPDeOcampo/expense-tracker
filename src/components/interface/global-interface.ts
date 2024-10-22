@@ -45,6 +45,7 @@ export interface FocusStateType {
   errorEmailRegister: boolean;
   errorReEnterRegister: boolean;
   focusState?: boolean;
+  errorOldPassword?: boolean;
   errorReEnterPassword?: boolean;
 }
 export interface IFieldValueTypes {
@@ -54,6 +55,8 @@ export interface IFieldValueTypes {
   emailLogin: string;
   passwordLogin: string;
   passwordRegister: string;
+  oldPassword: string;
+  newPassword: string;
   reEnterPassword: string;
   date: string;
   amount: string;
@@ -140,10 +143,12 @@ export interface IToastTypes {
 }
 
 export interface IUserTypes {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
-  username: string;
+  username?: string;
   password?: string;
   reEnterPassword?: string;
+  oldPassword?: string;
+  newPassword?: string;
 }

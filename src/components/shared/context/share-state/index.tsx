@@ -64,7 +64,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     emailLogin: "",
     passwordLogin: "",
     passwordRegister: "",
-    password: "",
+    oldPassword: "",
     newPassword: "",
     reEnterPassword: "",
     date: "",

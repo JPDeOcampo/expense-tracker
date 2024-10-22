@@ -24,6 +24,9 @@ interface IGroupFieldTypes {
   isReEnterRegister?: boolean;
   isAutoComplete?: boolean;
   isCustomNumber?: boolean;
+  isOldPassword?: boolean;
+  isNewPassword?: boolean;
+  isReEnterPassword?: boolean;
 }
 interface AutocompleteItemType {
   value: string;
@@ -46,6 +49,9 @@ const GroupField = ({
   isEmailRegister,
   isPasswordLogin,
   isReEnterRegister,
+  isOldPassword,
+  isNewPassword,
+  isReEnterPassword,
   isAutoComplete,
   isCustomNumber,
   items,
@@ -65,6 +71,10 @@ const GroupField = ({
       hasError = "errorEmailRegister";
     } else if (isReEnterRegister) {
       hasError = "errorReEnterRegister";
+    } else if (isOldPassword) {
+      hasError = "errorOldPassword";
+    }else if (isReEnterPassword) {
+      hasError = "errorReEnterPassword";
     }
 
     if (hasError) {
@@ -73,12 +83,15 @@ const GroupField = ({
 
     setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: e.target.value }));
   };
-console.log(formValues)
+
   const isError =
     (isEmailLogin && focusState.errorEmailLogin) ||
     (isEmailRegister && focusState.errorEmailRegister) ||
     (isReEnterRegister && focusState.errorReEnterRegister) ||
-    (isPasswordLogin && focusState.errorPasswordLogin);
+    (isPasswordLogin && focusState.errorPasswordLogin)||
+    (isOldPassword && focusState.errorOldPassword) || 
+    (isReEnterPassword && focusState.errorReEnterPassword);
+    
     const itemList = items ?? [];
   return (
     <>

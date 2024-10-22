@@ -11,6 +11,7 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import GenericModal from "@/components/shared/components/generic-modal";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const Header = () => {
       if (response?.ok) {
         router.push("/");
         sessionStorage.clear();
+        toast.remove();
       }
     } catch (error) {
       console.error(error);
@@ -89,6 +91,16 @@ const Header = () => {
                 }}
               >
                 Change Password
+              </DropdownItem>
+              <DropdownItem
+                key="delete"
+                color="warning"
+                onClick={() => {
+                  setIsGenericModal("Delete Account");
+                  setIsModalOpen(true);
+                }}
+              >
+                Delete Account
               </DropdownItem>
               <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                 Log Out
