@@ -5,6 +5,8 @@ const API_EXPENSE_URL = `/api/expense`;
 export const ENDPOINTS = {
   register: `${API_USER_URL}/register`,
   login: `${API_USER_URL}/login`,
+  updateProfile: `${API_USER_URL}/updateProfile`,
+  updatePassword: `${API_USER_URL}/updatePassword`,
   logout: `${API_USER_URL}/logout`,
 
   add_income: `${API_INCOME_URL}/add-income`,

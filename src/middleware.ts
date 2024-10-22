@@ -51,5 +51,7 @@ export const config = {
     "/api/income/fetch-income",
     "/api/expense/add-expense",
     "/api/expense/fetch-expense",
+    "/api/users/updateProfile",
+    "/api/users/updatePassword",
   ],
 };

@@ -32,6 +32,7 @@ export interface FocusStateType {
   username: boolean;
   email: boolean;
   password: boolean;
+  newPassword: boolean;
   reEnterPassword: boolean;
   date: boolean;
   amount: boolean;
@@ -44,6 +45,7 @@ export interface FocusStateType {
   errorEmailRegister: boolean;
   errorReEnterRegister: boolean;
   focusState?: boolean;
+  errorReEnterPassword?: boolean;
 }
 export interface IFieldValueTypes {
   firstName: string;
@@ -88,8 +90,11 @@ export interface ShareContextType {
   setFormValues: Dispatch<SetStateAction<Record<string, string>>>;
   currency: string | null;
   setCurrency: (currency: string | null) => void;
-  user: { firstName: string; username: string; email: string;} | (string | number);
-  setUser: (user: string | number) => void;
+  user:
+    | IUserTypes[]
+    | { firstName: string; lastName: string; username: string; email: string }
+    | (string | number);
+  setUser: Dispatch<SetStateAction<IUserTypes[]>>;
   updateToast: (props: IToastTypes) => void;
 }
 
@@ -132,4 +137,13 @@ export interface IToastTypes {
   delay?: number | undefined;
   toastId?: "" | string | undefined;
   className?: string;
+}
+
+export interface IUserTypes {
+  firstName: string;
+  lastName: string;
+  email?: string;
+  username: string;
+  password?: string;
+  reEnterPassword?: string;
 }

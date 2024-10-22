@@ -44,9 +44,14 @@ const Overview = () => {
         </button>
       </div>
       <div className="w-full flex flex-col justify-center items-center">
-        <h3 className="text-4xl font-bold text-quaternary">{handleFormatAmount(currentBalance as number, currency as string)}</h3>
-        <p className="text-secondary-500 text-base font-semibold">Current Balance</p>
+        <h3 className="text-4xl font-bold text-quaternary">
+          {handleFormatAmount(currentBalance as number, currency as string)}
+        </h3>
+        <p className="text-secondary-500 text-base font-semibold">
+          Current Balance
+        </p>
       </div>
+      <GenericModal isGenericModal={'add-item'} isModalOpen={isModalOpen} header={'add'} setIsModalOpen={setIsModalOpen} />
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
           <p className="text-base font-semibold text-quaternary">Total Spent</p>
@@ -69,12 +74,6 @@ const Overview = () => {
           </p>
         </div>
       </div>
-      {/* {isModalOpen && ( */}
-        <GenericModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-        />
-      {/* )} */}
     </div>
   );
 };

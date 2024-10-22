@@ -3,7 +3,7 @@ import useShareContextHooks from "../context-hooks/share-state-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
 
 interface FocusState extends FocusStateType {
-  [key: string]: boolean;
+  [key: string]: boolean | undefined;
   focusState: boolean;
 }
 const useGlobalHooks = () => {

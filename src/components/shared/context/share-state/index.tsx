@@ -5,7 +5,6 @@ import {
   useMemo,
   FC,
   ReactNode,
-  useEffect,
 } from "react";
 import {
   ICombinedDataType,
@@ -15,6 +14,7 @@ import {
 import GenericToast from "../../components/generic-toast";
 import { IToastTypes } from "@/components/interface/global-interface";
 import toast from "react-hot-toast";
+import { IUserTypes } from "@/components/interface/global-interface";
 
 const initialFocusState: FocusStateType = {
   firstName: false,
@@ -22,6 +22,7 @@ const initialFocusState: FocusStateType = {
   username: false,
   email: false,
   password: false,
+  newPassword: false,
   reEnterPassword: false,
   date: false,
   amount: false,
@@ -33,6 +34,7 @@ const initialFocusState: FocusStateType = {
   errorPasswordLogin: false,
   errorEmailRegister: false,
   errorReEnterRegister: false,
+  errorReEnterPassword: false,
 };
 
 export const ShareContext = createContext<ShareContextType | null>(null);
@@ -41,7 +43,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [isCreateAccount, setIsCreateAccount] = useState<boolean>(false);
   const [incomeData, setIncomeData] = useState<ICombinedDataType[]>([]);
   const [expenseData, setExpenseData] = useState<ICombinedDataType[]>([]);
-  const [user, setUser] = useState<string | number>("");
+  const [user, setUser] = useState<IUserTypes[]>([]);
   const [overAllIncomeData, setOverAllIncomeData] = useState<number>(0);
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
   const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
@@ -62,6 +64,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     emailLogin: "",
     passwordLogin: "",
     passwordRegister: "",
+    password: "",
+    newPassword: "",
     reEnterPassword: "",
     date: "",
     amount: "",

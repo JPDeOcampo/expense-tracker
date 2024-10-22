@@ -1,17 +1,16 @@
 import { ENDPOINTS } from "../../../apiConfig";
 import { IUserTypes } from "@/components/interface/global-interface";
 
-export const registerService = async ({
+export const updateProfileService = async ({
   firstName,
   lastName,
   email,
   username,
-  password,
-  reEnterPassword,
 }: IUserTypes) => {
+
   try {
-    const response = await fetch(ENDPOINTS.register, {
-      method: "POST",
+    const response = await fetch(ENDPOINTS.updateProfile, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,8 +19,6 @@ export const registerService = async ({
         lastName: lastName,
         email: email,
         username: username,
-        password: password,
-        reEnterPassword: reEnterPassword,
       }),
     });
     const data = await response.json();
