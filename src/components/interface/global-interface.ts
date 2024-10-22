@@ -88,7 +88,7 @@ export interface ShareContextType {
   setFormValues: Dispatch<SetStateAction<Record<string, string>>>;
   currency: string | null;
   setCurrency: (currency: string | null) => void;
-  user: { firstName: string } | (string | number);
+  user: { firstName: string; username: string; email: string;} | (string | number);
   setUser: (user: string | number) => void;
   updateToast: (props: IToastTypes) => void;
 }

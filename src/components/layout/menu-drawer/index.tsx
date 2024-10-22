@@ -23,10 +23,10 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, name, route }) => {
 
   return (
     <a
-      className={`flex gap-2 items-center py-2 px-4 font-semibold cursor-pointer ${
+      className={`flex gap-2 items-center py-2 font-semibold cursor-pointer ${
         route === pathname
-          ? "border-l-5 border-tertiary-500 bg-primary text-neutral-light"
-          : "hover:text-primary"
+          ? "border-l-5 border-tertiary-500 bg-primary text-neutral-light pl-3 pr-4"
+          : "hover:text-primary px-4"
       }`}
       onClick={handleMenuLink}
     >
