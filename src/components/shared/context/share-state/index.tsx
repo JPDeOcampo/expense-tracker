@@ -35,6 +35,7 @@ const initialFocusState: FocusStateType = {
   errorEmailRegister: false,
   errorReEnterRegister: false,
   errorReEnterPassword: false,
+  errorPassword: false,
 };
 
 export const ShareContext = createContext<ShareContextType | null>(null);

@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   login: `${API_USER_URL}/login`,
   updateProfile: `${API_USER_URL}/updateProfile`,
   updatePassword: `${API_USER_URL}/updatePassword`,
+  deleteAccount: `${API_USER_URL}/deleteAccount`,
   logout: `${API_USER_URL}/logout`,
 
   add_income: `${API_INCOME_URL}/add-income`,

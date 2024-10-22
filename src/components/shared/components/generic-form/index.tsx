@@ -15,6 +15,7 @@ interface IPropTypes {
   isReEnterReq?: boolean;
   isProfileUpdate?: boolean;
   isChangePass?: boolean;
+  isDeleteAccount?: boolean
 }
 
 const GenericForm = ({
@@ -26,17 +27,20 @@ const GenericForm = ({
   isReEnterReq,
   isProfileUpdate,
   isChangePass,
+  isDeleteAccount
 }: IPropTypes) => {
   const { shareContext } = useShareContextHooks();
   const { focusState, handleFocus, handleBlur } = shareContext;
 
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
+  const [isVisibleNewPassword, setIsVisibleNewPassword] =
+  useState<boolean>(false);
   const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
     useState<boolean>(false);
 
   return (
     <>
-      {!isChangePass && (
+      {(!isChangePass && !isDeleteAccount) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <GroupField
             label="First Name"
@@ -75,7 +79,7 @@ const GenericForm = ({
             handleBlur={handleBlur}
             isEmailRegister={true}
           />
-          {!isProfileUpdate && (
+          {(!isProfileUpdate) && (
             <>
               <div className="relative">
                 <GroupField
@@ -163,13 +167,38 @@ const GenericForm = ({
             <div className="relative">
               <GroupField
                 label="New password"
-                type={isVisibleReEnterPassword ? "text" : "password"}
+                type={isVisibleNewPassword ? "text" : "password"}
                 name="newPassword"
                 isRequired={isReEnterReq}
                 isFocused={focusState.newPassword}
                 handleFocus={handleFocus}
                 handleBlur={handleBlur}
-                isNewPassword={true}
+              />
+              <button
+                className="absolute top-10 right-3 focus:outline-none"
+                type="button"
+                onClick={() =>
+                  setIsVisibleNewPassword(!isVisibleNewPassword)
+                }
+                aria-label="toggle password visibility"
+              >
+                {isVisibleNewPassword ? (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                )}
+              </button>
+            </div>
+            <div className="relative">
+              <GroupField
+                label="Re-enter password"
+                type={isVisibleReEnterPassword ? "text" : "password"}
+                name="reEnterPassword"
+                isRequired={isReEnterReq}
+                isFocused={focusState.reEnterPassword}
+                handleFocus={handleFocus}
+                handleBlur={handleBlur}
+                isReEnterPassword={true}
               />
               <button
                 className="absolute top-10 right-3 focus:outline-none"
@@ -180,6 +209,37 @@ const GenericForm = ({
                 aria-label="toggle password visibility"
               >
                 {isVisibleReEnterPassword ? (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                )}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+      {isDeleteAccount && (
+        <>
+          <div className="grid grid-cols-1 gap-6">
+            <div className="relative">
+              <GroupField
+                label="Password"
+                type={isVisiblePassword ? "text" : "password"}
+                name="password"
+                isRequired={isPasswordReq}
+                isFocused={focusState.password}
+                handleFocus={handleFocus}
+                handleBlur={handleBlur}
+                hasIconEnd={true}
+                isPassword={true}
+              />
+              <button
+                className="absolute top-10 right-3 focus:outline-none"
+                type="button"
+                onClick={() => setIsVisiblePassword(!isVisiblePassword)}
+                aria-label="toggle password visibility"
+              >
+                {isVisiblePassword ? (
                   <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                 ) : (
                   <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />

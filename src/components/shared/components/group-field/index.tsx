@@ -2,7 +2,10 @@
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
-import { FocusStateType, IFieldValueTypes } from "@/components/interface/global-interface";
+import {
+  FocusStateType,
+  IFieldValueTypes,
+} from "@/components/interface/global-interface";
 
 interface IGroupFieldTypes {
   label: string;
@@ -25,7 +28,7 @@ interface IGroupFieldTypes {
   isAutoComplete?: boolean;
   isCustomNumber?: boolean;
   isOldPassword?: boolean;
-  isNewPassword?: boolean;
+  isPassword?: boolean;
   isReEnterPassword?: boolean;
 }
 interface AutocompleteItemType {
@@ -50,7 +53,7 @@ const GroupField = ({
   isPasswordLogin,
   isReEnterRegister,
   isOldPassword,
-  isNewPassword,
+  isPassword,
   isReEnterPassword,
   isAutoComplete,
   isCustomNumber,
@@ -73,26 +76,33 @@ const GroupField = ({
       hasError = "errorReEnterRegister";
     } else if (isOldPassword) {
       hasError = "errorOldPassword";
-    }else if (isReEnterPassword) {
+    } else if (isReEnterPassword) {
       hasError = "errorReEnterPassword";
+    } else if (isPassword) {
+      hasError = "errorPassword";
     }
+
 
     if (hasError) {
       setFocusState((prev: FocusStateType) => ({ ...prev, [hasError]: false }));
     }
 
-    setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: e.target.value }));
+    setFormValues((prev: Record<string, string>) => ({
+      ...prev,
+      [name]: e.target.value,
+    }));
   };
 
   const isError =
     (isEmailLogin && focusState.errorEmailLogin) ||
     (isEmailRegister && focusState.errorEmailRegister) ||
     (isReEnterRegister && focusState.errorReEnterRegister) ||
-    (isPasswordLogin && focusState.errorPasswordLogin)||
-    (isOldPassword && focusState.errorOldPassword) || 
+    (isPasswordLogin && focusState.errorPasswordLogin) ||
+    (isOldPassword && focusState.errorOldPassword) ||
+    (isPassword && focusState.errorPassword) ||
     (isReEnterPassword && focusState.errorReEnterPassword);
-    
-    const itemList = items ?? [];
+
+  const itemList = items ?? [];
   return (
     <>
       {isAutoComplete ? (
@@ -108,8 +118,11 @@ const GroupField = ({
             onBlur={() => handleBlur(name)}
             defaultItems={items}
             selectedKey={formValues[value || name]}
-            onSelectionChange={(selected) =>{
-              setFormValues((prev: Record<string, string>) => ({ ...prev, [name]: selected as string}))
+            onSelectionChange={(selected) => {
+              setFormValues((prev: Record<string, string>) => ({
+                ...prev,
+                [name]: selected as string,
+              }));
             }}
           >
             {itemList.map((item: AutocompleteItemType) => (
@@ -162,6 +175,13 @@ const GroupField = ({
             aria-labelledby={name}
             placeholder={placeholder}
             value={formValues[value || name] ?? ""}
+            maxLength={
+              name === "firstName" || name === "lastName"
+                ? 20
+                : name === "username"
+                ? 15
+                : undefined
+            }
             className={`text-base text-quaternary ${
               hasIconFirst ? "pl-6 pr-3" : hasIconEnd ? "pl-3 pr-10" : "px-3"
             } ${

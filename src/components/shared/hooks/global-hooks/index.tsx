@@ -1,6 +1,9 @@
 "use client";
 import useShareContextHooks from "../context-hooks/share-state-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
+import { useRouter } from "next/navigation";
+import { logoutService } from "@/service/api/logoutService";
+import toast from "react-hot-toast";
 
 interface FocusState extends FocusStateType {
   [key: string]: boolean | undefined;
@@ -9,6 +12,7 @@ interface FocusState extends FocusStateType {
 const useGlobalHooks = () => {
   const { shareContext } = useShareContextHooks();
   const { setFormValues, setIsError, setFocusState } = shareContext;
+  const router = useRouter();
 
   const handleResetFormValues = () => {
     setFormValues((prev: Record<string, string>) => {
@@ -55,11 +59,25 @@ const useGlobalHooks = () => {
     }).format(amount);
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await logoutService();
+      if (response?.ok) {
+        router.push("/");
+        sessionStorage.clear();
+        toast.remove();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     handleResetFormValues,
     handleResetErrorFocus,
     handleSetError,
     handleFormatAmount,
+    handleLogout,
   };
 };
 

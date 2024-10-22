@@ -53,5 +53,6 @@ export const config = {
     "/api/expense/fetch-expense",
     "/api/users/updateProfile",
     "/api/users/updatePassword",
+    "/api/users/deleteAccount",
   ],
 };

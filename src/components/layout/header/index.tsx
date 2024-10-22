@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
-import { logoutService } from "@/service/api/logoutService";
-import { useRouter } from "next/navigation";
 import {
   Dropdown,
   DropdownTrigger,
@@ -11,30 +9,18 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import GenericModal from "@/components/shared/components/generic-modal";
-import toast from "react-hot-toast";
+import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 const Header = () => {
-  const router = useRouter();
   const { shareContext } = useShareContextHooks();
   const { user } = shareContext;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const { handleLogout } = useGlobalHooks();
   const [isGenericModal, setIsGenericModal] = useState<string>("");
 
-  const handleLogout = async () => {
-    try {
-      const response = await logoutService();
-      if (response?.ok) {
-        router.push("/");
-        sessionStorage.clear();
-        toast.remove();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const firstLetter = (user as { firstName: string })?.firstName?.charAt(0);
+  const firstName = (user as { firstName: string })?.firstName?.charAt(0);
+  const firstLetter = firstName?.charAt(0);
+  const lastName = (user as { lastName: string })?.lastName;
   const email = (user as { email: string })?.email;
   const username = (user as { username: string })?.username;
 
@@ -52,7 +38,7 @@ const Header = () => {
                 />
                 <div className="flex flex-col">
                   <p className="text-base font-semibold text-neutral-dark">
-                    {email}
+                    {firstName} {lastName}
                   </p>
                   <p className="text-sm font-medium text-quaternary relative -top-1">
                     @{username}
@@ -63,7 +49,7 @@ const Header = () => {
             <DropdownMenu aria-label="User Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-bold">Signed in as</p>
-                <p className="font-bold">@{username}</p>
+                <p className="font-bold">{email}</p>
               </DropdownItem>
               <DropdownItem
                 key="settings"

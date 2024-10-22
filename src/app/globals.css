@@ -164,13 +164,15 @@ body {
 } */
 
 .toast-error {
-  @apply !bg-red-500 border border-red-300 text-neutral-dark;
+  @apply !bg-red-500 border border-red-300 !text-neutral-light;
 }
 
 .toast-success {
   @apply !bg-green-500 border border-green-300 !text-neutral-light;
 }
-
+.toast {
+  @apply w-80;
+}
 .toast>div {
   @apply !m-0 !w-full !h-full;
 }

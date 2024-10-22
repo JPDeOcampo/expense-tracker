@@ -17,6 +17,9 @@ import { updateProfileService } from "@/service/api/updateProfileService";
 import { updatePasswordService } from "@/service/api/updatePassword";
 import { FocusStateType } from "@/components/interface/global-interface";
 import { IUserTypes } from "@/components/interface/global-interface";
+import { deleteAccountService } from "@/service/api/deleteAccountService";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 interface IPropTypes {
   isGenericModal: string;
   isModalOpen: boolean;
@@ -37,7 +40,7 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
+  const { handleResetFormValues, handleResetErrorFocus } =
     useGlobalHooks();
 
   const firstName = (user as { firstName: string })?.firstName;
@@ -91,6 +94,14 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
           ...prev,
           errorEmailRegister: true,
         }));
+        updateToast({
+          isToast: "alert-error",
+          toastId: "alert-error",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-error",
+          message: response?.message,
+        });
       } else {
         handleCloseModal();
         handleResetFormValues();
@@ -105,7 +116,6 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
         setUser((prev: IUserTypes[]) => {
           const updatedData = { ...prev, ...data };
           sessionStorage.setItem("user", JSON.stringify(updatedData));
-          console.log(updatedData);
           return updatedData;
         });
       }
@@ -173,11 +183,27 @@ const ChangePassword = ({
           ...prev,
           errorOldPassword: true,
         }));
+        updateToast({
+          isToast: "alert-error",
+          toastId: "alert-error",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-error",
+          message: response?.message,
+        });
       } else if (response?.invalidMatchPassword) {
         setFocusState((prev: FocusStateType) => ({
           ...prev,
           errorReEnterPassword: true,
         }));
+        updateToast({
+          isToast: "alert-error",
+          toastId: "alert-error",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-error",
+          message: response?.message,
+        });
       } else {
         handleCloseModal();
         handleResetFormValues();
@@ -221,8 +247,100 @@ const ChangePassword = ({
 const Configurations = () => {
   return <></>;
 };
-const DeleteAccount = () => {
-  return <></>;
+const DeleteAccount = ({
+  handleCloseModal,
+}: {
+  handleCloseModal: () => void;
+}) => {
+  const { shareContext } = useShareContextHooks();
+  const { updateToast, setFocusState, focusState } = shareContext;
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { handleResetFormValues, handleResetErrorFocus, handleLogout } = useGlobalHooks();
+  const router = useRouter();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    handleResetErrorFocus();
+
+    const formData = new FormData(event.currentTarget);
+
+    const data: IUserTypes = {
+      password: formData.get("password") as string,
+      reEnterPassword: formData.get("reEnterPassword") as string,
+    };
+
+    try {
+      const response = await deleteAccountService(data);
+
+      if (response?.invalidPassword) {
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorPassword: true,
+        }));
+        updateToast({
+          isToast: "alert-error",
+          toastId: "alert-error",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-error",
+          message: response?.message,
+        });
+      } else if (response?.invalidMatchPassword) {
+        setFocusState((prev: FocusStateType) => ({
+          ...prev,
+          errorReEnterPassword: true,
+        }));
+        updateToast({
+          isToast: "alert-error",
+          toastId: "alert-error",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-error",
+          message: response?.message,
+        });
+      } else {
+        handleCloseModal();
+        handleResetFormValues();
+        updateToast({
+          isToast: "alert-success",
+          toastId: "alert-success",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-success",
+          message: "Successfully updated!",
+        });
+        handleLogout();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
+        <GenericForm
+          isDeleteAccount={true}
+          isPasswordReq={true}
+          isReEnterReq={true}
+        />
+        <div className="w-full flex gap-3 mt-4 justify-end">
+          <Button color="danger" variant="light" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button color="primary" type="submit">
+            Save{" "}
+            {loading && <Spinner className="button-spinner" color="default" />}
+          </Button>
+        </div>
+      </form>
+    </>
+  );
 };
 
 const GenericModal = ({
@@ -231,8 +349,7 @@ const GenericModal = ({
   header,
   setIsModalOpen,
 }: IPropTypes) => {
-  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
-    useGlobalHooks();
+  const { handleResetFormValues, handleResetErrorFocus } = useGlobalHooks();
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -263,7 +380,7 @@ const GenericModal = ({
                 ) : isGenericModal === "Change Password" ? (
                   <Configurations />
                 ) : (
-                  <DeleteAccount />
+                  <DeleteAccount handleCloseModal={handleCloseModal} />
                 )}
               </ModalBody>
             </>

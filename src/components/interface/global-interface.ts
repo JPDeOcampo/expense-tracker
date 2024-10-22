@@ -47,6 +47,7 @@ export interface FocusStateType {
   focusState?: boolean;
   errorOldPassword?: boolean;
   errorReEnterPassword?: boolean;
+  errorPassword?:boolean;
 }
 export interface IFieldValueTypes {
   firstName: string;
