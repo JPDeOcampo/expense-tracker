@@ -18,7 +18,7 @@ const Header = () => {
   const { handleLogout } = useGlobalHooks();
   const [isGenericModal, setIsGenericModal] = useState<string>("");
 
-  const firstName = (user as { firstName: string })?.firstName?.charAt(0);
+  const firstName = (user as { firstName: string })?.firstName;
   const firstLetter = firstName?.charAt(0);
   const lastName = (user as { lastName: string })?.lastName;
   const email = (user as { email: string })?.email;
