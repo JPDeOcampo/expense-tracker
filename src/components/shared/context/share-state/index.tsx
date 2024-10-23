@@ -1,11 +1,5 @@
 "use client";
-import {
-  createContext,
-  useState,
-  useMemo,
-  FC,
-  ReactNode,
-} from "react";
+import { createContext, useState, useMemo, FC, ReactNode } from "react";
 import {
   ICombinedDataType,
   FocusStateType,
@@ -30,6 +24,8 @@ const initialFocusState: FocusStateType = {
   frequency: false,
   paymentMethod: false,
   note: false,
+  to: false,
+  from: false,
   errorEmailLogin: false,
   errorPasswordLogin: false,
   errorEmailRegister: false,
@@ -74,6 +70,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     frequency: "",
     paymentMethod: "",
     note: "",
+    to: "",
+    from: "",
   });
 
   // Textfield Focus
@@ -112,19 +110,12 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     className,
     message,
   }: IToastTypes) => {
-
-    toast(
-      <GenericToast
-        isToast={isToast}
-        message={message}
-      />,
-      {
-        position: position,
-        duration: delay,
-        className: `toast ${className}`,
-        id: toastId,
-      }
-    )
+    toast(<GenericToast isToast={isToast} message={message} />, {
+      position: position,
+      duration: delay,
+      className: `toast ${className}`,
+      id: toastId,
+    });
   };
 
   const contextValue = useMemo(

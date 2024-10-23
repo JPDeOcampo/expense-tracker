@@ -19,7 +19,7 @@ import { FocusStateType } from "@/components/interface/global-interface";
 import { IUserTypes } from "@/components/interface/global-interface";
 import { deleteAccountService } from "@/service/api/deleteAccountService";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+
 interface IPropTypes {
   isGenericModal: string;
   isModalOpen: boolean;
@@ -40,8 +40,7 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { handleResetFormValues, handleResetErrorFocus } =
-    useGlobalHooks();
+  const { handleResetFormValues, handleResetErrorFocus } = useGlobalHooks();
 
   const firstName = (user as { firstName: string })?.firstName;
   const lastName = (user as { lastName: string })?.lastName;
@@ -155,11 +154,11 @@ const ChangePassword = ({
   handleCloseModal: () => void;
 }) => {
   const { shareContext } = useShareContextHooks();
-  const { updateToast, setFocusState, focusState } = shareContext;
+  const { updateToast, setFocusState } = shareContext;
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
+  const { handleResetFormValues, handleResetErrorFocus } =
     useGlobalHooks();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -244,9 +243,6 @@ const ChangePassword = ({
   );
 };
 
-const Configurations = () => {
-  return <></>;
-};
 const DeleteAccount = ({
   handleCloseModal,
 }: {
@@ -257,7 +253,8 @@ const DeleteAccount = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { handleResetFormValues, handleResetErrorFocus, handleLogout } = useGlobalHooks();
+  const { handleResetFormValues, handleResetErrorFocus, handleLogout } =
+    useGlobalHooks();
   const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -377,8 +374,6 @@ const GenericModal = ({
                   <MyProfile handleCloseModal={handleCloseModal} />
                 ) : isGenericModal === "Change Password" ? (
                   <ChangePassword handleCloseModal={handleCloseModal} />
-                ) : isGenericModal === "Change Password" ? (
-                  <Configurations />
                 ) : (
                   <DeleteAccount handleCloseModal={handleCloseModal} />
                 )}

@@ -7,17 +7,18 @@ import {
   DropdownMenu,
   DropdownItem,
   Avatar,
+  DropdownSection,
 } from "@nextui-org/react";
 import GenericModal from "@/components/shared/components/generic-modal";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 const Header = () => {
   const { shareContext } = useShareContextHooks();
-  const { user } = shareContext;
+  const { user, setCurrency, currency } = shareContext;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { handleLogout } = useGlobalHooks();
   const [isGenericModal, setIsGenericModal] = useState<string>("");
-
+console.log(currency)
   const firstName = (user as { firstName: string })?.firstName;
   const firstLetter = firstName?.charAt(0);
   const lastName = (user as { lastName: string })?.lastName;
@@ -61,16 +62,8 @@ const Header = () => {
                 My Profile
               </DropdownItem>
               <DropdownItem
-                key="configurations"
-                onClick={() => {
-                  setIsGenericModal("Configurations");
-                  setIsModalOpen(true);
-                }}
-              >
-                Configurations
-              </DropdownItem>
-              <DropdownItem
                 key="change-pass"
+                color="warning"
                 onClick={() => {
                   setIsGenericModal("Change Password");
                   setIsModalOpen(true);
@@ -78,16 +71,56 @@ const Header = () => {
               >
                 Change Password
               </DropdownItem>
-              <DropdownItem
-                key="delete"
-                color="warning"
-                onClick={() => {
-                  setIsGenericModal("Delete Account");
-                  setIsModalOpen(true);
-                }}
-              >
-                Delete Account
-              </DropdownItem>
+              <DropdownSection aria-label="Delete Account" showDivider>
+                <DropdownItem
+                  key="delete"
+                  color="danger"
+                  className="text-secondary"
+                  onClick={() => {
+                    setIsGenericModal("Delete Account");
+                    setIsModalOpen(true);
+                  }}
+                >
+                  Delete Account
+                </DropdownItem>
+              </DropdownSection>
+              <DropdownSection aria-label="Configurations" showDivider>
+                <DropdownItem
+                  isReadOnly
+                  key="currency"
+                  className="cursor-default"
+                  endContent={
+                    <select
+                      className="z-10 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent text-default-500"
+                      id="theme"
+                      name="theme"
+                      onChange={(e) => setCurrency(e.target.value)}
+                    >
+                      <option value="PHP">PHP</option>
+                      <option value="USD">USD</option>
+                    </select>
+                  }
+                >
+                  Currency
+                </DropdownItem>
+                <DropdownItem
+                  isReadOnly
+                  key="theme"
+                  className="cursor-default"
+                  endContent={
+                    <select
+                      className="z-10 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent text-default-500"
+                      id="theme"
+                      name="theme"
+                    >
+                      <option onClick={()=>{}}>Light</option>
+                      <option>Dark</option>
+                    </select>
+                  }
+                >
+                  Theme
+                </DropdownItem>
+              </DropdownSection>
               <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                 Log Out
               </DropdownItem>

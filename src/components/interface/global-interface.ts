@@ -40,6 +40,8 @@ export interface FocusStateType {
   frequency: boolean;
   paymentMethod: boolean;
   note: boolean;
+  to?: boolean;
+  from?: boolean;
   errorEmailLogin: boolean;
   errorPasswordLogin: boolean;
   errorEmailRegister: boolean;
@@ -47,7 +49,7 @@ export interface FocusStateType {
   focusState?: boolean;
   errorOldPassword?: boolean;
   errorReEnterPassword?: boolean;
-  errorPassword?:boolean;
+  errorPassword?: boolean;
 }
 export interface IFieldValueTypes {
   firstName: string;
@@ -65,6 +67,8 @@ export interface IFieldValueTypes {
   frequency: string;
   paymentMethod: string;
   note: string;
+  to: string;
+  from: string;
 }
 export interface ShareContextType {
   combinedData: ICombinedDataType[] | [];

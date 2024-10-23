@@ -190,7 +190,6 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     } catch (error) {
       console.error(error);
     }
-    
   };
 
   return (
@@ -235,6 +234,26 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
           handleBlur={handleBlur}
           isAutoComplete={true}
         />
+      )}
+      {onTabs === "transfer" && (
+        <>
+          <GroupField
+            label="To"
+            type="text"
+            name="to"
+            isFocused={focusState.to}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
+          />
+          <GroupField
+            label="From"
+            type="text"
+            name="from"
+            isFocused={focusState.from}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
+          />
+        </>
       )}
 
       <GroupField

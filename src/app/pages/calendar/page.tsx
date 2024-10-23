@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { ShareContext } from "@/components/shared/context/share-state";
@@ -10,6 +10,9 @@ import {
   Button,
 } from "@nextui-org/react";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 interface EventExtendedProps {
   type: string;
@@ -33,34 +36,68 @@ const Calendar = () => {
     combinedData: [],
   };
 
+  const { handleFormatAmount } = useGlobalHooks();
+  const { shareContext } = useShareContextHooks();
+  const { updateToast, setFocusState, focusState, handleFocus, handleBlur } =
+    shareContext;
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
+    useGlobalHooks();
+
   const sortedData = combinedData.sort((a, b) => {
     return (
       new Date(b.createdAt ?? "").getTime() -
       new Date(a.createdAt ?? "").getTime()
     );
   });
-  const { handleFormatAmount } = useGlobalHooks();
+  console.log(sortedData);
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
 
-    const title = type === "income" ? "Income" : "Expense";
+    const title =
+      type === "income"
+        ? "Income"
+        : type === "expense"
+        ? "Expense"
+        : "Transfer";
 
     return (
       <div className="w-full overflow-auto">
         <Popover placement="top" offset={20} showArrow>
-          <PopoverTrigger>
-            <Button className="w-full h-full p-2 border-0 rounded-none justify-start bg-primary">
-              <div className="w-full h-full flex flex-col items-start gap-0 justify-start">
-                <h5 className="text-sm font-semibold text-neutral-light">{`${
-                  frequency ? frequency : ""
-                } ${title} `}</h5>
-                <h6 className="text-xs font-medium text-neutral-light">
-                  {handleFormatAmount(amount as number, currency as string)}
-                </h6>
+          <div className="w-full h-full bg-primary flex gap-4">
+            <PopoverTrigger>
+              <Button className="w-full h-full p-2 border-0 rounded-none justify-start bg-transparent">
+                <div className="w-full h-full flex flex-col items-start gap-0 justify-start">
+                  <h5 className="text-sm font-semibold text-neutral-light">{`${
+                    frequency ? frequency : ""
+                  } ${title} `}</h5>
+                  <h6 className="text-xs font-medium text-neutral-light">
+                    {handleFormatAmount(amount as number, currency as string)}
+                  </h6>
+                </div>
+              </Button>
+            </PopoverTrigger>
+            <div className="flex gap-2 px-2">
+              <div className="flex items-center justify-center">
+                <button>
+                  <span className="text-success-300 text-lg hover:text-neutral-light80">
+                    <FaEdit />
+                  </span>
+                </button>
               </div>
-            </Button>
-          </PopoverTrigger>
+              <div className="flex items-center justify-center">
+                <button>
+                  <span className="text-danger-300 text-lg hover:text-neutral-light80">
+                    <MdDelete />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <PopoverContent className="">
             <div className="px-1 py-2">
               <ul className="flex flex-col gap-1">
