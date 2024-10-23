@@ -48,7 +48,7 @@ const Login = () => {
 
     try {
       const response = await loginService(data);
-      console.log(response);
+
       if (response?.invalidEmail) {
         setFocusState((prev: FocusStateType) => ({
           ...prev,

@@ -39,7 +39,7 @@ const Calendar = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [updateData, setUpdateData] = useState<IEventExtendedProps>();
-  console.log(isModalOpen);
+
   const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
     useGlobalHooks();
 
@@ -49,12 +49,11 @@ const Calendar = () => {
       new Date(a.createdAt ?? "").getTime()
     );
   });
-  console.log(sortedData);
+ 
   const handleEdit = (type: string, data : IEventExtendedProps) => {
     setIsModalOpen(true);
     setSelectedTabs(type);
     setUpdateData(data);
-    console.log(data)
   };
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
