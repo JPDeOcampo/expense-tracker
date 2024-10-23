@@ -45,6 +45,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
   const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
   const [currency, setCurrency] = useState<string | null>("PHP");
+  const [selectedTabs, setSelectedTabs] = useState<string | null>("expense");
 
   const [isError, setIsError] = useState<{ error: string; message: string }>({
     error: "",
@@ -146,6 +147,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       user,
       setUser,
       updateToast,
+      selectedTabs,
+      setSelectedTabs,
     }),
     [
       isCreateAccount,
@@ -172,6 +175,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       user,
       setUser,
       updateToast,
+      selectedTabs,
+      setSelectedTabs,
     ]
   );
   return (

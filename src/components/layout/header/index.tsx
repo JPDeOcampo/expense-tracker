@@ -18,7 +18,7 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { handleLogout } = useGlobalHooks();
   const [isGenericModal, setIsGenericModal] = useState<string>("");
-console.log(currency)
+
   const firstName = (user as { firstName: string })?.firstName;
   const firstLetter = firstName?.charAt(0);
   const lastName = (user as { lastName: string })?.lastName;

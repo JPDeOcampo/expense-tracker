@@ -13,22 +13,17 @@ import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
-interface EventExtendedProps {
-  type: string;
-  amount: number;
-  category: string;
-  frequency: string;
-  paymentMethod: string;
-  note: string;
-}
+import GenericModal from "@/components/shared/components/generic-modal";
+import { IEventExtendedProps } from "@/components/interface/global-interface";
 
 interface Event {
-  extendedProps: EventExtendedProps;
+  extendedProps: IEventExtendedProps;
+  start: string;
 }
 
 interface EventInfo {
   event: Event;
+  
 }
 
 const Calendar = () => {
@@ -38,11 +33,13 @@ const Calendar = () => {
 
   const { handleFormatAmount } = useGlobalHooks();
   const { shareContext } = useShareContextHooks();
-  const { updateToast, setFocusState, focusState, handleFocus, handleBlur } =
+  const { setSelectedTabs, updateToast, setFocusState, focusState, handleFocus, handleBlur } =
     shareContext;
 
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [updateData, setUpdateData] = useState<IEventExtendedProps>();
+  console.log(isModalOpen);
   const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
     useGlobalHooks();
 
@@ -53,9 +50,21 @@ const Calendar = () => {
     );
   });
   console.log(sortedData);
+  const handleEdit = (type: string, data : IEventExtendedProps) => {
+    setIsModalOpen(true);
+    setSelectedTabs(type);
+    setUpdateData(data);
+    console.log(data)
+  };
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
+      const eventDate = new Date(eventInfo.event.start);
+      const date = eventDate.toISOString();
+      const combineUpdateData = {
+        ...eventInfo.event.extendedProps,
+        date
+      }
 
     const title =
       type === "income"
@@ -63,7 +72,7 @@ const Calendar = () => {
         : type === "expense"
         ? "Expense"
         : "Transfer";
-
+     
     return (
       <div className="w-full overflow-auto">
         <Popover placement="top" offset={20} showArrow>
@@ -82,14 +91,14 @@ const Calendar = () => {
             </PopoverTrigger>
             <div className="flex gap-2 px-2">
               <div className="flex items-center justify-center">
-                <button>
+                <button onClick={() => handleEdit(type, combineUpdateData)}>
                   <span className="text-success-300 text-lg hover:text-neutral-light80">
                     <FaEdit />
                   </span>
                 </button>
               </div>
               <div className="flex items-center justify-center">
-                <button>
+                <button onClick={() => setIsModalOpen(true)}>
                   <span className="text-danger-300 text-lg hover:text-neutral-light80">
                     <MdDelete />
                   </span>
@@ -144,6 +153,14 @@ const Calendar = () => {
           weekends={false}
           events={sortedData}
           eventContent={renderEventContent}
+        />
+        <GenericModal
+          isGenericModal={"add-item"}
+          isModalOpen={isModalOpen}
+          header={"Update"}
+          isUpdate={true}
+          updateData={updateData}
+          setIsModalOpen={setIsModalOpen}
         />
       </div>
     </div>

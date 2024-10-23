@@ -18,13 +18,23 @@ import { updatePasswordService } from "@/service/api/updatePassword";
 import { FocusStateType } from "@/components/interface/global-interface";
 import { IUserTypes } from "@/components/interface/global-interface";
 import { deleteAccountService } from "@/service/api/deleteAccountService";
-import { useRouter } from "next/navigation";
-
+import { IEventExtendedProps } from "@/components/interface/global-interface";
+interface EventExtendedProps {
+  date?: string;
+  type: string;
+  amount: number;
+  category: string;
+  frequency: string;
+  paymentMethod: string;
+  note: string;
+}
 interface IPropTypes {
   isGenericModal: string;
   isModalOpen: boolean;
   header: string;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  isUpdate?: boolean;
+  updateData?: IEventExtendedProps;
 }
 
 const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
@@ -158,8 +168,7 @@ const ChangePassword = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { handleResetFormValues, handleResetErrorFocus } =
-    useGlobalHooks();
+  const { handleResetFormValues, handleResetErrorFocus } = useGlobalHooks();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -249,13 +258,12 @@ const DeleteAccount = ({
   handleCloseModal: () => void;
 }) => {
   const { shareContext } = useShareContextHooks();
-  const { updateToast, setFocusState, focusState } = shareContext;
+  const { updateToast, setFocusState } = shareContext;
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const { handleResetFormValues, handleResetErrorFocus, handleLogout } =
     useGlobalHooks();
-  const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -344,6 +352,8 @@ const GenericModal = ({
   isGenericModal,
   isModalOpen,
   header,
+  isUpdate,
+  updateData,
   setIsModalOpen,
 }: IPropTypes) => {
   const { handleResetFormValues, handleResetErrorFocus } = useGlobalHooks();
@@ -369,7 +379,11 @@ const GenericModal = ({
               </ModalHeader>
               <ModalBody>
                 {isGenericModal === "add-item" ? (
-                  <GenericTabs handleCloseModal={handleCloseModal} />
+                  <GenericTabs
+                    handleCloseModal={handleCloseModal}
+                    isUpdate={isUpdate ?? false}
+                    updateData={updateData}
+                  />
                 ) : isGenericModal === "My Profile" ? (
                   <MyProfile handleCloseModal={handleCloseModal} />
                 ) : isGenericModal === "Change Password" ? (

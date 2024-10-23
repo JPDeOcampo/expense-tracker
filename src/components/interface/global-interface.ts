@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-export interface IMainData {
+export interface IBaseData {
   amount: number | string;
   date: string;
   note: string;
@@ -8,7 +8,7 @@ export interface IMainData {
   _id?: string;
   __v?: number;
 }
-export interface ICategoryDataType extends IMainData {
+export interface ICategoryDataType extends IBaseData {
   category: string;
 }
 
@@ -104,11 +104,13 @@ export interface ShareContextType {
     | (string | number);
   setUser: Dispatch<SetStateAction<IUserTypes[]>>;
   updateToast: (props: IToastTypes) => void;
+  selectedTabs: string | null;
+  setSelectedTabs: (selectedTabs: string | null) => void;
 }
 
 // Income, Expense, and Transfer
 export interface IAddFormTypes {
-  date: string;
+  date?: string;
   amount: string | number;
   note: string;
   frequency?: string;
@@ -116,6 +118,9 @@ export interface IAddFormTypes {
   paymentMethod?: string;
   to?: string;
   from?: string;
+}
+export interface IEventExtendedProps extends IAddFormTypes {
+  type: string;
 }
 
 export interface ITransaction {

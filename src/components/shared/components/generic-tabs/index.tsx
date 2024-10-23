@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 import GroupField from "../group-field";
 import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
@@ -9,12 +9,21 @@ import { ICombinedDataType } from "@/components/interface/global-interface";
 import useTotalHooks from "../../hooks/total-hooks";
 import { ITransaction } from "@/components/interface/global-interface";
 import { Spinner } from "@nextui-org/react";
+import { IEventExtendedProps } from "@/components/interface/global-interface";
+
 interface FormProps {
   onTabs: string;
   handleCloseModal: () => void;
+  isUpdate?: boolean;
+  updateData?: IEventExtendedProps;
 }
 
-const Form = ({ onTabs, handleCloseModal }: FormProps) => {
+const Form = ({
+  onTabs,
+  handleCloseModal,
+  isUpdate,
+  updateData,
+}: FormProps) => {
   const { shareContext } = useShareContextHooks();
   const {
     focusState,
@@ -28,22 +37,25 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     incomeData,
     currentBalance,
     updateToast,
+    setFormValues,
+    formValues,
   } = shareContext;
   const { getTotalAmount } = useTotalHooks();
 
   const [loading, setLoading] = useState(false);
+
   const categories = {
     income: [
       { label: "Allowance", value: "allowance" },
       { label: "Salary", value: "salary" },
-      { label: "Petty cash", value: "petty_cash" },
+      { label: "Petty cash", value: "petty cash" },
       { label: "Bonus", value: "bonus" },
       { label: "Other", value: "other" },
     ],
     expense: [
       { label: "Food", value: "food" },
       { label: "Transport", value: "transport" },
-      { label: "Social Life", value: "social_life" },
+      { label: "Social Life", value: "social life" },
       { label: "Culture", value: "culture" },
       { label: "Apparel", value: "apparel" },
       { label: "Beauty", value: "beauty" },
@@ -54,18 +66,35 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
     ],
   };
 
-  const paymentMethod = [
+  const paymentMethodItems = [
     { label: "Bank", value: "bank" },
     { label: "Cash", value: "cash" },
     { label: "Card", value: "card" },
   ];
 
-  const frequency = [
+  const frequencyItems = [
     { label: "Daily", value: "daily" },
     { label: "Weekly", value: "weekly" },
     { label: "Monthly", value: "monthly" },
     { label: "Other", value: "other" },
   ];
+  const { date, amount, paymentMethod, frequency, category, note } =
+    updateData ?? {};
+
+  useEffect(() => {
+    if (isUpdate) {
+      const dateObject = new Date(date ?? ""); // parse the date string into a Date object
+      setFormValues((prev: Record<string, string>) => ({
+        ...prev,
+        date: dateObject.toISOString().split("T")[0] ?? "",
+        amount: (amount ?? "").toString(),
+        category: category ?? "",
+        frequency: frequency ?? "",
+        paymentMethod: paymentMethod ?? "",
+        note: note ?? "",
+      }));
+    }
+  }, [updateData]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -222,17 +251,19 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
           handleFocus={handleFocus}
           handleBlur={handleBlur}
           isAutoComplete={true}
+          selectedItem={category}
         />
       )}
       {onTabs === "income" && (
         <GroupField
           label="Frequency"
           name="frequency"
-          items={frequency}
+          items={frequencyItems}
           isFocused={focusState.frequency}
           handleFocus={handleFocus}
           handleBlur={handleBlur}
           isAutoComplete={true}
+          selectedItem={frequency}
         />
       )}
       {onTabs === "transfer" && (
@@ -260,11 +291,12 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
         label="Payment Method"
         type="text"
         name="paymentMethod"
-        items={paymentMethod}
+        items={paymentMethodItems}
         isFocused={focusState.paymentMethod}
         handleFocus={handleFocus}
         handleBlur={handleBlur}
         isAutoComplete={true}
+        selectedItem={paymentMethod}
       />
       <GroupField
         label="Note"
@@ -288,10 +320,15 @@ const Form = ({ onTabs, handleCloseModal }: FormProps) => {
 };
 const GenericTabs = ({
   handleCloseModal,
+  isUpdate,
+  updateData,
 }: {
   handleCloseModal: () => void;
+  isUpdate: boolean;
+  updateData?: IEventExtendedProps;
 }) => {
-  const [selected, setSelected] = useState<string>("expense");
+  const { shareContext } = useShareContextHooks();
+  const { selectedTabs, setSelectedTabs } = shareContext;
 
   return (
     <div className="flex flex-col w-full">
@@ -301,19 +338,46 @@ const GenericTabs = ({
             fullWidth
             size="md"
             aria-label="Tabs form"
-            selectedKey={selected}
+            selectedKey={selectedTabs}
             onSelectionChange={(newSelected) =>
-              setSelected(newSelected as string)
+              setSelectedTabs(newSelected as string)
             }
           >
-            <Tab key="income" title="Income">
-              <Form handleCloseModal={handleCloseModal} onTabs="income" />
+            <Tab
+              key="income"
+              title="Income"
+              isDisabled={isUpdate && selectedTabs !== "income"}
+            >
+              <Form
+                handleCloseModal={handleCloseModal}
+                onTabs={"income"}
+                isUpdate={isUpdate}
+                updateData={updateData}
+              />
             </Tab>
-            <Tab key="expense" title="Expense">
-              <Form handleCloseModal={handleCloseModal} onTabs="expense" />
+            <Tab
+              key="expense"
+              title="Expense"
+              isDisabled={isUpdate && selectedTabs !== "expense"}
+            >
+              <Form
+                handleCloseModal={handleCloseModal}
+                onTabs="expense"
+                isUpdate={isUpdate}
+                updateData={updateData}
+              />
             </Tab>
-            <Tab key="transfer" title="Transfer">
-              <Form handleCloseModal={handleCloseModal} onTabs="transfer" />
+            <Tab
+              key="transfer"
+              title="Transfer"
+              isDisabled={isUpdate && selectedTabs !== "transfer"}
+            >
+              <Form
+                handleCloseModal={handleCloseModal}
+                onTabs="transfer"
+                isUpdate={isUpdate}
+                updateData={updateData}
+              />
             </Tab>
           </Tabs>
         </CardBody>

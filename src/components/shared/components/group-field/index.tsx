@@ -1,10 +1,9 @@
 "use client";
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
-import { Dispatch, SetStateAction, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import {
   FocusStateType,
-  IFieldValueTypes,
 } from "@/components/interface/global-interface";
 
 interface IGroupFieldTypes {
@@ -30,11 +29,9 @@ interface IGroupFieldTypes {
   isOldPassword?: boolean;
   isPassword?: boolean;
   isReEnterPassword?: boolean;
+  selectedItem?: string;
 }
-interface AutocompleteItemType {
-  value: string;
-  label: string;
-}
+
 const GroupField = ({
   label,
   placeholder,
@@ -58,6 +55,7 @@ const GroupField = ({
   isAutoComplete,
   isCustomNumber,
   items,
+  selectedItem,
 }: IGroupFieldTypes) => {
   const { shareContext } = useShareContextHooks();
   const { focusState, setFocusState, formValues, setFormValues } = shareContext;
@@ -82,7 +80,6 @@ const GroupField = ({
       hasError = "errorPassword";
     }
 
-
     if (hasError) {
       setFocusState((prev: FocusStateType) => ({ ...prev, [hasError]: false }));
     }
@@ -102,7 +99,6 @@ const GroupField = ({
     (isPassword && focusState.errorPassword) ||
     (isReEnterPassword && focusState.errorReEnterPassword);
 
-  const itemList = items ?? [];
   return (
     <>
       {isAutoComplete ? (
@@ -117,7 +113,7 @@ const GroupField = ({
             onFocus={() => handleFocus(name)}
             onBlur={() => handleBlur(name)}
             defaultItems={items}
-            selectedKey={formValues[value || name]}
+            defaultSelectedKey={selectedItem?.toLowerCase() || formValues[value || name]}
             onSelectionChange={(selected) => {
               setFormValues((prev: Record<string, string>) => ({
                 ...prev,
@@ -125,11 +121,7 @@ const GroupField = ({
               }));
             }}
           >
-            {itemList.map((item: AutocompleteItemType) => (
-              <AutocompleteItem key={item.value} value={item.value}>
-                {item.label}
-              </AutocompleteItem>
-            ))}
+            {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
           </Autocomplete>
         </div>
       ) : isCustomNumber ? (

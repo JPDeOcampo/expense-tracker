@@ -51,7 +51,7 @@ const Overview = () => {
           Current Balance
         </p>
       </div>
-      <GenericModal isGenericModal={'add-item'} isModalOpen={isModalOpen} header={'add'} setIsModalOpen={setIsModalOpen} />
+      <GenericModal isGenericModal={'add-item'} isModalOpen={isModalOpen} header={'Add new item'} setIsModalOpen={setIsModalOpen} />
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
           <p className="text-base font-semibold text-quaternary">Total Spent</p>
