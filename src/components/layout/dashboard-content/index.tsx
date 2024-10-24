@@ -210,7 +210,7 @@ const RecentTransaction = () => {
     const newData = sortedData.slice(0, page * itemsPerPage);
 
     setDisplayedData(newData);
-  }, [combinedData, page]);
+  }, [combinedData, page, currency]);
 
   const hasMore = displayedData.length < combinedData.length;
   const loadMore = () => {

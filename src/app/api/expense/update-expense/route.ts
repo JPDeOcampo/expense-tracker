@@ -1,10 +1,12 @@
 import connectMongoDB from "../../../../../libs/mongodb";
 import { NextResponse, NextRequest } from "next/server";
 import Users from "../../../../../models/users";
+import Expense from "../../../../../models/expense";
 import { validateToken } from "@/middleware";
 
 export const PUT = async (request: NextRequest) => {
   try {
+
     const updates = await request.json();
 
     // Filter out undefined fields and empty strings
@@ -22,33 +24,25 @@ export const PUT = async (request: NextRequest) => {
 
     await connectMongoDB();
 
-    // Check for email uniqueness if the email is being updated
-    if (filteredUpdates.email) {
-      const existingUser = await Users.findOne({ email: filteredUpdates.email });
-  
-      // If the user exists and it's not the current user's email
-      if (existingUser && existingUser._id.toString() === userId) {
-        return NextResponse.json(
-          { message: "Email already exists", invalidEmail: true}
-        );
-      }
+    const existingUserId = await Users.findOne({ userId: userId });
+    const existingExpenseId = await Expense.findOne({ _id: filteredUpdates.id });
+
+    if (!existingUserId && !existingExpenseId) {
+      return NextResponse.json({ message: "Invalid item Id", invalidId: true });
     }
 
-    const result = await Users.findByIdAndUpdate(
-      userId,
-      { $set: filteredUpdates }, // Use $set to only update provided fields
-      { new: true, runValidators: true } // runValidators to enforce schema validation
+    const result = await Expense.findByIdAndUpdate(
+      filteredUpdates.id,
+      { $set: filteredUpdates },
+      { new: true, runValidators: true }
     );
 
     if (!result) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Items not found" }, { status: 404 });
     }
 
     return NextResponse.json(
-      { message: "Update Successful", user: result },
+      { message: "Updated successfully!", user: result },
       { status: 200 }
     );
   } catch (error) {

@@ -1,7 +1,7 @@
 import { ENDPOINTS } from "../../../apiConfig";
 
 export const fetchUserService = async (id: number) => {
-    console.log(id, 'id')
+  
   try {
     const response = await fetch(`${ENDPOINTS.login}/${id}`, {
       method: "GET",

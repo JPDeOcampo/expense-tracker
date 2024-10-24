@@ -5,6 +5,7 @@ import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import {
   FocusStateType,
 } from "@/components/interface/global-interface";
+import useGlobalHooks from "../../hooks/global-hooks";
 
 interface IGroupFieldTypes {
   label: string;
@@ -58,7 +59,9 @@ const GroupField = ({
   selectedItem,
 }: IGroupFieldTypes) => {
   const { shareContext } = useShareContextHooks();
-  const { focusState, setFocusState, formValues, setFormValues } = shareContext;
+  const { focusState, setFocusState, formValues, setFormValues, currency } = shareContext;
+
+  const { currencySymbol } = useGlobalHooks();
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>, name: string) => {
     e.preventDefault();
@@ -144,7 +147,7 @@ const GroupField = ({
               onChange={(e) => handleOnChange(e, value || name)}
               startContent={
                 <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">$</span>
+                  <span className="text-default-400 text-small">{currencySymbol}</span>
                 </div>
               }
             />

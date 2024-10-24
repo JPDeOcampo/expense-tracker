@@ -44,13 +44,13 @@ export const POST = async (request: NextRequest) => {
     await newIncome.save();
 
     return NextResponse.json(
-      { message: "Registration Success" },
+      { message: "New income has been successfully added" },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error during registration:", error);
+    console.error("Error during adding new income:", error);
     return NextResponse.json(
-      { message: "Registration Failed" },
+      { message: "Adding new income failed" },
       { status: 500 }
     );
   }

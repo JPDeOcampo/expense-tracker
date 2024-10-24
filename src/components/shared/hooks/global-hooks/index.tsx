@@ -11,7 +11,7 @@ interface FocusState extends FocusStateType {
 }
 const useGlobalHooks = () => {
   const { shareContext } = useShareContextHooks();
-  const { setFormValues, setIsError, setFocusState } = shareContext;
+  const { setFormValues, setIsError, setFocusState, currency } = shareContext;
   const router = useRouter();
 
   const handleResetFormValues = () => {
@@ -59,6 +59,15 @@ const useGlobalHooks = () => {
     }).format(amount);
   };
 
+  const formattedAmount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency ?? "USD",
+  });
+
+  const currencySymbol = formattedAmount
+    .formatToParts(1)
+    .find((part) => part.type === "currency")?.value;
+
   const handleLogout = async () => {
     try {
       const response = await logoutService();
@@ -78,6 +87,7 @@ const useGlobalHooks = () => {
     handleSetError,
     handleFormatAmount,
     handleLogout,
+    currencySymbol,
   };
 };
 

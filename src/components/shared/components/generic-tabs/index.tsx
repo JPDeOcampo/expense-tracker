@@ -1,6 +1,7 @@
 "use client";
 import { useState, FormEvent, useEffect } from "react";
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
+import useGlobalContextHooks from "../../hooks/context-hooks/global-context-hooks";
 import GroupField from "../group-field";
 import { Tabs, Tab, Card, CardBody, Button } from "@nextui-org/react";
 import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService";
@@ -10,6 +11,7 @@ import useTotalHooks from "../../hooks/total-hooks";
 import { ITransaction } from "@/components/interface/global-interface";
 import { Spinner } from "@nextui-org/react";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
+import { updateExpenseService } from "@/service/api/expenseServices/updateExpenseService";
 
 interface FormProps {
   onTabs: string;
@@ -38,9 +40,10 @@ const Form = ({
     currentBalance,
     updateToast,
     setFormValues,
-    formValues,
   } = shareContext;
   const { getTotalAmount } = useTotalHooks();
+  const { globalContext } = useGlobalContextHooks();
+  const { fetchIncome } = globalContext;
 
   const [loading, setLoading] = useState(false);
 
@@ -78,15 +81,15 @@ const Form = ({
     { label: "Monthly", value: "monthly" },
     { label: "Other", value: "other" },
   ];
-  const { date, amount, paymentMethod, frequency, category, note } =
+
+  const { _id, date, amount, paymentMethod, frequency, category, note } =
     updateData ?? {};
 
   useEffect(() => {
     if (isUpdate) {
-      const dateObject = new Date(date ?? ""); // parse the date string into a Date object
       setFormValues((prev: Record<string, string>) => ({
         ...prev,
-        date: dateObject.toISOString().split("T")[0] ?? "",
+        date: date?.split("T")[0] ?? "",
         amount: (amount ?? "").toString(),
         category: category ?? "",
         frequency: frequency ?? "",
@@ -109,7 +112,7 @@ const Form = ({
       frequency: frequency?.value ?? "",
       category: category?.value ?? "",
       paymentMethod: paymentMethod?.value ?? "",
-      userId: "",
+      _id: isUpdate ? _id : "",
     };
 
     if (onTabs === "income") {
@@ -127,6 +130,7 @@ const Form = ({
     try {
       if (onTabs === "income") {
         const response = await AddIncomeService(formData);
+
         if (response?.ok) {
           setIncomeData((prev: ICombinedDataType[]) => {
             const updatedData = [
@@ -173,13 +177,33 @@ const Form = ({
           handleCloseModal();
         }
       } else if (onTabs === "expense") {
-        const response = await AddExpenseService(formData);
+        const response = isUpdate
+          ? await updateExpenseService(formData)
+          : await AddExpenseService(formData);
+        const data = await response?.json();
+        if (!isUpdate) {
+          fetchIncome();
+        }
         if (response?.ok) {
           setExpenseData((prev: ICombinedDataType[]) => {
-            const updatedData = [
+            const addNewData = [
               { ...formData, createdAt: new Date().toISOString() },
               ...prev,
             ];
+
+            const updateData = prev.map((expense) => {
+              if (expense._id === _id) {
+                return {
+                  ...expense,
+                  ...formData,
+                  updatedAt: new Date().toISOString(),
+                };
+              }
+              return expense;
+            });
+
+            const updatedData = isUpdate ? updateData : addNewData;
+
             const overAllExpense = getTotalAmount(
               updatedData as ITransaction[]
             );
@@ -210,7 +234,7 @@ const Form = ({
             position: "top-center",
             delay: 4000,
             className: "toast-success",
-            message: "Successfully added!",
+            message: data.message,
           });
 
           handleCloseModal();

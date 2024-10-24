@@ -42,13 +42,13 @@ export const POST = async (request: NextRequest) => {
     await newExpense.save();
 
     return NextResponse.json(
-      { message: "Add expense Success" },
+      { message: "New expense has been successfully added" },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error during registration:", error);
+    console.error("Error during adding new expense:", error);
     return NextResponse.json(
-      { message: "Adding new expense Failed" },
+      { message: "Adding new item expense" },
       { status: 500 }
     );
   }

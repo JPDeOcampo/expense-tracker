@@ -23,9 +23,7 @@ interface Event {
 
 interface EventInfo {
   event: Event;
-  
 }
-
 const Calendar = () => {
   const { combinedData, currency } = useContext(ShareContext) ?? {
     combinedData: [],
@@ -33,15 +31,10 @@ const Calendar = () => {
 
   const { handleFormatAmount } = useGlobalHooks();
   const { shareContext } = useShareContextHooks();
-  const { setSelectedTabs, updateToast, setFocusState, focusState, handleFocus, handleBlur } =
-    shareContext;
+  const { setSelectedTabs } = shareContext;
 
-  const [loading, setLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [updateData, setUpdateData] = useState<IEventExtendedProps>();
-
-  const { handleResetFormValues, handleResetErrorFocus, handleSetError } =
-    useGlobalHooks();
 
   const sortedData = combinedData.sort((a, b) => {
     return (
@@ -49,8 +42,8 @@ const Calendar = () => {
       new Date(a.createdAt ?? "").getTime()
     );
   });
- 
-  const handleEdit = (type: string, data : IEventExtendedProps) => {
+
+  const handleEdit = (type: string, data: IEventExtendedProps) => {
     setIsModalOpen(true);
     setSelectedTabs(type);
     setUpdateData(data);
@@ -58,12 +51,14 @@ const Calendar = () => {
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
-      const eventDate = new Date(eventInfo.event.start);
-      const date = eventDate.toISOString();
-      const combineUpdateData = {
-        ...eventInfo.event.extendedProps,
-        date
-      }
+    const eventDate = new Date(eventInfo.event.start);
+    eventDate.setHours(8, 0, 0, 0);
+    const date = eventDate.toISOString();
+
+    const combineUpdateData = {
+      ...eventInfo.event.extendedProps,
+      date,
+    };
 
     const title =
       type === "income"
@@ -71,7 +66,7 @@ const Calendar = () => {
         : type === "expense"
         ? "Expense"
         : "Transfer";
-     
+
     return (
       <div className="w-full overflow-auto">
         <Popover placement="top" offset={20} showArrow>

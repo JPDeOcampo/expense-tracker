@@ -4,7 +4,7 @@ export interface IBaseData {
   date: string;
   note: string;
   paymentMethod: string;
-  userId: string;
+  userId?: string;
   _id?: string;
   __v?: number;
 }
@@ -100,7 +100,7 @@ export interface ShareContextType {
   setCurrency: (currency: string | null) => void;
   user:
     | IUserTypes[]
-    | { firstName: string; lastName: string; username: string; email: string }
+    | { firstName: string; lastName: string; username: string; email: string; _id: string; }
     | (string | number);
   setUser: Dispatch<SetStateAction<IUserTypes[]>>;
   updateToast: (props: IToastTypes) => void;
@@ -121,6 +121,8 @@ export interface IAddFormTypes {
 }
 export interface IEventExtendedProps extends IAddFormTypes {
   type: string;
+  _id?: string;
+  userId?: string;
 }
 
 export interface ITransaction {
@@ -161,4 +163,5 @@ export interface IUserTypes {
   reEnterPassword?: string;
   oldPassword?: string;
   newPassword?: string;
+  _id?: string;
 }
