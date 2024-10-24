@@ -14,11 +14,9 @@ import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 const Header = () => {
   const { shareContext } = useShareContextHooks();
-  const { user, setCurrency, currency } = shareContext;
+  const { user, setCurrency, isGenericModal, setIsGenericModal, modalHeader, setModalHeader } = shareContext;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { handleLogout } = useGlobalHooks();
-  const [isGenericModal, setIsGenericModal] = useState<string>("");
-
   const firstName = (user as { firstName: string })?.firstName;
   const firstLetter = firstName?.charAt(0);
   const lastName = (user as { lastName: string })?.lastName;
@@ -55,8 +53,9 @@ const Header = () => {
               <DropdownItem
                 key="settings"
                 onClick={() => {
-                  setIsGenericModal("My Profile");
+                  setIsGenericModal("my-profile");
                   setIsModalOpen(true);
+                  setModalHeader("My Profile");
                 }}
               >
                 My Profile
@@ -65,8 +64,9 @@ const Header = () => {
                 key="change-pass"
                 color="warning"
                 onClick={() => {
-                  setIsGenericModal("Change Password");
+                  setIsGenericModal("change-password");
                   setIsModalOpen(true);
+                  setModalHeader("Change Password")
                 }}
               >
                 Change Password
@@ -77,8 +77,9 @@ const Header = () => {
                   color="danger"
                   className="text-secondary"
                   onClick={() => {
-                    setIsGenericModal("Delete Account");
+                    setIsGenericModal("delete-account");
                     setIsModalOpen(true);
+                    setModalHeader("Delete Account")
                   }}
                 >
                   Delete Account
@@ -130,7 +131,7 @@ const Header = () => {
       </header>
       <GenericModal
         isGenericModal={isGenericModal}
-        header={isGenericModal}
+        header={modalHeader}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       />

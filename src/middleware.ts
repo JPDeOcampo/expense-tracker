@@ -50,6 +50,8 @@ export const config = {
     "/api/income/add-income",
     "/api/income/fetch-income",
     "/api/expense/add-expense",
+    "/api/expense/update-expense",
+    "/api/expense/delete-expense",
     "/api/expense/fetch-expense",
     "/api/users/updateProfile",
     "/api/users/updatePassword",

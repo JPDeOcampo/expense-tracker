@@ -100,12 +100,22 @@ export interface ShareContextType {
   setCurrency: (currency: string | null) => void;
   user:
     | IUserTypes[]
-    | { firstName: string; lastName: string; username: string; email: string; _id: string; }
+    | {
+        firstName: string;
+        lastName: string;
+        username: string;
+        email: string;
+        _id: string;
+      }
     | (string | number);
   setUser: Dispatch<SetStateAction<IUserTypes[]>>;
   updateToast: (props: IToastTypes) => void;
   selectedTabs: string | null;
   setSelectedTabs: (selectedTabs: string | null) => void;
+  isGenericModal: string | null;
+  setIsGenericModal: (isGenericModal: string | null) => void;
+  modalHeader: string | null;
+  setModalHeader: (modalHeader: string | null) => void;
 }
 
 // Income, Expense, and Transfer
@@ -163,5 +173,5 @@ export interface IUserTypes {
   reEnterPassword?: string;
   oldPassword?: string;
   newPassword?: string;
-  _id?: string;
+  _id?: string | undefined;
 }

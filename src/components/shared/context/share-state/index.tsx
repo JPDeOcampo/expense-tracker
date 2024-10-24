@@ -46,6 +46,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
   const [currency, setCurrency] = useState<string | null>("PHP");
   const [selectedTabs, setSelectedTabs] = useState<string | null>("expense");
+  const [isGenericModal, setIsGenericModal] = useState<string | null>("");
+  const [modalHeader, setModalHeader] = useState<string | null>("");
 
   const [isError, setIsError] = useState<{ error: string; message: string }>({
     error: "",
@@ -149,6 +151,10 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       updateToast,
       selectedTabs,
       setSelectedTabs,
+      isGenericModal,
+      setIsGenericModal,
+      modalHeader,
+      setModalHeader,
     }),
     [
       isCreateAccount,
@@ -177,6 +183,10 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       updateToast,
       selectedTabs,
       setSelectedTabs,
+      isGenericModal,
+      setIsGenericModal,
+      modalHeader,
+      setModalHeader,
     ]
   );
   return (

@@ -15,26 +15,23 @@ import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import GenericForm from "../generic-form";
 import { updateProfileService } from "@/service/api/updateProfileService";
 import { updatePasswordService } from "@/service/api/updatePassword";
-import { FocusStateType } from "@/components/interface/global-interface";
-import { IUserTypes } from "@/components/interface/global-interface";
+import {
+  FocusStateType,
+  IUserTypes,
+  IEventExtendedProps,
+} from "@/components/interface/global-interface";
 import { deleteAccountService } from "@/service/api/deleteAccountService";
-import { IEventExtendedProps } from "@/components/interface/global-interface";
-interface EventExtendedProps {
-  date?: string;
-  type: string;
-  amount: number;
-  category: string;
-  frequency: string;
-  paymentMethod: string;
-  note: string;
-}
+import { deleteExpenseService } from "@/service/api/expenseServices/deleteExpenseService";
+import useGlobalContextHooks from "../../hooks/context-hooks/global-context-hooks";
+
 interface IPropTypes {
-  isGenericModal: string;
-  isModalOpen: boolean;
-  header: string;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  isGenericModal?: string | null;
+  isModalOpen?: boolean;
+  header?: string | null;
+  setIsModalOpen?: Dispatch<SetStateAction<boolean>>;
   isUpdate?: boolean;
   updateData?: IEventExtendedProps;
+  handleCloseModal?: () => void;
 }
 
 const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
@@ -348,6 +345,93 @@ const DeleteAccount = ({
   );
 };
 
+const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { shareContext } = useShareContextHooks();
+  const { updateToast } = shareContext;
+  const { globalContext } = useGlobalContextHooks();
+  const { fetchIncome } = globalContext;
+  const keysToDisplay = [
+    "type",
+    "date",
+    "amount",
+    "category",
+    "to",
+    "from",
+    "frequency",
+    "paymentMethod",
+    "note",
+  ];
+  const keyIndexMap = keysToDisplay.reduce(
+    (acc: { [key: string]: number }, key, index) => {
+      acc[key] = index;
+      return acc;
+    },
+    {}
+  );
+  const handleDelete = async (id: string | undefined) => {
+    if (!id) return;
+    setLoading(true);
+    try {
+      const response = await deleteExpenseService(id);
+      const data = await response?.json();
+      if (response?.ok) {
+        setLoading(false);
+        fetchIncome();
+        updateToast({
+          isToast: "alert-success",
+          toastId: "alert-success",
+          position: "top-center",
+          delay: 4000,
+          className: "toast-success",
+          message: data.message,
+        });
+        handleCloseModal?.();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <div className="flex flex-col gap-4">
+      <p>Are you sure you want to delete?</p>
+      <ul className="bg-secondary p-4 rounded-md h-50 overflow-y-auto">
+        {updateData &&
+          Object.entries(updateData)
+            .filter(([key]) => keysToDisplay.includes(key))
+            .sort(([keyA], [keyB]) => keyIndexMap[keyA] - keyIndexMap[keyB])
+            .map(([key, value], i) => {
+              return (
+                <li key={i}>
+                  <span className="capitalize text-sm font-semibold text-quaternary">
+                    {key}:
+                  </span>
+                  <span className="capitalize text-sm text-quaternary">
+                    {" "}
+                    {value}{" "}
+                  </span>
+                </li>
+              );
+            })}
+      </ul>
+      <div className="w-full flex gap-3 mt-4 justify-end">
+        <Button color="danger" variant="light" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button
+          color="primary"
+          type="submit"
+          onClick={() => handleDelete(updateData?._id)}
+        >
+          Delete{" "}
+          {loading && <Spinner className="button-spinner" color="default" />}
+        </Button>
+      </div>
+    </div>
+  );
+};
 const GenericModal = ({
   isGenericModal,
   isModalOpen,
@@ -359,7 +443,7 @@ const GenericModal = ({
   const { handleResetFormValues, handleResetErrorFocus } = useGlobalHooks();
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen?.(false);
     handleResetFormValues();
     handleResetErrorFocus();
   };
@@ -384,13 +468,18 @@ const GenericModal = ({
                     isUpdate={isUpdate ?? false}
                     updateData={updateData}
                   />
-                ) : isGenericModal === "My Profile" ? (
+                ) : isGenericModal === "my-profile" ? (
                   <MyProfile handleCloseModal={handleCloseModal} />
-                ) : isGenericModal === "Change Password" ? (
+                ) : isGenericModal === "change-password" ? (
                   <ChangePassword handleCloseModal={handleCloseModal} />
-                ) : (
+                ) : isGenericModal === "delete-account" ? (
                   <DeleteAccount handleCloseModal={handleCloseModal} />
-                )}
+                ) : isGenericModal === "delete-item" ? (
+                  <DeleteModal
+                    handleCloseModal={handleCloseModal}
+                    updateData={updateData}
+                  />
+                ) : null}
               </ModalBody>
             </>
           )}

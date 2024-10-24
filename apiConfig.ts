@@ -16,5 +16,6 @@ export const ENDPOINTS = {
   add_expense: `${API_EXPENSE_URL}/add-expense`,
   fetch_expense: `${API_EXPENSE_URL}/fetch-expense`,
   update_expense: `${API_EXPENSE_URL}/update-expense`,
+  delete_expense: `${API_EXPENSE_URL}/delete-expense`,
   dashboard: `api/dashboard`,
 };

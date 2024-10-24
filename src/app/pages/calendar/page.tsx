@@ -15,6 +15,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import GenericModal from "@/components/shared/components/generic-modal";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
+import { ICombinedDataType } from "@/components/interface/global-interface";
 
 interface Event {
   extendedProps: IEventExtendedProps;
@@ -25,7 +26,14 @@ interface EventInfo {
   event: Event;
 }
 const Calendar = () => {
-  const { combinedData, currency } = useContext(ShareContext) ?? {
+  const {
+    combinedData,
+    currency,
+    isGenericModal,
+    setIsGenericModal,
+    modalHeader,
+    setModalHeader,
+  } = useContext(ShareContext) ?? {
     combinedData: [],
   };
 
@@ -47,6 +55,21 @@ const Calendar = () => {
     setIsModalOpen(true);
     setSelectedTabs(type);
     setUpdateData(data);
+    setIsGenericModal?.("add-item");
+    setModalHeader?.("Update");
+  };
+
+  const handleDelete = (type: string, data: IEventExtendedProps) => {
+    const updatedData = {
+      ...data,
+      amount: handleFormatAmount(Number(data.amount), String(currency)),
+      date: new Date(data.date ?? "").toISOString().split("T")[0],
+    };
+
+    setUpdateData(updatedData);
+    setIsModalOpen(true);
+    setIsGenericModal?.("delete-item");
+    setModalHeader?.(`Delete ${type}`);
   };
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
@@ -92,7 +115,7 @@ const Calendar = () => {
                 </button>
               </div>
               <div className="flex items-center justify-center">
-                <button onClick={() => setIsModalOpen(true)}>
+                <button onClick={() => handleDelete(type, combineUpdateData)}>
                   <span className="text-danger-300 text-lg hover:text-neutral-light80">
                     <MdDelete />
                   </span>
@@ -149,9 +172,9 @@ const Calendar = () => {
           eventContent={renderEventContent}
         />
         <GenericModal
-          isGenericModal={"add-item"}
+          isGenericModal={isGenericModal}
           isModalOpen={isModalOpen}
-          header={"Update"}
+          header={modalHeader}
           isUpdate={true}
           updateData={updateData}
           setIsModalOpen={setIsModalOpen}
