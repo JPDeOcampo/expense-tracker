@@ -12,6 +12,8 @@ export const ENDPOINTS = {
 
   add_income: `${API_INCOME_URL}/add-income`,
   fetch_income: `${API_INCOME_URL}/fetch-income`,
+  update_income: `${API_INCOME_URL}/update-income`,
+  delete_income: `${API_INCOME_URL}/delete-income`,
 
   add_expense: `${API_EXPENSE_URL}/add-expense`,
   fetch_expense: `${API_EXPENSE_URL}/fetch-expense`,

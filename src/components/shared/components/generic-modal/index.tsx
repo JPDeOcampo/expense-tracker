@@ -23,6 +23,7 @@ import {
 import { deleteAccountService } from "@/service/api/deleteAccountService";
 import { deleteExpenseService } from "@/service/api/expenseServices/deleteExpenseService";
 import useGlobalContextHooks from "../../hooks/context-hooks/global-context-hooks";
+import { deleteIncomeService } from "@/service/api/incomeServices/deleteIncomeService";
 
 interface IPropTypes {
   isGenericModal?: string | null;
@@ -373,7 +374,10 @@ const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await deleteExpenseService(id);
+      const response =
+        updateData?.type === "income"
+          ? await deleteIncomeService(id)
+          : await deleteExpenseService(id);
       const data = await response?.json();
       if (response?.ok) {
         setLoading(false);

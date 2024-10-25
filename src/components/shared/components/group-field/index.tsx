@@ -1,10 +1,8 @@
 "use client";
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
-import {
-  FocusStateType,
-} from "@/components/interface/global-interface";
+import { FocusStateType } from "@/components/interface/global-interface";
 import useGlobalHooks from "../../hooks/global-hooks";
 
 interface IGroupFieldTypes {
@@ -59,7 +57,7 @@ const GroupField = ({
   selectedItem,
 }: IGroupFieldTypes) => {
   const { shareContext } = useShareContextHooks();
-  const { focusState, setFocusState, formValues, setFormValues, currency } = shareContext;
+  const { focusState, setFocusState, formValues, setFormValues } = shareContext;
 
   const { currencySymbol } = useGlobalHooks();
 
@@ -101,7 +99,18 @@ const GroupField = ({
     (isOldPassword && focusState.errorOldPassword) ||
     (isPassword && focusState.errorPassword) ||
     (isReEnterPassword && focusState.errorReEnterPassword);
+    
 
+  useEffect(() => {
+    const date = new Date();
+    if (formValues.date === '') {
+      setFormValues((prev: Record<string, string>) => ({
+        ...prev,
+        date: date.toISOString().split("T")[0] ?? "",
+      }));
+    }
+  }, []);
+  
   return (
     <>
       {isAutoComplete ? (
@@ -116,7 +125,9 @@ const GroupField = ({
             onFocus={() => handleFocus(name)}
             onBlur={() => handleBlur(name)}
             defaultItems={items}
-            defaultSelectedKey={selectedItem?.toLowerCase() || formValues[value || name]}
+            defaultSelectedKey={
+              selectedItem?.toLowerCase() || formValues[value || name]
+            }
             onSelectionChange={(selected) => {
               setFormValues((prev: Record<string, string>) => ({
                 ...prev,
@@ -124,7 +135,9 @@ const GroupField = ({
               }));
             }}
           >
-            {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+            {(item) => (
+              <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
+            )}
           </Autocomplete>
         </div>
       ) : isCustomNumber ? (
@@ -147,7 +160,9 @@ const GroupField = ({
               onChange={(e) => handleOnChange(e, value || name)}
               startContent={
                 <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">{currencySymbol}</span>
+                  <span className="text-default-400 text-small">
+                    {currencySymbol}
+                  </span>
                 </div>
               }
             />

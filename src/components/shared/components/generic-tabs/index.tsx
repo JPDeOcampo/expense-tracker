@@ -12,6 +12,7 @@ import { ITransaction } from "@/components/interface/global-interface";
 import { Spinner } from "@nextui-org/react";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
 import { updateExpenseService } from "@/service/api/expenseServices/updateExpenseService";
+import { updateIncomeService } from "@/service/api/incomeServices/updateIncomeService";
 
 interface FormProps {
   onTabs: string;
@@ -65,6 +66,7 @@ const Form = ({
       { label: "Health", value: "health" },
       { label: "Education", value: "education" },
       { label: "Gift", value: "gift" },
+      { label: "Transfer", value: "transfer" },
       { label: "Other", value: "other" },
     ],
   };
@@ -129,14 +131,26 @@ const Form = ({
 
     try {
       if (onTabs === "income") {
-        const response = await AddIncomeService(formData);
+        const response = isUpdate
+          ? await updateIncomeService(formData)
+          : await AddIncomeService(formData);
+
+        const data = await response?.json();
+
+        if (!isUpdate) {
+          fetchIncome();
+        }
 
         if (response?.ok) {
+          if(isUpdate){
+            fetchIncome()
+          }else{
           setIncomeData((prev: ICombinedDataType[]) => {
             const updatedData = [
               { ...formData, createdAt: new Date().toISOString() },
               ...prev,
             ];
+
             const newData = [{ ...formData }];
             // Calculate overall income and expense
             const overAllIncome = getTotalAmount(updatedData as ITransaction[]);
@@ -164,6 +178,7 @@ const Form = ({
 
             return updatedData;
           });
+        }
           setLoading(false);
           updateToast({
             isToast: "alert-success",
@@ -171,7 +186,7 @@ const Form = ({
             position: "top-center",
             delay: 4000,
             className: "toast-success",
-            message: "Successfully added!",
+            message: data.message,
           });
 
           handleCloseModal();
@@ -391,7 +406,7 @@ const GenericTabs = ({
                 updateData={updateData}
               />
             </Tab>
-            <Tab
+            {/* <Tab
               key="transfer"
               title="Transfer"
               isDisabled={isUpdate && selectedTabs !== "transfer"}
@@ -402,7 +417,7 @@ const GenericTabs = ({
                 isUpdate={isUpdate}
                 updateData={updateData}
               />
-            </Tab>
+            </Tab> */}
           </Tabs>
         </CardBody>
       </Card>
