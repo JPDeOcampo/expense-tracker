@@ -75,7 +75,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 h-[500px] justify-center lg:h-auto">
       {isError.error === "login-error" && (
         <GenericToast isToast={'default'} message={isError.message} />
       )}

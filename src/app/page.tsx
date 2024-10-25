@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 h-auto lg:h-lvh w-full">
-      <div className="bg-primary w-full h-full flex flex-col items-center justify-center gap-6 p-6">
+      <div className="bg-primary w-full h-full flex flex-col items-center justify-center gap-6 px-6 py-8">
         <div className="w-56 h-56">
           <img src="/images/graph-people.svg" />
         </div>

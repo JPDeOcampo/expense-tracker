@@ -102,7 +102,7 @@ body {
 /* CARD */
 
 .card {
-  @apply bg-neutral-light p-4 rounded-lg shadow-md flex flex-col gap-6;
+  @apply bg-neutral-light p-6 rounded-lg shadow-md flex flex-col gap-6;
 }
 
 .card-header {
@@ -127,7 +127,7 @@ body {
 }
 
 .custom-container {
-  @apply px-6 lg:pl-72 py-6 lg:pr-14 h-auto w-full;
+  @apply px-6 lg:pl-72 pt-5 lg:pt-0 pb-8 lg:pr-14 h-auto w-full;
 }
 
 /* CALENDAR */

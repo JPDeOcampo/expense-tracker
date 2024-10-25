@@ -161,9 +161,9 @@ const Calendar = () => {
     );
   };
   return (
-    <div className="custom-container flex flex-col gap-4">
+    <div className="custom-container flex flex-col gap-8">
       <h1 className="text-3xl font-bold text-primary">Calendar</h1>
-      <div className="bg-neutral-light p-4 rounded-md">
+      <div className="card">
         <FullCalendar
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
