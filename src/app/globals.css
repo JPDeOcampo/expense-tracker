@@ -127,7 +127,7 @@ body {
 }
 
 .custom-container {
-  @apply pl-72 py-6 pr-14 h-auto w-full;
+  @apply px-6 lg:pl-72 py-6 lg:pr-14 h-auto w-full;
 }
 
 /* CALENDAR */

@@ -1,25 +1,28 @@
 "use client";
-import ValidateContainer from "@/components/shared/components/validate-container";
+import { useRef, useEffect } from "react";
+import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { MdOutlineDashboard, MdOutlineCategory } from "react-icons/md";
 import { useRouter, usePathname } from "next/navigation";
 import { IoIosSettings } from "react-icons/io";
-import { MouseEvent } from 'react';
-
+import { MouseEvent } from "react";
+import MenuHeader from "@/components/shared/components/menu-header";
+import Hamburger from "@/components/shared/components/hamburger";
+import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 interface MenuItemProps {
-    icon: JSX.Element; // Adjust if your icon is a string or a specific component
-    name: string;
-    route: string;
+  icon: JSX.Element; // Adjust if your icon is a string or a specific component
+  name: string;
+  route: string;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ icon, name, route }) => {
-    const router = useRouter();
-    const pathname = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
 
-    const handleMenuLink = (e: MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        router.push(route);
-    };
+  const handleMenuLink = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    router.push(route);
+  };
 
   return (
     <a
@@ -37,34 +40,98 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, name, route }) => {
 };
 
 const MenuDrawer = () => {
+  const { shareContext } = useShareContextHooks();
+  const { setIsMenuDrawer, isMenuDrawer } = shareContext;
+  const { handleMenuClick } = useGlobalHooks();
+  
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutside = (event: Event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      const target = event.target as Element;
+      if (!target.closest(".menu-drawer")) {
+        setIsMenuDrawer(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1024) {
+        setIsMenuDrawer(false);
+      }
+    };
+
+    if (isMenuDrawer) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isMenuDrawer]);
+  
   return (
-    <ValidateContainer>
+    <>
+      {isMenuDrawer && (
+        <div className={`h-full w-full bg-[#33333380] fixed z-10 block inset-0`}></div>
+      )}
       <div
-        className={`w-[12%] h-full bg-neutral-light flex flex-col gap-4 fixed inset-0`}
+        className={`${
+          isMenuDrawer ? "w-[240px]" : "w-0"
+        } z-10 lg:min-w-[150px] lg:w-[240px] h-full bg-neutral-light fixed inset-0 transition-all duration-300`}
+        ref={menuRef}
       >
-        <div className="py-6 px-4">
-          <h1>XTracker</h1>
-        </div>
-        <div className="flex flex-col">
-          <MenuItem
-            icon={<MdOutlineDashboard />}
-            name="Dashboard"
-            route="/pages/dashboard"
-          />
-          <MenuItem
-            icon={<MdOutlineCategory />}
-            name="Calendar"
-            route="/pages/calendar"
-          />
-          <MenuItem
-            icon={<IoIosSettings />}
-            name="Settings"
-            route="/pages/settings"
-          />
-          {/* <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" /> */}
+        <div
+          className={`${
+            isMenuDrawer ? "flex" : "hidden"
+          } lg:flex flex-col gap-4 h-full transition-all`}
+        >
+          <div className="flex items-center gap-3 lg:gap-0 py-5 px-4 lg:p-0">
+            <div className="w-full">
+              <MenuHeader />
+            </div>
+            <div className="lg:hidden flex items-center">
+              {/* <Hamburger
+                isMenuDrawer={isMenuDrawer}
+                handleClick={handleMenuClick}
+              /> */}
+              <button onClick={handleMenuClick} className="w-6 h-6 cursor-pointer"><img src="/images/icons/arrow-left.svg"/></button>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <MenuItem
+              icon={<MdOutlineDashboard />}
+              name="Dashboard"
+              route="/pages/dashboard"
+            />
+            <MenuItem
+              icon={<MdOutlineCategory />}
+              name="Calendar"
+              route="/pages/calendar"
+            />
+            <MenuItem
+              icon={<IoIosSettings />}
+              name="Settings"
+              route="/pages/settings"
+            />
+            {/* <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" /> */}
+          </div>
         </div>
       </div>
-    </ValidateContainer>
+    </>
   );
 };
 

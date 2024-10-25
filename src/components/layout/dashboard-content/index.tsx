@@ -51,7 +51,7 @@ const Overview = () => {
           Current Balance
         </p>
       </div>
-      <GenericModal isGenericModal={'add-item'} isModalOpen={isModalOpen} header={'Add new item'} setIsModalOpen={setIsModalOpen} />
+
       <div className="w-full grid grid-cols-2 gap-2">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
           <p className="text-base font-semibold text-quaternary">Total Spent</p>
@@ -73,6 +73,14 @@ const Overview = () => {
             )}
           </p>
         </div>
+      </div>
+      <div className="hidden">
+        <GenericModal
+          isGenericModal={"add-item"}
+          isModalOpen={isModalOpen}
+          header={"Add new item"}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
     </div>
   );
@@ -271,7 +279,7 @@ const DashboardContent = () => {
     <div className="flex flex-col w-full h-full gap-4">
       <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
       <div className="flex flex-col gap-6">
-        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[30%_1fr] gap-6">
+        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[35%_1fr] gap-6">
           <Overview />
           <BalanceSpent />
         </div>

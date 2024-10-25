@@ -11,7 +11,7 @@ interface FocusState extends FocusStateType {
 }
 const useGlobalHooks = () => {
   const { shareContext } = useShareContextHooks();
-  const { setFormValues, setIsError, setFocusState, currency } = shareContext;
+  const { setFormValues, setIsError, setFocusState, currency, setIsMenuDrawer, isMenuDrawer } = shareContext;
   const router = useRouter();
 
   const handleResetFormValues = () => {
@@ -81,12 +81,17 @@ const useGlobalHooks = () => {
     }
   };
 
+  const handleMenuClick = () => {
+    setIsMenuDrawer(!isMenuDrawer);
+  };
+
   return {
     handleResetFormValues,
     handleResetErrorFocus,
     handleSetError,
     handleFormatAmount,
     handleLogout,
+    handleMenuClick,
     currencySymbol,
   };
 };

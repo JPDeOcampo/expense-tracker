@@ -82,7 +82,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-6 lg:p-8">
+    <div className="flex flex-col gap-6">
       <div className="w-full">
         <button
           className="flex gap-2 items-center text-quaternary hover:text-primary"

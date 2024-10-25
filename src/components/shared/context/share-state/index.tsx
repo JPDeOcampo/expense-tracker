@@ -38,6 +38,7 @@ export const ShareContext = createContext<ShareContextType | null>(null);
 
 const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [isCreateAccount, setIsCreateAccount] = useState<boolean>(false);
+  const [isMenuDrawer, setIsMenuDrawer] = useState<boolean>(false);
   const [incomeData, setIncomeData] = useState<ICombinedDataType[]>([]);
   const [expenseData, setExpenseData] = useState<ICombinedDataType[]>([]);
   const [user, setUser] = useState<IUserTypes[]>([]);
@@ -155,6 +156,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsGenericModal,
       modalHeader,
       setModalHeader,
+      isMenuDrawer,
+      setIsMenuDrawer,
     }),
     [
       isCreateAccount,
@@ -187,6 +190,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsGenericModal,
       modalHeader,
       setModalHeader,
+      isMenuDrawer,
+      setIsMenuDrawer,
     ]
   );
   return (
