@@ -54,7 +54,7 @@ const Profile = () => {
           <DropdownMenu aria-label="User Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-bold">Signed in as</p>
-              <p className="font-bold truncate">{email}</p>
+              <p className="font-bold truncate w-[200px]">{email}</p>
             </DropdownItem>
             <DropdownItem
               key="settings"
