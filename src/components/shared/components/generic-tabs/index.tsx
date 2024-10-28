@@ -269,6 +269,7 @@ const Form = ({
         isFocused={focusState.date}
         handleFocus={handleFocus}
         handleBlur={handleBlur}
+        isRequired={true}
       />
 
       <GroupField
@@ -280,6 +281,7 @@ const Form = ({
         handleFocus={handleFocus}
         handleBlur={handleBlur}
         isCustomNumber={true}
+        isRequired={true}
       />
       {(onTabs === "income" || onTabs === "expense") && (
         <GroupField
@@ -291,6 +293,7 @@ const Form = ({
           handleBlur={handleBlur}
           isAutoComplete={true}
           selectedItem={category}
+          isRequired={true}
         />
       )}
       {onTabs === "income" && (
@@ -303,6 +306,7 @@ const Form = ({
           handleBlur={handleBlur}
           isAutoComplete={true}
           selectedItem={frequency}
+          isRequired={true}
         />
       )}
       {onTabs === "transfer" && (
@@ -314,6 +318,7 @@ const Form = ({
             isFocused={focusState.to}
             handleFocus={handleFocus}
             handleBlur={handleBlur}
+            isRequired={true}
           />
           <GroupField
             label="From"
@@ -322,6 +327,7 @@ const Form = ({
             isFocused={focusState.from}
             handleFocus={handleFocus}
             handleBlur={handleBlur}
+            isRequired={true}
           />
         </>
       )}
@@ -336,6 +342,7 @@ const Form = ({
         handleBlur={handleBlur}
         isAutoComplete={true}
         selectedItem={paymentMethod}
+        isRequired={true}
       />
       <GroupField
         label="Note"
@@ -347,7 +354,7 @@ const Form = ({
       />
       <div className="w-full flex gap-3 mt-4 justify-end">
         <Button color="danger" variant="light" onClick={handleCloseModal}>
-          Close
+          Cancel
         </Button>
         <Button color="primary" type="submit">
           Save{" "}

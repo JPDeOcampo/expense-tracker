@@ -93,7 +93,7 @@ const Calendar = () => {
     return (
       <div className="w-full overflow-auto">
         <Popover placement="top" offset={20} showArrow>
-          <div className="w-full h-full bg-primary flex gap-4">
+          <div className="w-full h-full bg-primary flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
             <PopoverTrigger>
               <Button className="w-full h-full p-2 border-0 rounded-none justify-start bg-transparent">
                 <div className="w-full h-full flex flex-col items-start gap-0 justify-start">
@@ -132,26 +132,27 @@ const Calendar = () => {
                     <h5 className="text-base font-bold text-quaternary">{`${
                       frequency ? frequency : ""
                     } ${title} `}</h5>
-                    <h6 className="text-sm font-medium text-quaternary">
-                      {" "}
-                      {handleFormatAmount(amount as number, currency as string)}
+                    <h6 className="text-base font-medium text-quaternary">
+                      <mark>{handleFormatAmount(amount as number, currency as string)}</mark>
                     </h6>
                   </div>
                 </li>
                 <li>
-                  <span className="text-base text-quaternary">
-                    Category: {category}
-                  </span>
+                  <p className="text-sm text-quaternary">
+                    <span className="font-semibold">Category:</span> {category}
+                  </p>
                 </li>
                 <li>
-                  <span className="text-base text-quaternary">
-                    Payment Method: {paymentMethod}
-                  </span>
+                  <p className="text-sm text-quaternary">
+                    <span className="font-semibold">Payment Method:</span>{" "}
+                    {paymentMethod}
+                  </p>
                 </li>
                 <li>
-                  <span className="text-base text-quaternary">
-                    Note: {note ? note : "N/A"}
-                  </span>
+                  <p className="text-sm text-quaternary">
+                    <span className="font-semibold">Note:</span>{" "}
+                    {note ? note : "N/A"}
+                  </p>
                 </li>
               </ul>
             </div>

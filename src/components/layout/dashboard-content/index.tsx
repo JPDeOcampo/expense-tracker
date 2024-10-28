@@ -52,7 +52,7 @@ const Overview = () => {
         </p>
       </div>
 
-      <div className="w-full grid grid-cols-2 gap-2">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col gap-4 p-4 bg-tertiary rounded-md">
           <p className="text-base font-semibold text-quaternary">Total Spent</p>
           <p className="text-xl font-medium text-primary">
@@ -145,7 +145,7 @@ const Category = () => {
   };
 
   return (
-    <div className="card">
+    <div className="card h-auto lg:min-h-[500px]">
       <h2 className="card-header">Most Category</h2>
       <Table
         isHeaderSticky
@@ -160,8 +160,8 @@ const Category = () => {
           ) : null
         }
         classNames={{
-          base: "max-h-[520px] overflow-auto [&>div]:shadow-none",
-          table: "min-h-[320px]",
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0",
+          table: "",
         }}
       >
         <TableHeader>
@@ -224,7 +224,7 @@ const RecentTransaction = () => {
   };
 
   return (
-    <div className="card">
+    <div className="card h-auto lg:min-h-[500px]">
       <h2 className="card-header">Transaction History</h2>
       <Table
         isHeaderSticky
@@ -239,8 +239,8 @@ const RecentTransaction = () => {
           ) : null
         }
         classNames={{
-          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0",
-          table: "min-h-[320px]",
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0 [&>div]:min-w-[768px] [&>div]:2xl:min-w-0",
+          table: "",
         }}
       >
         <TableHeader>
@@ -277,11 +277,11 @@ const DashboardContent = () => {
     <div className="flex flex-col w-full h-full gap-8">
       <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
       <div className="flex flex-col gap-6">
-        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-[35%_1fr] gap-6">
+        <div className="w-full h-full grid grid-cols-1 xl:grid-cols-[35%_1fr] gap-6">
           <Overview />
           <BalanceSpent />
         </div>
-        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="w-full h-full grid grid-cols-1 xl:grid-cols-2 gap-6">
           <Category />
           <RecentTransaction />
         </div>

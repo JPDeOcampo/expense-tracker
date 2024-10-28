@@ -128,6 +128,7 @@ const GroupField = ({
             defaultSelectedKey={
               selectedItem?.toLowerCase() || formValues[value || name]
             }
+            isRequired
             onSelectionChange={(selected) => {
               setFormValues((prev: Record<string, string>) => ({
                 ...prev,
@@ -158,6 +159,7 @@ const GroupField = ({
               onFocus={() => handleFocus(name)}
               onBlur={() => handleBlur(name)}
               onChange={(e) => handleOnChange(e, value || name)}
+              required={isRequired}
               startContent={
                 <div className="pointer-events-none flex items-center">
                   <span className="text-default-400 text-small">

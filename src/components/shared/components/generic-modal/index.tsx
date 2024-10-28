@@ -138,7 +138,7 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
       <GenericForm isProfileUpdate={true} />
       <div className="w-full flex gap-3 mt-4 justify-end">
         <Button color="danger" variant="light" onClick={handleCloseModal}>
-          Close
+          Cancel
         </Button>
         {hasChange ? (
           <Button color="primary" type="submit">
@@ -239,7 +239,7 @@ const ChangePassword = ({
       />
       <div className="w-full flex gap-3 mt-4 justify-end">
         <Button color="danger" variant="light" onClick={handleCloseModal}>
-          Close
+          Cancel
         </Button>
         <Button color="primary" type="submit">
           Save{" "}
@@ -326,6 +326,7 @@ const DeleteAccount = ({
 
   return (
     <>
+       <p className="text-base text-quaternary">Please enter your password to delete this account.</p>
       <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
         <GenericForm
           isDeleteAccount={true}
@@ -334,10 +335,10 @@ const DeleteAccount = ({
         />
         <div className="w-full flex gap-3 mt-4 justify-end">
           <Button color="danger" variant="light" onClick={handleCloseModal}>
-            Close
+            Cancel
           </Button>
           <Button color="primary" type="submit">
-            Save{" "}
+            Delete{" "}
             {loading && <Spinner className="button-spinner" color="default" />}
           </Button>
         </div>
@@ -399,8 +400,8 @@ const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
     }
   };
   return (
-    <div className="flex flex-col gap-4">
-      <p>Are you sure you want to delete?</p>
+    <div className="flex flex-col gap-4 py-3">
+      <p className="text-base text-quaternary">Are you sure you want to delete?</p>
       <ul className="bg-secondary p-4 rounded-md h-50 overflow-y-auto">
         {updateData &&
           Object.entries(updateData)
@@ -458,6 +459,7 @@ const GenericModal = ({
         placement={"center"}
         onOpenChange={() => handleCloseModal()}
         aria-modal="true"
+        scrollBehavior={"inside"}
       >
         <ModalContent>
           {() => (
