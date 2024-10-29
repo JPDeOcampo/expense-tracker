@@ -3,10 +3,9 @@ import { useRef, useEffect } from "react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { MdOutlineDashboard, MdOutlineCategory } from "react-icons/md";
 import { useRouter, usePathname } from "next/navigation";
-import { IoIosSettings } from "react-icons/io";
+import { IoCalendarOutline } from "react-icons/io5";
 import { MouseEvent } from "react";
 import MenuHeader from "@/components/shared/components/menu-header";
-import Hamburger from "@/components/shared/components/hamburger";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 
 interface MenuItemProps {
@@ -118,14 +117,14 @@ const MenuDrawer = () => {
               route="/pages/dashboard"
             />
             <MenuItem
-              icon={<MdOutlineCategory />}
+              icon={<IoCalendarOutline />}
               name="Calendar"
               route="/pages/calendar"
             />
             <MenuItem
-              icon={<IoIosSettings />}
-              name="Settings"
-              route="/pages/settings"
+              icon={<MdOutlineCategory />}
+              name="Category"
+              route="/pages/category"
             />
             {/* <MenuItem icon={<MdOutlineCategory />} name="Export" route="ex" /> */}
           </div>

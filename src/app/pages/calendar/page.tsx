@@ -15,7 +15,6 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import GenericModal from "@/components/shared/components/generic-modal";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
-import { ICombinedDataType } from "@/components/interface/global-interface";
 
 interface Event {
   extendedProps: IEventExtendedProps;
@@ -27,22 +26,20 @@ interface EventInfo {
 }
 const Calendar = () => {
   const {
+    handleFormatAmount,
+    isModalOpen,
+    updateData,
+    handleEdit,
+    handleDelete,
+    setIsModalOpen,
+  } = useGlobalHooks();
+  const { shareContext } = useShareContextHooks();
+  const {
     combinedData,
     currency,
     isGenericModal,
-    setIsGenericModal,
     modalHeader,
-    setModalHeader,
-  } = useContext(ShareContext) ?? {
-    combinedData: [],
-  };
-
-  const { handleFormatAmount } = useGlobalHooks();
-  const { shareContext } = useShareContextHooks();
-  const { setSelectedTabs } = shareContext;
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [updateData, setUpdateData] = useState<IEventExtendedProps>();
+  } = shareContext;
 
   const sortedData = combinedData.sort((a, b) => {
     return (
@@ -51,26 +48,6 @@ const Calendar = () => {
     );
   });
 
-  const handleEdit = (type: string, data: IEventExtendedProps) => {
-    setIsModalOpen(true);
-    setSelectedTabs(type);
-    setUpdateData(data);
-    setIsGenericModal?.("add-item");
-    setModalHeader?.("Update");
-  };
-
-  const handleDelete = (type: string, data: IEventExtendedProps) => {
-    const updatedData = {
-      ...data,
-      amount: handleFormatAmount(Number(data.amount), String(currency)),
-      date: new Date(data.date ?? "").toISOString().split("T")[0],
-    };
-
-    setUpdateData(updatedData);
-    setIsModalOpen(true);
-    setIsGenericModal?.("delete-item");
-    setModalHeader?.(`Delete ${type}`);
-  };
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
@@ -133,7 +110,12 @@ const Calendar = () => {
                       frequency ? frequency : ""
                     } ${title} `}</h5>
                     <h6 className="text-base font-medium text-quaternary">
-                      <mark>{handleFormatAmount(amount as number, currency as string)}</mark>
+                      <mark>
+                        {handleFormatAmount(
+                          amount as number,
+                          currency as string
+                        )}
+                      </mark>
                     </h6>
                   </div>
                 </li>
