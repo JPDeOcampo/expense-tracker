@@ -1,4 +1,5 @@
 "use client";
+import { useState, useMemo, useEffect, Dispatch, SetStateAction } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -8,6 +9,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+  Button,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
+import type { Selection } from "@nextui-org/react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 
@@ -26,10 +35,80 @@ interface IEntry {
   amount: string | number;
 }
 
+const YearFilter = ({
+  setFilterYear,
+}: {
+  setFilterYear: Dispatch<SetStateAction<string | number>>;
+}) => {
+  const { shareContext } = useShareContextHooks();
+  const { combinedData } = shareContext;
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["All"]));
+
+  const selectedValue = useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+
+  const currentYear = new Date().getFullYear();
+
+  const [years, setYears] = useState<number[]>([]);
+  const [startYear, setStartYear] = useState<number>(currentYear);
+  const [endYear, setEndYear] = useState<number>(currentYear);
+
+  useEffect(() => {
+    const yearsFromData = combinedData.map((entry) =>
+      new Date(entry.date).getFullYear()
+    );
+
+    const minYear = Math.min(...yearsFromData);
+    const maxYear = Math.max(...yearsFromData);
+
+    setStartYear(minYear);
+    setEndYear(maxYear);
+  }, [combinedData]);
+
+  useEffect(() => {
+    const yearArray: number[] = [];
+    for (let year = startYear; year <= endYear; year++) {
+      yearArray.push(year);
+    }
+    setYears(yearArray);
+    setSelectedKeys(new Set([currentYear]));
+  }, [startYear, endYear]);
+
+  useEffect(() => {
+    const selectedKey = Array.from(selectedKeys)[0];
+    setFilterYear(selectedKey);
+  }, [selectedKeys]);
+
+  return (
+    <Dropdown>
+      <DropdownTrigger>
+        <Button variant="bordered" className="capitalize">
+          {selectedValue}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Single selection example"
+        variant="flat"
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
+      >
+        {years.map((item, i) => (
+          <DropdownItem key={item} value={item}>
+            {item}
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
+  );
+};
 const BalanceSpent = () => {
   const { shareContext } = useShareContextHooks();
   const { combinedData } = shareContext;
-
+  const [filterYear, setFilterYear] = useState<string | number>('');
   const months = [
     "January",
     "February",
@@ -56,10 +135,13 @@ const BalanceSpent = () => {
 
     const monthIndex = months.indexOf(month);
 
-    const monthlyEntries = combinedData.filter(
-      (entry: ICombinedDataType) =>
-        new Date(entry.date).getMonth() === monthIndex
-    );
+    const monthlyEntries = combinedData.filter((entry: ICombinedDataType) => {
+      const entryDate = new Date(entry.date);
+      return (
+        entryDate.getMonth() === monthIndex &&
+        entryDate.getFullYear() === Number(filterYear)
+      );
+    });
 
     monthlyEntries.forEach((entry: IEntry) => {
       if (entry.type === "income") {
@@ -72,7 +154,7 @@ const BalanceSpent = () => {
     // Ensure totals are not negative
     totalIncome = Math.max(totalIncome, 0);
     totalExpenses = Math.max(totalExpenses, 0);
-    
+
     // Calculate balance
     const balance = totalIncome - totalExpenses;
 
@@ -81,7 +163,11 @@ const BalanceSpent = () => {
 
   return (
     <div className="card">
-      <h2 className="card-header">Balance vs Spent</h2>
+      <div className="flex w-full justify-between">
+        <h2 className="card-header">Balance vs Spent</h2>
+        <YearFilter setFilterYear={setFilterYear} />
+      </div>
+
       <ChartContainer config={chartConfig} className="h-[200px] w-full">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />

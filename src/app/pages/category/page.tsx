@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import GenericModal from "@/components/shared/components/generic-modal";
 import {
@@ -11,11 +11,62 @@ import {
   TableCell,
   Button,
   Tooltip,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
+import type { Selection } from "@nextui-org/react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
-import { ITableDataType, ICombinedDataType, IEventExtendedProps } from "@/components/interface/global-interface";
+import {
+  ITableDataType,
+  ICombinedDataType,
+  IEventExtendedProps,
+} from "@/components/interface/global-interface";
+import { categories } from "@/components/shared/constant";
+
+const CategoryFilter = () => {
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["All"]));
+
+  const selectedValue = useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+ const combinedCategory = [
+  ...categories.income,
+  ...categories.expense
+ ]
+ console.log(combinedCategory)
+  return (
+    <Dropdown>
+      <DropdownTrigger>
+        <Button 
+          variant="bordered" 
+          className="capitalize"
+        >
+          {selectedValue}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu 
+        aria-label="Single selection example"
+        variant="flat"
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
+      >
+       {combinedCategory.map((item, i) => (
+          <DropdownItem key={item.value} value={item.value}>
+            {item.label}
+          </DropdownItem>
+        ))}
+     
+      </DropdownMenu>
+    </Dropdown>
+  );
+};
 
 const CategoryList = () => {
   const { shareContext } = useShareContextHooks();
@@ -60,8 +111,7 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="card h-auto lg:min-h-[840px]">
-      <h2 className="card-header">Category List</h2>
+    <>
       <Table
         isHeaderSticky
         aria-label="transaction-history"
@@ -112,7 +162,12 @@ const CategoryList = () => {
                         <div className="flex items-center justify-center">
                           <Tooltip content="Edit">
                             <button
-                              onClick={() => handleEdit(item.type ?? "", item as IEventExtendedProps)}
+                              onClick={() =>
+                                handleEdit(
+                                  item.type ?? "",
+                                  item as IEventExtendedProps
+                                )
+                              }
                             >
                               <span className="text-success-300 text-lg hover:text-neutral-dark80">
                                 <FaEdit />
@@ -124,7 +179,10 @@ const CategoryList = () => {
                           <Tooltip content="Delete">
                             <button
                               onClick={() =>
-                                handleDelete(item.type ?? "", item as IEventExtendedProps)
+                                handleDelete(
+                                  item.type ?? "",
+                                  item as IEventExtendedProps
+                                )
                               }
                             >
                               <span className="text-danger-300 text-lg hover:text-neutral-dark80">
@@ -150,7 +208,7 @@ const CategoryList = () => {
         updateData={updateData}
         setIsModalOpen={setIsModalOpen}
       />
-    </div>
+    </>
   );
 };
 
@@ -158,7 +216,14 @@ const Category = () => {
   return (
     <div className="custom-container flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-primary">Categories</h1>
-      <CategoryList />
+      <div className="card h-auto lg:min-h-[840px]">
+        <h2 className="card-header">Category List</h2>
+        <div>
+          <CategoryFilter />
+        </div>
+
+        <CategoryList />
+      </div>
     </div>
   );
 };
