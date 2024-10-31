@@ -34,11 +34,12 @@ const CategoryFilter = () => {
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
   );
+
  const combinedCategory = [
   ...categories.income,
   ...categories.expense
  ]
- console.log(combinedCategory)
+
   return (
     <Dropdown>
       <DropdownTrigger>
