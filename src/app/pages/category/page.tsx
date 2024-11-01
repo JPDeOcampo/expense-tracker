@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Dispatch, SetStateAction } from "react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import GenericModal from "@/components/shared/components/generic-modal";
 import {
@@ -15,6 +15,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Checkbox,
 } from "@nextui-org/react";
 import type { Selection } from "@nextui-org/react";
 import { FaEdit } from "react-icons/fa";
@@ -27,30 +28,39 @@ import {
 } from "@/components/interface/global-interface";
 import { categories } from "@/components/shared/constant";
 
-const CategoryFilter = () => {
+const CategoryFilter = ({
+  isIncome,
+  isExpense,
+  setIsSelectedList,
+}: {
+  isIncome: boolean;
+  isExpense: boolean;
+  setIsSelectedList: Dispatch<SetStateAction<string>>;
+}) => {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["All"]));
 
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
   );
+  useEffect(() => {
+    setIsSelectedList(selectedValue);
+  }, [selectedKeys]);
 
- const combinedCategory = [
-  ...categories.income,
-  ...categories.expense
- ]
+  const combinedCategory = isIncome
+    ? [{ label: "All", value: "All" }, ...categories.income]
+    : isExpense
+    ? [{ label: "All", value: "All" }, ...categories.expense]
+    : [];
 
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button 
-          variant="bordered" 
-          className="capitalize"
-        >
+        <Button variant="bordered" className="capitalize">
           {selectedValue}
         </Button>
       </DropdownTrigger>
-      <DropdownMenu 
+      <DropdownMenu
         aria-label="Single selection example"
         variant="flat"
         disallowEmptySelection
@@ -58,21 +68,29 @@ const CategoryFilter = () => {
         selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
       >
-       {combinedCategory.map((item, i) => (
+        {combinedCategory.map((item, i) => (
           <DropdownItem key={item.value} value={item.value}>
             {item.label}
           </DropdownItem>
         ))}
-     
       </DropdownMenu>
     </Dropdown>
   );
 };
 
-const CategoryList = () => {
+const CategoryList = ({
+  isIncome,
+  isExpense,
+  isSelectedList,
+}: {
+  isIncome: boolean;
+  isExpense: boolean;
+  isSelectedList: string;
+}) => {
   const { shareContext } = useShareContextHooks();
   const { combinedData, currency, isGenericModal, modalHeader } = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
+
   const [page, setPage] = useState(1);
   const {
     handleFormatAmount,
@@ -85,8 +103,27 @@ const CategoryList = () => {
 
   const itemsPerPage = 15;
 
+  const capitalizeFirstLetter = (string: string) => {
+    if (!string) return string; // Handle empty string
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   useEffect(() => {
-    const updatedData = combinedData.map((item: ICombinedDataType) => ({
+    const listData =
+      isIncome && !isExpense
+        ? combinedData.filter((item) => item.type === "income")
+        : isExpense && !isIncome
+        ? combinedData.filter((item) => item.type === "expense")
+        : combinedData;
+
+    const filteredData =
+      (isIncome && isExpense) || isSelectedList === "All"
+        ? listData
+        : listData.filter(
+            (item) => item.category === capitalizeFirstLetter(isSelectedList)
+          );
+
+    const updatedData = filteredData.map((item: ICombinedDataType) => ({
       ...item,
       date: new Date(item.date).toISOString().split("T")[0],
       createdAt: item.createdAt
@@ -104,9 +141,12 @@ const CategoryList = () => {
     const newData = sortedData.slice(0, page * itemsPerPage);
 
     setDisplayedData(newData);
-  }, [combinedData, page, currency]);
+  }, [combinedData, page, currency, isIncome, isExpense, isSelectedList]);
 
-  const hasMore = displayedData.length < combinedData.length;
+  const hasMore =
+    displayedData.length === itemsPerPage &&
+    displayedData.length < combinedData.length;
+
   const loadMore = () => {
     setPage((prev) => prev + 1);
   };
@@ -214,16 +254,40 @@ const CategoryList = () => {
 };
 
 const Category = () => {
+  const [isIncome, setIsIncome] = useState(true);
+  const [isExpense, setIsExpense] = useState(true);
+  const [isSelectedList, setIsSelectedList] = useState<string>("");
+
   return (
     <div className="custom-container flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-primary">Categories</h1>
       <div className="card h-auto lg:min-h-[840px]">
         <h2 className="card-header">Category List</h2>
-        <div>
-          <CategoryFilter />
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <Checkbox isSelected={isIncome} onValueChange={setIsIncome}>
+              Income
+            </Checkbox>
+            <Checkbox isSelected={isExpense} onValueChange={setIsExpense}>
+              Expense
+            </Checkbox>
+          </div>
+          <div>
+            {(!isIncome && !isExpense ? null : !isIncome || !isExpense) ? (
+              <CategoryFilter
+                isIncome={isIncome}
+                isExpense={isExpense}
+                setIsSelectedList={setIsSelectedList}
+              />
+            ) : null}
+          </div>
         </div>
 
-        <CategoryList />
+        <CategoryList
+          isIncome={isIncome}
+          isExpense={isExpense}
+          isSelectedList={isSelectedList}
+        />
       </div>
     </div>
   );
