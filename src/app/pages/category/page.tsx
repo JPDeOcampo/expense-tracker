@@ -31,22 +31,30 @@ import { categories } from "@/components/shared/constant";
 const CategoryFilter = ({
   isIncome,
   isExpense,
-  setIsSelectedList,
 }: {
   isIncome: boolean;
   isExpense: boolean;
-  setIsSelectedList: Dispatch<SetStateAction<string>>;
 }) => {
+  const { shareContext } = useShareContextHooks();
+  const { setIsSelectedList, isSelectedList } = shareContext;
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["All"]));
+  const [isSelectedKeys, setIsSelectedKeys] = useState<boolean>(true);
 
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
   );
-  useEffect(() => {
-    setIsSelectedList(selectedValue);
-  }, [selectedKeys]);
 
+  useEffect(() => {
+    if (isSelectedList.category !== "" && isSelectedKeys) {
+      setSelectedKeys(new Set([isSelectedList.category]));
+      setIsSelectedList({ type: "", category: isSelectedList.category });
+    } else {
+      setIsSelectedList({ type: "", category: selectedValue });
+    }
+    setIsSelectedKeys(false);
+  }, [selectedKeys]);
+  
   const combinedCategory = isIncome
     ? [{ label: "All", value: "All" }, ...categories.income]
     : isExpense
@@ -61,7 +69,7 @@ const CategoryFilter = ({
         </Button>
       </DropdownTrigger>
       <DropdownMenu
-        aria-label="Single selection example"
+        aria-label="Filter by category"
         variant="flat"
         disallowEmptySelection
         selectionMode="single"
@@ -81,14 +89,18 @@ const CategoryFilter = ({
 const CategoryList = ({
   isIncome,
   isExpense,
-  isSelectedList,
 }: {
   isIncome: boolean;
   isExpense: boolean;
-  isSelectedList: string;
 }) => {
   const { shareContext } = useShareContextHooks();
-  const { combinedData, currency, isGenericModal, modalHeader } = shareContext;
+  const {
+    combinedData,
+    currency,
+    isGenericModal,
+    modalHeader,
+    isSelectedList,
+  } = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
 
   const [page, setPage] = useState(1);
@@ -99,14 +111,10 @@ const CategoryList = ({
     isModalOpen,
     updateData,
     setIsModalOpen,
+    capitalizeFirstLetter,
   } = useGlobalHooks();
 
   const itemsPerPage = 15;
-
-  const capitalizeFirstLetter = (string: string) => {
-    if (!string) return string; // Handle empty string
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
 
   useEffect(() => {
     const listData =
@@ -117,10 +125,12 @@ const CategoryList = ({
         : combinedData;
 
     const filteredData =
-      (isIncome && isExpense) || isSelectedList === "All"
+      (isIncome && isExpense) || isSelectedList.category === "All"
         ? listData
         : listData.filter(
-            (item) => item.category === capitalizeFirstLetter(isSelectedList)
+            (item) =>
+              item.category ===
+              capitalizeFirstLetter(isSelectedList.category ?? "")
           );
 
     const updatedData = filteredData.map((item: ICombinedDataType) => ({
@@ -254,10 +264,29 @@ const CategoryList = ({
 };
 
 const Category = () => {
+  const { shareContext } = useShareContextHooks();
+  const { isSelectedList, setIsSelectedList } = shareContext;
   const [isIncome, setIsIncome] = useState(true);
   const [isExpense, setIsExpense] = useState(true);
-  const [isSelectedList, setIsSelectedList] = useState<string>("");
 
+  const handleCheckbox = (value: string) => {
+    if (value === "income") {
+      setIsIncome(!isIncome);
+    } else if (value === "expense") {
+      setIsExpense(!isExpense);
+    }
+    setIsSelectedList({ type: "", category: "" });
+  };
+
+  useEffect(() => {
+    if (isSelectedList.type === "income") {
+      setIsIncome(true);
+      setIsExpense(false);
+    } else if (isSelectedList.type === "expense") {
+      setIsIncome(false);
+      setIsExpense(true);
+    }
+  }, [isSelectedList]);
   return (
     <div className="custom-container flex flex-col gap-4">
       <h1 className="text-3xl font-bold text-primary">Categories</h1>
@@ -265,29 +294,27 @@ const Category = () => {
         <h2 className="card-header">Category List</h2>
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <Checkbox isSelected={isIncome} onValueChange={setIsIncome}>
+            <Checkbox
+              isSelected={isIncome}
+              onValueChange={(e) => handleCheckbox("income")}
+            >
               Income
             </Checkbox>
-            <Checkbox isSelected={isExpense} onValueChange={setIsExpense}>
+            <Checkbox
+              isSelected={isExpense}
+              onValueChange={(e) => handleCheckbox("expense")}
+            >
               Expense
             </Checkbox>
           </div>
           <div>
             {(!isIncome && !isExpense ? null : !isIncome || !isExpense) ? (
-              <CategoryFilter
-                isIncome={isIncome}
-                isExpense={isExpense}
-                setIsSelectedList={setIsSelectedList}
-              />
+              <CategoryFilter isIncome={isIncome} isExpense={isExpense} />
             ) : null}
           </div>
         </div>
 
-        <CategoryList
-          isIncome={isIncome}
-          isExpense={isExpense}
-          isSelectedList={isSelectedList}
-        />
+        <CategoryList isIncome={isIncome} isExpense={isExpense} />
       </div>
     </div>
   );

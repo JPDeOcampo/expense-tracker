@@ -18,6 +18,7 @@ import { EyeIcon } from "../../../../public/images";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 import { ITableDataType } from "@/components/interface/global-interface";
+import { useRouter } from "next/navigation";
 
 interface IType extends ICombinedDataType {
   type: string;
@@ -88,10 +89,10 @@ const Overview = () => {
 
 const Category = () => {
   const { shareContext } = useShareContextHooks();
-  const { combinedData } = shareContext;
+  const { combinedData, setIsSelectedList} = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
   const [page, setPage] = useState(1);
-
+   const router = useRouter();
   const itemsPerPage = 9;
 
   useEffect(() => {
@@ -145,8 +146,9 @@ const Category = () => {
   const loadMore = () => {
     setPage((prev) => prev + 1);
   };
-  const handleView = (key: string) => {
-    console.log(key);
+  const handleView = (type: string, category: string) => {
+    setIsSelectedList({type, category});
+    router.push(`/pages/category`);
   };
   return (
     <div className="card h-auto lg:min-h-[500px]">
@@ -186,7 +188,7 @@ const Category = () => {
                     {columnKey === "action" && (
                       <div>
                         <Tooltip content="View">
-                          <button onClick={() => handleView(item["category"])}>
+                          <button onClick={() => handleView(item["type"] ?? "", item["category"])}>
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                               <EyeIcon />
                             </span>

@@ -117,6 +117,11 @@ export interface ShareContextType {
   setIsGenericModal: (isGenericModal: string | null) => void;
   modalHeader: string | null;
   setModalHeader: (modalHeader: string | null) => void;
+  isSelectedList: {
+    type: string;
+    category: string;
+  };
+  setIsSelectedList: (isSelectedList: { type: string; category: string }) => void;
 }
 
 // Income, Expense, and Transfer

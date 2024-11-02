@@ -49,7 +49,10 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedTabs, setSelectedTabs] = useState<string | null>("expense");
   const [isGenericModal, setIsGenericModal] = useState<string | null>("");
   const [modalHeader, setModalHeader] = useState<string | null>("");
-
+  const [isSelectedList, setIsSelectedList] = useState<{
+    type: string;
+    category: string;
+  }>({ type: "", category: "" });
   const [isError, setIsError] = useState<{ error: string; message: string }>({
     error: "",
     message: "",
@@ -158,6 +161,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setModalHeader,
       isMenuDrawer,
       setIsMenuDrawer,
+      isSelectedList,
+      setIsSelectedList,
     }),
     [
       isCreateAccount,
@@ -192,6 +197,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setModalHeader,
       isMenuDrawer,
       setIsMenuDrawer,
+      isSelectedList,
+      setIsSelectedList,
     ]
   );
   return (
