@@ -54,7 +54,7 @@ const CategoryFilter = ({
     }
     setIsSelectedKeys(false);
   }, [selectedKeys]);
-  
+
   const combinedCategory = isIncome
     ? [{ label: "All", value: "All" }, ...categories.income]
     : isExpense
@@ -190,66 +190,70 @@ const CategoryList = ({
           <TableColumn key="createdAt">Created</TableColumn>
           <TableColumn key="action">Action</TableColumn>
         </TableHeader>
-        <TableBody>
-          {displayedData.map((item: ICombinedDataType, i) => (
-            <TableRow key={i}>
-              {(columnKey) => (
-                <TableCell className="h-6">
-                  <div>
-                    <p
-                      className={`capitalize text-base text-quaternary ${
-                        columnKey === "createdAt" ? "text-secondary-500" : ""
-                      }`}
-                    >
-                      {columnKey === "amount"
-                        ? handleFormatAmount(
-                            Number(item.amount),
-                            String(currency)
-                          )
-                        : item[columnKey]}
-                    </p>
-                    {columnKey === "action" && (
-                      <div className="flex gap-2">
-                        <div className="flex items-center justify-center">
-                          <Tooltip content="Edit">
-                            <button
-                              onClick={() =>
-                                handleEdit(
-                                  item.type ?? "",
-                                  item as IEventExtendedProps
-                                )
-                              }
-                            >
-                              <span className="text-success-300 text-lg hover:text-neutral-dark80">
-                                <FaEdit />
-                              </span>
-                            </button>
-                          </Tooltip>
+        {displayedData.length === 0 ? (
+         <TableBody emptyContent={"No results."}>{[]}</TableBody>
+        ) : (
+          <TableBody>
+            {displayedData.map((item: ICombinedDataType, i) => (
+              <TableRow key={i}>
+                {(columnKey) => (
+                  <TableCell className="h-6">
+                    <div>
+                      <p
+                        className={`capitalize text-base text-quaternary ${
+                          columnKey === "createdAt" ? "text-secondary-500" : ""
+                        }`}
+                      >
+                        {columnKey === "amount"
+                          ? handleFormatAmount(
+                              Number(item.amount),
+                              String(currency)
+                            )
+                          : item[columnKey]}
+                      </p>
+                      {columnKey === "action" && (
+                        <div className="flex gap-2">
+                          <div className="flex items-center justify-center">
+                            <Tooltip content="Edit">
+                              <button
+                                onClick={() =>
+                                  handleEdit(
+                                    item.type ?? "",
+                                    item as IEventExtendedProps
+                                  )
+                                }
+                              >
+                                <span className="text-success-300 text-lg hover:text-neutral-dark80">
+                                  <FaEdit />
+                                </span>
+                              </button>
+                            </Tooltip>
+                          </div>
+                          <div className="flex items-center justify-center">
+                            <Tooltip content="Delete">
+                              <button
+                                onClick={() =>
+                                  handleDelete(
+                                    item.type ?? "",
+                                    item as IEventExtendedProps
+                                  )
+                                }
+                              >
+                                <span className="text-danger-300 text-lg hover:text-neutral-dark80">
+                                  <MdDelete />
+                                </span>
+                              </button>
+                            </Tooltip>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-center">
-                          <Tooltip content="Delete">
-                            <button
-                              onClick={() =>
-                                handleDelete(
-                                  item.type ?? "",
-                                  item as IEventExtendedProps
-                                )
-                              }
-                            >
-                              <span className="text-danger-300 text-lg hover:text-neutral-dark80">
-                                <MdDelete />
-                              </span>
-                            </button>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
+                      )}
+                    </div>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
       <GenericModal
         isGenericModal={isGenericModal}
