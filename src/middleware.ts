@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import * as jose from "jose";
 import * as cookie from "cookie";
+import Users from "../models/users";
 
 const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secure-default-secret"
@@ -8,14 +9,14 @@ const SECRET_KEY = new TextEncoder().encode(
 
 export const validateToken = async (request: NextRequest) => {
   const cookies = request.cookies.get("token");
-  
+
   if (!cookies) {
     return {
       error: { message: "No authentication token", invalidToken: true },
     };
   }
 
-  const token = cookies.value; 
+  const token = cookies.value;
   if (!token) {
     return { error: { message: "Token not found", invalidToken: true } };
   }
@@ -23,8 +24,9 @@ export const validateToken = async (request: NextRequest) => {
   try {
     const { payload } = await jose.jwtVerify(token, SECRET_KEY);
     const userId = payload.id;
-
-    if (!userId) {
+    const sessionId = await Users.findOne({ sessionId: payload.sessionId });
+  
+    if (!userId || sessionId.sessionId !== payload.sessionId) {
       return { error: { message: "Invalid token", invalidToken: true } };
     }
 

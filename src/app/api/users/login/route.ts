@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import connectMongoDB from "../../../../../libs/mongodb";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
@@ -20,21 +21,30 @@ export const POST = async (request: Request) => {
 
     const user = await Users.findOne({ email });
     if (!user) {
-      return NextResponse.json(
-        { message: "Invalid Email", invalidEmail: true },
-      );
+      return NextResponse.json({
+        message: "Invalid Email",
+        invalidEmail: true,
+      });
     }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      return NextResponse.json(
-        { message: "Invalid Password", invalidPassword: true},
-      );
+      return NextResponse.json({
+        message: "Invalid Password",
+        invalidPassword: true,
+      });
     }
-
-    const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const sessionId = new mongoose.Types.ObjectId();
+    const token = jwt.sign(
+      { id: user._id, email: user.email, sessionId: sessionId.toString() },
+      SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+    
+    user.sessionId = sessionId;
+    await user.save();
 
     const response = NextResponse.json(
       { token, id: user._id },
