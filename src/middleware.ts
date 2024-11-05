@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import * as jose from "jose";
 import * as cookie from "cookie";
-import Users from "../models/users";
 
 const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secure-default-secret"
@@ -24,9 +23,8 @@ export const validateToken = async (request: NextRequest) => {
   try {
     const { payload } = await jose.jwtVerify(token, SECRET_KEY);
     const userId = payload.id;
-    const sessionId = await Users.findOne({ sessionId: payload.sessionId });
-  
-    if (!userId || sessionId.sessionId !== payload.sessionId) {
+
+    if (!userId) {
       return { error: { message: "Invalid token", invalidToken: true } };
     }
 
