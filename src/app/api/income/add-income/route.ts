@@ -2,6 +2,7 @@ import connectMongoDB from "../../../../../libs/mongodb";
 import Income from "../../../../../models/income";
 import { NextResponse, NextRequest } from "next/server";
 import { validateToken } from "@/middleware";
+import Users from "../../../../../models/users";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -27,9 +28,16 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json(validationResponse.error);
     }
 
-    const { userId } = validationResponse;
+    const { userId, sessionId } = validationResponse;
 
     await connectMongoDB();
+
+//     const checkSessionId = await Users.findOne({ sessionId: sessionId });
+// console.log(checkSessionId)
+//     if (!checkSessionId) {
+//         return NextResponse.json({ message: "Invalid item Id", invalidId: true });
+//     }
+
 
     const newIncome = new Income({
       userId,

@@ -1,34 +1,38 @@
 import { NextResponse, NextRequest } from "next/server";
 import * as jose from "jose";
-import * as cookie from "cookie";
 
 const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secure-default-secret"
 );
 
 export const validateToken = async (request: NextRequest) => {
-  const cookies = request.cookies.get("token");
+  const cookiesToken = request.cookies.get("token");
+  const cookiesSessionId = request.cookies.get("sessionId");
 
-  if (!cookies) {
+  if (!cookiesToken || !cookiesSessionId) {
     return {
       error: { message: "No authentication token", invalidToken: true },
     };
   }
 
-  const token = cookies.value;
-  if (!token) {
+  const token = cookiesToken.value;
+  const sessionIdToken = cookiesSessionId.value;
+
+  if (!token || !sessionIdToken) {
     return { error: { message: "Token not found", invalidToken: true } };
   }
 
   try {
     const { payload } = await jose.jwtVerify(token, SECRET_KEY);
+
     const userId = payload.id;
+    const sessionId = payload.sessionId;
 
     if (!userId) {
       return { error: { message: "Invalid token", invalidToken: true } };
     }
 
-    return { userId };
+    return { userId, sessionId, sessionIdToken};
   } catch (err) {
     return { error: { message: "Token verification failed" } };
   }
@@ -38,7 +42,7 @@ export async function middleware(request: NextRequest) {
   const validationResult = await validateToken(request);
 
   if (validationResult.error) {
-    return NextResponse.json(validationResult.error);
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   return NextResponse.next();
@@ -46,15 +50,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/api/dashboard",
-    "/api/income/add-income",
-    "/api/income/fetch-income",
-    "/api/expense/add-expense",
-    "/api/expense/update-expense",
-    "/api/expense/delete-expense",
-    "/api/expense/fetch-expense",
-    "/api/users/updateProfile",
-    "/api/users/updatePassword",
-    "/api/users/deleteAccount",
+    "/api/income:path*",
+    "/api/expense:path*",
+    "/pages/:path*",
   ],
 };
