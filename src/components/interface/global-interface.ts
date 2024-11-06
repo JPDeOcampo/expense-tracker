@@ -72,8 +72,8 @@ export interface IFieldValueTypes {
 }
 export interface ShareContextType {
   combinedData: ICombinedDataType[] | [];
-  isCreateAccount: boolean;
-  setIsCreateAccount: (value: boolean) => void;
+  isLoginState: string | null;
+  setIsLoginState: (isLoginState: string | null) => void;
   isMenuDrawer: boolean;
   setIsMenuDrawer: (value: boolean) => void;
   focusState: FocusStateType;

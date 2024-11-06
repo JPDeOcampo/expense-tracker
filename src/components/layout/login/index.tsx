@@ -13,10 +13,10 @@ import { FocusStateType } from "@/components/interface/global-interface";
 import useGlobalContextHooks from "@/components/shared/hooks/context-hooks/global-context-hooks";
 
 const Login = () => {
-  const { shareContext} = useShareContextHooks();
+  const { shareContext } = useShareContextHooks();
   const { globalContext } = useGlobalContextHooks();
   const {
-    setIsCreateAccount,
+    setIsLoginState,
     focusState,
     handleFocus,
     handleBlur,
@@ -77,7 +77,7 @@ const Login = () => {
   return (
     <div className="flex flex-col gap-6 h-[500px] justify-center lg:h-auto">
       {isError.error === "login-error" && (
-        <GenericToast isToast={'default'} message={isError.message} />
+        <GenericToast isToast={"default"} message={isError.message} />
       )}
       <h2 className="text-2xl font-bold text-primary">Login</h2>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
@@ -105,18 +105,26 @@ const Login = () => {
             hasIconEnd={true}
             isPasswordLogin={true}
           />
-          <button
-            className="absolute top-10 right-3 focus:outline-none"
-            type="button"
-            onClick={toggleVisibility}
-            aria-label="toggle password visibility"
-          >
-            {isVisible ? (
-              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            ) : (
-              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            )}
-          </button>
+          <div>
+            <button
+              className="absolute top-10 right-3 focus:outline-none"
+              type="button"
+              onClick={toggleVisibility}
+              aria-label="toggle password visibility"
+            >
+              {isVisible ? (
+                <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+              ) : (
+                <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+              )}
+            </button>
+            <button
+              className="text-sm font-medium text-quaternary hover:text-primary mt-2"
+              onClick={() => setIsLoginState("forgot-password")}
+            >
+              Forgot password?
+            </button>
+          </div>
         </div>
 
         <div className="w-full mt-3">
@@ -128,7 +136,7 @@ const Login = () => {
       </form>
       <button
         className="text-base font-medium text-quaternary hover:text-primary mt-4"
-        onClick={() => setIsCreateAccount(true)}
+        onClick={() => setIsLoginState("create-account")}
       >
         Create Account
       </button>

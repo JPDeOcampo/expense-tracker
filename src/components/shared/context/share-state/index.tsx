@@ -37,7 +37,7 @@ const initialFocusState: FocusStateType = {
 export const ShareContext = createContext<ShareContextType | null>(null);
 
 const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
-  const [isCreateAccount, setIsCreateAccount] = useState<boolean>(false);
+  const [isLoginState, setIsLoginState] = useState<string | null>("login");
   const [isMenuDrawer, setIsMenuDrawer] = useState<boolean>(false);
   const [incomeData, setIncomeData] = useState<ICombinedDataType[]>([]);
   const [expenseData, setExpenseData] = useState<ICombinedDataType[]>([]);
@@ -127,8 +127,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
 
   const contextValue = useMemo(
     () => ({
-      isCreateAccount,
-      setIsCreateAccount,
+      isLoginState,
+      setIsLoginState,
       focusState,
       setFocusState,
       handleFocus,
@@ -165,8 +165,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsSelectedList,
     }),
     [
-      isCreateAccount,
-      setIsCreateAccount,
+      isLoginState,
+      setIsLoginState,
       focusState,
       setFocusState,
       handleFocus,

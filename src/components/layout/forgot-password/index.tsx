@@ -4,14 +4,12 @@ import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-
 import GroupField from "@/components/shared/components/group-field";
 import { registerService } from "@/service/api/registerService";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { EyeFilledIcon } from "../../../../public/images";
-import { EyeSlashFilledIcon } from "../../../../public/images";
 import { Spinner } from "@nextui-org/react";
 import GenericToast from "@/components/shared/components/generic-toast";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { FocusStateType } from "@/components/interface/global-interface";
 
-const Register = () => {
+const ForgotPassword = () => {
   const { shareContext } = useShareContextHooks();
   const {
     setIsLoginState,
@@ -22,10 +20,6 @@ const Register = () => {
     isError,
     updateToast,
   } = shareContext;
-
-  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
-  const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
-    useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -82,7 +76,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 -mt-10">
       <div className="w-full">
         <button
           className="flex gap-2 items-center text-quaternary hover:text-primary"
@@ -97,39 +91,14 @@ const Register = () => {
       {isError.error === "register-error" && (
         <GenericToast isToast={"default"} message={isError.message} />
       )}
-      <h2 className="text-2xl font-bold text-primary">Register</h2>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-bold text-primary">Forgot Password</h2>
+        <p className="text-quaternary">
+          Please enter your registered email.
+        </p>
+      </div>
 
-      <form
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        onSubmit={handleSubmit}
-      >
-        <GroupField
-          label="First Name"
-          type="text"
-          name="firstName"
-          isRequired={true}
-          isFocused={focusState.firstName}
-          handleFocus={handleFocus}
-          handleBlur={handleBlur}
-        />
-        <GroupField
-          label="Last Name"
-          type="text"
-          name="lastName"
-          isRequired={true}
-          isFocused={focusState.lastName}
-          handleFocus={handleFocus}
-          handleBlur={handleBlur}
-        />
-        <GroupField
-          label="Username"
-          type="text"
-          name="username"
-          isRequired={true}
-          isFocused={focusState.username}
-          handleFocus={handleFocus}
-          handleBlur={handleBlur}
-        />
+      <form className="grid gap-6" onSubmit={handleSubmit}>
         <GroupField
           label="Email"
           type="email"
@@ -140,59 +109,10 @@ const Register = () => {
           handleBlur={handleBlur}
           isEmailRegister={true}
         />
-        <div className="relative">
-          <GroupField
-            label="Password"
-            type={isVisiblePassword ? "text" : "password"}
-            name="password"
-            isRequired={true}
-            isFocused={focusState.password}
-            handleFocus={handleFocus}
-            handleBlur={handleBlur}
-            hasIconEnd={true}
-          />
-          <button
-            className="absolute top-10 right-3 focus:outline-none"
-            type="button"
-            onClick={() => setIsVisiblePassword(!isVisiblePassword)}
-            aria-label="toggle password visibility"
-          >
-            {isVisiblePassword ? (
-              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            ) : (
-              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            )}
-          </button>
-        </div>
-        <div className="relative">
-          <GroupField
-            label="Re-enter password"
-            type={isVisibleReEnterPassword ? "text" : "password"}
-            name="reEnterPassword"
-            isRequired={true}
-            isFocused={focusState.reEnterPassword}
-            handleFocus={handleFocus}
-            handleBlur={handleBlur}
-            isReEnterRegister={true}
-          />
-          <button
-            className="absolute top-10 right-3 focus:outline-none"
-            type="button"
-            onClick={() =>
-              setIsVisibleReEnterPassword(!isVisibleReEnterPassword)
-            }
-            aria-label="toggle password visibility"
-          >
-            {isVisibleReEnterPassword ? (
-              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            ) : (
-              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-            )}
-          </button>
-        </div>
+
         <div className="w-full mt-3">
           <button type="submit" className="custom-btn">
-            Register
+            Submit
             {loading && <Spinner className="button-spinner" color="default" />}
           </button>
         </div>
@@ -201,4 +121,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ForgotPassword;

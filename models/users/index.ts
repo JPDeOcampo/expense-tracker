@@ -7,6 +7,8 @@ export interface IUsers extends Document {
   username: string;
   password: string;
   sessionId: string;
+  resetToken: string;
+  resetTokenExpires: Date;
 }
 
 const UsersSchema: Schema = new Schema({
@@ -16,6 +18,8 @@ const UsersSchema: Schema = new Schema({
   username: { type: String, required: true }, 
   password: { type: String, required: true },
   sessionId: { type: String },
+  resetToken: { type: String },
+  resetTokenExpires: { type: Date },
 });
 
 
