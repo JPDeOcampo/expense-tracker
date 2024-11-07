@@ -191,7 +191,7 @@ const CategoryList = ({
           <TableColumn key="action">Action</TableColumn>
         </TableHeader>
         {displayedData.length === 0 ? (
-         <TableBody emptyContent={"No results."}>{[]}</TableBody>
+         <TableBody emptyContent={"No category record."}>{[]}</TableBody>
         ) : (
           <TableBody>
             {displayedData.map((item: ICombinedDataType, i) => (

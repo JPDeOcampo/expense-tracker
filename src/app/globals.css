@@ -158,6 +158,25 @@ body {
   @apply overflow-y-auto mr-1 h-[140px] relative;
 }
 
+@media screen and (max-width: 650px) {
+  .fc-scroller {
+    /* @apply !overflow-scroll; */
+  }
+  .fc-media-screen{
+    @apply !w-[1110px];
+  }
+  .fc-col-header,
+  .fc-daygrid-body,
+  .fc-scrollgrid-sync-table {
+    @apply !w-[1100px];
+  }
+  .fc-view-harness,
+  .fc-daygrid-body,
+  .fc-scrollgrid-sync-table {
+    @apply !h-[700px];
+  }
+}
+
 /* TOAST */
 /* .alert-top-center {
   max-width: unset !important;
@@ -174,10 +193,10 @@ body {
 .toast {
   @apply w-96;
 }
-.toast>div {
+.toast > div {
   @apply !m-0 !w-full !h-full;
 }
 
-.toast>div>div {
+.toast > div > div {
   @apply !w-full !h-full py-2 px-4;
 }

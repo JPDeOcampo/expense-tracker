@@ -85,12 +85,12 @@ const MenuDrawer = () => {
   return (
     <>
       {isMenuDrawer && (
-        <div className={`h-full w-full bg-[#33333380] fixed z-10 block inset-0`}></div>
+        <div className={`h-full w-full bg-[#33333380] fixed z-20 block inset-0`}></div>
       )}
       <div
         className={`${
           isMenuDrawer ? "w-[240px]" : "w-0"
-        } z-10 lg:min-w-[150px] lg:w-[240px] h-full bg-neutral-light fixed inset-0 transition-all duration-300`}
+        } z-40 lg:min-w-[150px] lg:w-[240px] h-full bg-neutral-light fixed inset-0 transition-all duration-300`}
         ref={menuRef}
       >
         <div

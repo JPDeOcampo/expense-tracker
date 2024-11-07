@@ -89,10 +89,10 @@ const Overview = () => {
 
 const Category = () => {
   const { shareContext } = useShareContextHooks();
-  const { combinedData, setIsSelectedList} = shareContext;
+  const { combinedData, setIsSelectedList } = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
   const [page, setPage] = useState(1);
-   const router = useRouter();
+  const router = useRouter();
   const itemsPerPage = 9;
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const Category = () => {
     setPage((prev) => prev + 1);
   };
   const handleView = (type: string, category: string) => {
-    setIsSelectedList({type, category});
+    setIsSelectedList({ type, category });
     router.push(`/pages/category`);
   };
   return (
@@ -176,32 +176,40 @@ const Category = () => {
           <TableColumn key="count">Item no.</TableColumn>
           <TableColumn key="action">Action</TableColumn>
         </TableHeader>
-        <TableBody>
-          {displayedData.map((item: ICombinedDataType, i) => (
-            <TableRow key={i}>
-              {(columnKey) => (
-                <TableCell className="h-6">
-                  <div>
-                    <p className="capitalize text-base text-quaternary">
-                      {item[columnKey as keyof ICombinedDataType]}
-                    </p>
-                    {columnKey === "action" && (
-                      <div>
-                        <Tooltip content="View">
-                          <button onClick={() => handleView(item["type"] ?? "", item["category"])}>
-                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                              <EyeIcon />
-                            </span>
-                          </button>
-                        </Tooltip>
-                      </div>
-                    )}
-                  </div>
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
+        {displayedData.length === 0 ? (
+          <TableBody emptyContent={"No category record."}>{[]}</TableBody>
+        ) : (
+          <TableBody>
+            {displayedData.map((item: ICombinedDataType, i) => (
+              <TableRow key={i}>
+                {(columnKey) => (
+                  <TableCell className="h-6">
+                    <div>
+                      <p className="capitalize text-base text-quaternary">
+                        {item[columnKey as keyof ICombinedDataType]}
+                      </p>
+                      {columnKey === "action" && (
+                        <div>
+                          <Tooltip content="View">
+                            <button
+                              onClick={() =>
+                                handleView(item["type"] ?? "", item["category"])
+                              }
+                            >
+                              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                <EyeIcon />
+                              </span>
+                            </button>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
     </div>
   );
@@ -270,23 +278,27 @@ const RecentTransaction = () => {
           <TableColumn key="date">Date</TableColumn>
           <TableColumn key="createdAt">Created</TableColumn>
         </TableHeader>
-        <TableBody>
-          {displayedData.map((item: ICombinedDataType, i) => (
-            <TableRow key={i}>
-              {(columnKey) => (
-                <TableCell className="h-6">
-                  <p
-                    className={`capitalize text-base text-quaternary ${
-                      columnKey === "createdAt" ? "text-secondary-500" : ""
-                    }`}
-                  >
-                    {item[columnKey]}
-                  </p>
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
+        {displayedData.length === 0 ? (
+          <TableBody emptyContent={"No transaction history."}>{[]}</TableBody>
+        ) : (
+          <TableBody>
+            {displayedData.map((item: ICombinedDataType, i) => (
+              <TableRow key={i}>
+                {(columnKey) => (
+                  <TableCell className="h-6">
+                    <p
+                      className={`capitalize text-base text-quaternary ${
+                        columnKey === "createdAt" ? "text-secondary-500" : ""
+                      }`}
+                    >
+                      {item[columnKey]}
+                    </p>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
     </div>
   );

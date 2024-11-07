@@ -83,7 +83,7 @@ const Calendar = () => {
                 </div>
               </Button>
             </PopoverTrigger>
-            <div className="flex gap-2 px-2">
+            <div className="flex gap-2 p-2">
               <div className="flex items-center justify-center">
                 <button onClick={() => handleEdit(type, combineUpdateData)}>
                   <span className="text-success-300 text-lg hover:text-neutral-light80">
@@ -150,7 +150,7 @@ const Calendar = () => {
         <FullCalendar
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
-          weekends={false}
+          weekends={true}
           events={sortedData}
           eventContent={renderEventContent}
         />
