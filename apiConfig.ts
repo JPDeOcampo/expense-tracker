@@ -1,3 +1,5 @@
+import ResetPassword from "@/components/layout/reset-password";
+
 const API_USER_URL = `/api/users`;
 const API_INCOME_URL = `/api/income`;
 const API_EXPENSE_URL = `/api/expense`;
@@ -5,6 +7,9 @@ const API_EXPENSE_URL = `/api/expense`;
 export const ENDPOINTS = {
   register: `${API_USER_URL}/register`,
   login: `${API_USER_URL}/login`,
+  forgotPassword: `${API_USER_URL}/forgot-password`,
+  resetToken: `${API_USER_URL}/verify-reset-token`,
+  resetPassword: `${API_USER_URL}/reset-password`,
   updateProfile: `${API_USER_URL}/updateProfile`,
   updatePassword: `${API_USER_URL}/updatePassword`,
   deleteAccount: `${API_USER_URL}/deleteAccount`,

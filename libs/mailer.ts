@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendResetEmail(email: string, resetUrl: string) {
+export const sendResetEmail = async (email: string, resetCode: string) => {
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
@@ -34,8 +34,8 @@ export async function sendResetEmail(email: string, resetUrl: string) {
           <div class="content">
             <p>Hi,</p>
             <p>You requested a password reset for your account. Please use the one-time code below to reset your password:</p>
-            <div class="otp-code">${resetUrl}</div>
-            <p>This code will expire in 15 minutes. If you did not request a password reset, please ignore this email.</p>
+            <div class="otp-code">${resetCode}</div>
+            <p>This code will expire in 1 hour. If you did not request a password reset, please ignore this email.</p>
           </div>
           <div class="footer">
             <p>&copy; ${new Date().getFullYear()} Expense Tracker. All rights reserved.</p>

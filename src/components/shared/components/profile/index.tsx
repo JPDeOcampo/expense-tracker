@@ -107,7 +107,7 @@ const Profile = () => {
                     defaultValue={currency ?? ""}
                   >
                     <option value="PHP">PHP</option>
-                    <option value="USD" selected>USD</option>
+                    <option value="USD" defaultValue="USD">USD</option>
                     <option value="EUR">EUR</option>
                     <option value="JPY">JPY</option>
                     <option value="GBP">GBP</option>

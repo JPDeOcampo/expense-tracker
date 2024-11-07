@@ -3,6 +3,8 @@ import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-
 import Login from "@/components/layout/login";
 import Register from "@/components/layout/register";
 import ForgotPassword from "@/components/layout/forgot-password";
+import ResetToken from "@/components/layout/reset-token";
+import ResetPassword from "@/components/layout/reset-password";
 
 const App = () => {
   const { shareContext } = useShareContextHooks();
@@ -27,6 +29,10 @@ const App = () => {
           <Register />
         ) : isLoginState === "forgot-password" ? (
           <ForgotPassword />
+        ) : isLoginState === "verify-token" ? (
+          <ResetToken />
+        ) : isLoginState === "reset-password" ? (
+          <ResetPassword />
         ) : null}
       </div>
     </div>

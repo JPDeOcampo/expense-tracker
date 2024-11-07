@@ -180,4 +180,5 @@ export interface IUserTypes {
   oldPassword?: string;
   newPassword?: string;
   _id?: string | undefined;
+  token?: string;
 }
