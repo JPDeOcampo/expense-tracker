@@ -118,7 +118,9 @@ const Form = ({
             className: "toast-error",
             message: data.message,
           });
-          handleLogout(data.invalidToken);
+          setTimeout(() => {
+            handleLogout();
+          }, 3000);
           return;
         }
         if (response?.ok) {
@@ -191,7 +193,9 @@ const Form = ({
             className: "toast-error",
             message: data.message,
           });
-          handleLogout(data.invalidToken);
+          setTimeout(() => {
+            handleLogout();
+          }, 3000);
           return;
         }
         if (response?.ok) {

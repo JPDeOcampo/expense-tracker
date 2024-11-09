@@ -149,7 +149,7 @@ const Profile = () => {
                 Theme
               </DropdownItem> */}
             </DropdownSection>
-            <DropdownItem key="logout" color="danger" onClick={()=>handleLogout(false)}>
+            <DropdownItem key="logout" color="danger" onClick={handleLogout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>
