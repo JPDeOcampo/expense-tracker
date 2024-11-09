@@ -6,7 +6,7 @@ import Users from "../../../../../models/users";
 
 export const POST = async (request: NextRequest) => {
   try {
-    const { date, amount, category, frequency, paymentMethod, note } =
+    const { reqUserId, date, amount, category, frequency, paymentMethod, note } =
       await request.json();
 
     if (
@@ -28,16 +28,15 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json(validationResponse.error);
     }
 
-    const { userId, sessionId } = validationResponse;
+    const { userId } = validationResponse;
+
+    if (reqUserId !== userId) {
+      return NextResponse.json(
+        { message: "Invalid token, redirecting to login", invalidToken: true },
+      );
+    }
 
     await connectMongoDB();
-
-//     const checkSessionId = await Users.findOne({ sessionId: sessionId });
-// console.log(checkSessionId)
-//     if (!checkSessionId) {
-//         return NextResponse.json({ message: "Invalid item Id", invalidId: true });
-//     }
-
 
     const newIncome = new Income({
       userId,

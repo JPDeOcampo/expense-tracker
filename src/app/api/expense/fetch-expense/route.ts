@@ -3,16 +3,14 @@ import Expense from "../../../../../models/expense";
 import { NextResponse, NextRequest } from "next/server";
 import { validateToken } from "@/middleware";
 
-export const GET = async (request: NextRequest) => {
-  
+export const POST = async (request: NextRequest) => {
+  const { userId } = await request.json();
   try {
     const validationResponse = await validateToken(request);
-    
+
     if (validationResponse.error) {
       return NextResponse.json(validationResponse.error);
     }
-
-    const { userId } = validationResponse;
 
     await connectMongoDB();
 

@@ -32,6 +32,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setOverAllExpenseData,
     setCurrentBalance,
     setUser,
+    user,
   } = shareContext;
 
   const { getTotalAmount } = useTotalHooks();
@@ -41,8 +42,9 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const fetchExpense = async (
     currentBalance: number
   ): Promise<Response | undefined> => {
+    console.log('fetchExpense');
     try {
-      const response = await fetchExpenseService();
+      const response = await fetchExpenseService((user as { _id: string })._id);
       const data = await response?.json();
       if (response?.ok) {
         setExpenseData(data.expense);
@@ -66,7 +68,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const fetchIncome = async (): Promise<Response | undefined> => {
     try {
-      const response = await fetchIncomeService();
+      const response = await fetchIncomeService((user as { _id: string })._id);
       const data = await response?.json();
       if (response?.ok) {
         setIncomeData(data.income);

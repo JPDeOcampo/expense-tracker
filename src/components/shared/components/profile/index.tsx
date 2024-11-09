@@ -11,7 +11,6 @@ import {
 } from "@nextui-org/react";
 import GenericModal from "@/components/shared/components/generic-modal";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
-import { Currency } from "lucide-react";
 
 const Profile = () => {
   const { shareContext } = useShareContextHooks();
@@ -150,7 +149,7 @@ const Profile = () => {
                 Theme
               </DropdownItem> */}
             </DropdownSection>
-            <DropdownItem key="logout" color="danger" onClick={handleLogout}>
+            <DropdownItem key="logout" color="danger" onClick={()=>handleLogout(false)}>
               Log Out
             </DropdownItem>
           </DropdownMenu>

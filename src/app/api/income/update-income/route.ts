@@ -22,11 +22,17 @@ export const PUT = async (request: NextRequest) => {
 
     const { userId } = validationResponse;
 
+    if (filteredUpdates.reqUserId !== userId) {
+      return NextResponse.json(
+        { message: "Invalid token, redirecting to login", invalidToken: true },
+      );
+    }
+
     await connectMongoDB();
 
     const existingUserId = await Users.findOne({ userId: userId });
     const existingIncomeId = await Income.findOne({ _id: filteredUpdates.id });
-
+    
     if (!existingUserId && !existingIncomeId) {
       return NextResponse.json({ message: "Invalid item Id", invalidId: true });
     }

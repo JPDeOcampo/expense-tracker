@@ -85,13 +85,13 @@ const useGlobalHooks = () => {
     .formatToParts(1)
     .find((part) => part.type === "currency")?.value;
 
-  const handleLogout = async () => {
+  const handleLogout = async (isToast: boolean) => {
     try {
       const response = await logoutService((user as { _id: string })._id);
       if (response?.ok) {
         router.push("/");
         sessionStorage.clear();
-        toast.remove();
+        isToast && toast.remove();
       }
     } catch (error) {
       console.error(error);

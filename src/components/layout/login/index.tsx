@@ -118,17 +118,17 @@ const Login = () => {
                 <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
               )}
             </button>
-            <button
-              className="text-sm font-medium text-quaternary hover:text-primary mt-2"
+            <a
+              className="text-sm font-medium text-quaternary hover:text-primary mt-2 cursor-pointer"
               onClick={() => setIsLoginState("forgot-password")}
             >
               Forgot password?
-            </button>
+            </a>
           </div>
         </div>
 
         <div className="w-full mt-3">
-          <button type="submit" className="custom-btn">
+          <button type="submit" className="custom-btn" disabled={loading}>
             Login{" "}
             {loading && <Spinner className="button-spinner" color="default" />}
           </button>
@@ -137,6 +137,7 @@ const Login = () => {
       <button
         className="text-base font-medium text-quaternary hover:text-primary mt-4"
         onClick={() => setIsLoginState("create-account")}
+        disabled={loading}
       >
         Create Account
       </button>

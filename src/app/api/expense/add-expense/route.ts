@@ -5,7 +5,7 @@ import { validateToken } from "@/middleware";
 
 export const POST = async (request: NextRequest) => {
   try {
-    const { date, amount, category, paymentMethod, note } =
+    const { reqUserId, date, amount, category, paymentMethod, note } =
       await request.json();
 
     if (
@@ -27,6 +27,12 @@ export const POST = async (request: NextRequest) => {
     }
 
     const { userId } = validationResponse;
+
+    if (reqUserId !== userId) {
+      return NextResponse.json(
+        { message: "Invalid token, redirecting to login", invalidToken: true },
+      );
+    }
 
     await connectMongoDB();
 

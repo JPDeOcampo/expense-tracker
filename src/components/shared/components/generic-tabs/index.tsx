@@ -13,7 +13,9 @@ import { Spinner } from "@nextui-org/react";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
 import { updateExpenseService } from "@/service/api/expenseServices/updateExpenseService";
 import { updateIncomeService } from "@/service/api/incomeServices/updateIncomeService";
-import { categories, paymentMethodItems, frequencyItems  } from "../../constant";
+import { categories, paymentMethodItems, frequencyItems } from "../../constant";
+import useGlobalHooks from "../../hooks/global-hooks";
+
 interface FormProps {
   onTabs: string;
   handleCloseModal: () => void;
@@ -41,9 +43,11 @@ const Form = ({
     currentBalance,
     updateToast,
     setFormValues,
+    user,
   } = shareContext;
   const { getTotalAmount } = useTotalHooks();
   const { globalContext } = useGlobalContextHooks();
+  const { handleLogout } = useGlobalHooks();
   const { fetchIncome } = globalContext;
 
   const [loading, setLoading] = useState(false);
@@ -72,6 +76,7 @@ const Form = ({
       event.currentTarget;
 
     const formData: ICombinedDataType = {
+      userId: (user as { _id: string })._id,
       date: date.value,
       amount: amount.value,
       note: note.value,
@@ -104,45 +109,59 @@ const Form = ({
         if (!isUpdate) {
           fetchIncome();
         }
-
-        if (response?.ok) {
-          if(isUpdate){
-            fetchIncome()
-          }else{
-          setIncomeData((prev: ICombinedDataType[]) => {
-            const updatedData = [
-              { ...formData, createdAt: new Date().toISOString() },
-              ...prev,
-            ];
-
-            const newData = [{ ...formData }];
-            // Calculate overall income and expense
-            const overAllIncome = getTotalAmount(updatedData as ITransaction[]);
-            const updateCurrentBalance = getTotalAmount(
-              newData as ITransaction[]
-            );
-
-            // Store the updated data in sessionStorage
-            sessionStorage.setItem("income", JSON.stringify(updatedData));
-
-            // Update state with overall income and expense
-            setOverAllIncomeData(overAllIncome);
-            sessionStorage.setItem(
-              "overAllIncome",
-              JSON.stringify(overAllIncome)
-            );
-
-            const addNewBalance = (currentBalance ?? 0) + updateCurrentBalance;
-            // Update state with current balance
-            setCurrentBalance(addNewBalance);
-            sessionStorage.setItem(
-              "currentBalance",
-              JSON.stringify(addNewBalance)
-            );
-
-            return updatedData;
+        if (data.invalidToken) {
+          updateToast({
+            isToast: "alert-error",
+            toastId: "alert-error",
+            position: "top-center",
+            delay: 4000,
+            className: "toast-error",
+            message: data.message,
           });
+          handleLogout(data.invalidToken);
+          return;
         }
+        if (response?.ok) {
+          if (isUpdate) {
+            fetchIncome();
+          } else {
+            setIncomeData((prev: ICombinedDataType[]) => {
+              const updatedData = [
+                { ...formData, createdAt: new Date().toISOString() },
+                ...prev,
+              ];
+
+              const newData = [{ ...formData }];
+              // Calculate overall income and expense
+              const overAllIncome = getTotalAmount(
+                updatedData as ITransaction[]
+              );
+              const updateCurrentBalance = getTotalAmount(
+                newData as ITransaction[]
+              );
+
+              // Store the updated data in sessionStorage
+              sessionStorage.setItem("income", JSON.stringify(updatedData));
+
+              // Update state with overall income and expense
+              setOverAllIncomeData(overAllIncome);
+              sessionStorage.setItem(
+                "overAllIncome",
+                JSON.stringify(overAllIncome)
+              );
+
+              const addNewBalance =
+                (currentBalance ?? 0) + updateCurrentBalance;
+              // Update state with current balance
+              setCurrentBalance(addNewBalance);
+              sessionStorage.setItem(
+                "currentBalance",
+                JSON.stringify(addNewBalance)
+              );
+
+              return updatedData;
+            });
+          }
           setLoading(false);
           updateToast({
             isToast: "alert-success",
@@ -162,6 +181,18 @@ const Form = ({
         const data = await response?.json();
         if (!isUpdate) {
           fetchIncome();
+        }
+        if (data.invalidToken) {
+          updateToast({
+            isToast: "alert-error",
+            toastId: "alert-error",
+            position: "top-center",
+            delay: 4000,
+            className: "toast-error",
+            message: data.message,
+          });
+          handleLogout(data.invalidToken);
+          return;
         }
         if (response?.ok) {
           setExpenseData((prev: ICombinedDataType[]) => {

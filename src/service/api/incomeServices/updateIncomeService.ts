@@ -2,6 +2,7 @@ import { ENDPOINTS } from "../../../../apiConfig";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 
 export const updateIncomeService = async ({
+  userId,
   _id,
   date,
   amount,
@@ -19,6 +20,7 @@ export const updateIncomeService = async ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        reqUserId: userId,
         id: _id,
         date: date,
         amount: amount,

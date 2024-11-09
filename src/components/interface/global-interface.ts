@@ -134,6 +134,7 @@ export interface IAddFormTypes {
   paymentMethod?: string;
   to?: string;
   from?: string;
+  userId?: string;
 }
 export interface IEventExtendedProps extends IAddFormTypes {
   type: string;

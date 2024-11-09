@@ -2,7 +2,7 @@ import { ENDPOINTS } from "../../../../apiConfig";
 import { IAddFormTypes } from "@/components/interface/global-interface";
 
 export const AddIncomeService = async ({
-  // userId,
+  userId,
   date,
   amount,
   category,
@@ -17,7 +17,7 @@ export const AddIncomeService = async ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // userId: userId,
+        reqUserId: userId,
         date: date,
         amount: amount,
         category: category,
