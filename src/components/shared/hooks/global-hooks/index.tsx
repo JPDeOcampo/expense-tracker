@@ -91,7 +91,9 @@ const useGlobalHooks = () => {
       if (response?.ok) {
         router.push("/");
         sessionStorage.clear();
-        isToast && toast.remove();
+        if (isToast) {
+          toast.remove();
+        }
       }
     } catch (error) {
       console.error(error);
