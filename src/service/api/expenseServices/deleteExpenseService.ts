@@ -1,5 +1,4 @@
 import { ENDPOINTS } from "../../../../apiConfig";
-import { IUserTypes } from "@/components/interface/global-interface";
 
 export const deleteExpenseService = async (_id: string) => {
   try {

@@ -11,7 +11,7 @@ export const PUT = async (request: NextRequest) => {
 
     // Filter out undefined fields and empty strings
     const filteredUpdates = Object.fromEntries(
-      Object.entries(updates).filter(([key, value]) => value !== undefined && value !== "")
+      Object.entries(updates).filter(([_, value]) => value !== undefined && value !== "")
     );
 
     const validationResponse = await validateToken(request);

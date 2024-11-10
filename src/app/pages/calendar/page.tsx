@@ -1,8 +1,6 @@
 "use client";
-import { useContext, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { ShareContext } from "@/components/shared/context/share-state";
 import {
   Popover,
   PopoverTrigger,

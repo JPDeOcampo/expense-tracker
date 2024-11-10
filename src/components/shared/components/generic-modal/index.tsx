@@ -350,7 +350,7 @@ const DeleteAccount = ({
 const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { shareContext } = useShareContextHooks();
-  const { updateToast } = shareContext;
+  const { updateToast, user } = shareContext;
   const { globalContext } = useGlobalContextHooks();
   const { fetchIncome } = globalContext;
   const keysToDisplay = [
@@ -382,7 +382,7 @@ const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
       const data = await response?.json();
       if (response?.ok) {
         setLoading(false);
-        fetchIncome();
+        fetchIncome((user as { _id: string })._id);
         updateToast({
           isToast: "alert-success",
           toastId: "alert-success",

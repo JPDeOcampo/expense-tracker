@@ -33,7 +33,7 @@ export const validateToken = async (request: NextRequest) => {
     }
 
     return { userId, sessionId, sessionIdToken};
-  } catch (err) {
+  } catch (error) {
     return { error: { message: "Token verification failed" } };
   }
 };

@@ -96,7 +96,7 @@ const YearFilter = ({
         selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
       >
-        {years.map((item, i) => (
+        {years.map((item)=> (
           <DropdownItem key={item} value={item}>
             {item}
           </DropdownItem>

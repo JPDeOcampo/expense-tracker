@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import GenericModal from "@/components/shared/components/generic-modal";
 import {
@@ -76,7 +76,7 @@ const CategoryFilter = ({
         selectedKeys={selectedKeys}
         onSelectionChange={setSelectedKeys}
       >
-        {combinedCategory.map((item, i) => (
+        {combinedCategory.map((item) => (
           <DropdownItem key={item.value} value={item.value}>
             {item.label}
           </DropdownItem>
@@ -300,13 +300,13 @@ const Category = () => {
           <div className="flex gap-4">
             <Checkbox
               isSelected={isIncome}
-              onValueChange={(e) => handleCheckbox("income")}
+              onValueChange={() => handleCheckbox("income")}
             >
               Income
             </Checkbox>
             <Checkbox
               isSelected={isExpense}
-              onValueChange={(e) => handleCheckbox("expense")}
+              onValueChange={() => handleCheckbox("expense")}
             >
               Expense
             </Checkbox>
