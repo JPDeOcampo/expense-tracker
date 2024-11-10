@@ -50,6 +50,10 @@ export interface FocusStateType {
   errorOldPassword?: boolean;
   errorReEnterPassword?: boolean;
   errorPassword?: boolean;
+  errorAmount?: boolean;
+  errorCategory?: boolean;
+  errorFrequency?: boolean;
+  errorPaymentMethod?: boolean;
 }
 export interface IFieldValueTypes {
   firstName: string;

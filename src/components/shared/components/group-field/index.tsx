@@ -79,6 +79,8 @@ const GroupField = ({
       hasError = "errorReEnterPassword";
     } else if (isPassword) {
       hasError = "errorPassword";
+    } else if (name === "amount") {
+      hasError = "errorAmount";
     }
 
     if (hasError) {
@@ -90,6 +92,21 @@ const GroupField = ({
       [name]: e.target.value,
     }));
   };
+  const handleOnChangeAutoComplete = (name: string) => {
+    let hasError = "";
+
+    if (name === "category") {
+      hasError = "errorCategory";
+    } else if (name === "frequency") {
+      hasError = "errorFrequency";
+    } else if (name === "paymentMethod") {
+      hasError = "errorPaymentMethod";
+    }
+
+    if (hasError) {
+      setFocusState((prev: FocusStateType) => ({ ...prev, [hasError]: false }));
+    }
+  };
 
   const isError =
     (isEmailLogin && focusState.errorEmailLogin) ||
@@ -98,27 +115,39 @@ const GroupField = ({
     (isPasswordLogin && focusState.errorPasswordLogin) ||
     (isOldPassword && focusState.errorOldPassword) ||
     (isPassword && focusState.errorPassword) ||
-    (isReEnterPassword && focusState.errorReEnterPassword);
-    
+    (isReEnterPassword && focusState.errorReEnterPassword) ||
+    (name === "amount" && focusState.errorAmount) ||
+    (name === "category" && focusState.errorCategory) ||
+    (name === "frequency" && focusState.errorFrequency) ||
+    (name === "paymentMethod" && focusState.errorPaymentMethod);
 
   useEffect(() => {
     const date = new Date();
-    if (formValues.date === '') {
+    if (formValues.date === "") {
       setFormValues((prev: Record<string, string>) => ({
         ...prev,
         date: date.toISOString().split("T")[0] ?? "",
       }));
     }
   }, []);
-  
+
   return (
     <>
       {isAutoComplete ? (
         <div className="group-input">
-          <label className="text-base text-quaternary">{label}</label>
+          <label className={`text-base text-quaternary`}>
+            {label}{" "}
+            {isError && <span className="text-red-500 text-xs">*Required</span>}
+          </label>
           <Autocomplete
             className={`custom-auto-complete rounded-md ${
               isFocused ? "border border-quaternary" : "border border-secondary"
+            } ${
+              isError
+                ? "border border-red-500"
+                : isFocused
+                ? "border border-quaternary"
+                : "border border-secondary"
             }`}
             name={name}
             aria-labelledby={name}
@@ -128,12 +157,12 @@ const GroupField = ({
             defaultSelectedKey={
               selectedItem?.toLowerCase() || formValues[value || name]
             }
-            isRequired
             onSelectionChange={(selected) => {
               setFormValues((prev: Record<string, string>) => ({
                 ...prev,
                 [name]: selected as string,
               }));
+              handleOnChangeAutoComplete(name);
             }}
           >
             {(item) => (
@@ -144,7 +173,12 @@ const GroupField = ({
       ) : isCustomNumber ? (
         <>
           <div className="group-input">
-            <label className="text-base text-quaternary">{label}</label>
+            <label className="text-base text-quaternary">
+              {label}{" "}
+              {isError && (
+                <span className="text-red-500 text-xs">*Required</span>
+              )}
+            </label>
             <Input
               type={type}
               placeholder={placeholder}
@@ -152,14 +186,27 @@ const GroupField = ({
                 isFocused
                   ? "border border-quaternary"
                   : "border border-secondary"
+              }
+              ${
+                isError
+                  ? "border border-red-500"
+                  : isFocused
+                  ? "border border-quaternary"
+                  : "border border-secondary"
               }`}
               name={name}
               aria-labelledby={name}
               value={formValues[value || name]}
+              min="1"
+              onInput={(e) =>
+                ((e.target as HTMLInputElement).value = Math.max(
+                  1,
+                  Math.abs(parseFloat((e.target as HTMLInputElement).value))
+                ).toString())
+              }
               onFocus={() => handleFocus(name)}
               onBlur={() => handleBlur(name)}
               onChange={(e) => handleOnChange(e, value || name)}
-              required={isRequired}
               startContent={
                 <div className="pointer-events-none flex items-center">
                   <span className="text-default-400 text-small">

@@ -32,6 +32,10 @@ const initialFocusState: FocusStateType = {
   errorReEnterRegister: false,
   errorReEnterPassword: false,
   errorPassword: false,
+  errorAmount: false,
+  errorCategory: false,
+  errorFrequency: false,
+  errorPaymentMethod: false,
 };
 
 export const ShareContext = createContext<ShareContextType | null>(null);

@@ -15,6 +15,7 @@ import { updateExpenseService } from "@/service/api/expenseServices/updateExpens
 import { updateIncomeService } from "@/service/api/incomeServices/updateIncomeService";
 import { categories, paymentMethodItems, frequencyItems } from "../../constant";
 import useGlobalHooks from "../../hooks/global-hooks";
+import { FocusStateType } from "@/components/interface/global-interface";
 
 interface FormProps {
   onTabs: string;
@@ -44,10 +45,11 @@ const Form = ({
     updateToast,
     setFormValues,
     user,
+    setFocusState,
   } = shareContext;
   const { getTotalAmount } = useTotalHooks();
   const { globalContext } = useGlobalContextHooks();
-  const { handleLogout } = useGlobalHooks();
+  const { handleLogout, handleResetErrorFocus } = useGlobalHooks();
   const { fetchIncome } = globalContext;
 
   const [loading, setLoading] = useState(false);
@@ -67,14 +69,45 @@ const Form = ({
         note: note ?? "",
       }));
     }
-  }, [updateData]);
+    handleResetErrorFocus();
+    setFormValues((prev: Record<string, string>) => ({
+      ...prev,
+      category: "",
+    }));
+  }, [updateData, onTabs]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
     const { date, amount, category, frequency, paymentMethod, note } =
       event.currentTarget;
 
+    if (amount.value === "") {
+      setFocusState((prev: FocusStateType) => ({
+        ...prev,
+        errorAmount: true,
+      }));
+      return;
+    } else if (category.value === "") {
+      setFocusState((prev: FocusStateType) => ({
+        ...prev,
+        errorCategory: true,
+      }));
+      return;
+    } else if (frequency?.value === "" && onTabs !== "expense") {
+      setFocusState((prev: FocusStateType) => ({
+        ...prev,
+        errorFrequency: true,
+      }));
+      return;
+    } else if (paymentMethod.value === "") {
+      setFocusState((prev: FocusStateType) => ({
+        ...prev,
+        errorPaymentMethod: true,
+      }));
+      return;
+    }
+
+    setLoading(true);
     const formData: ICombinedDataType = {
       userId: (user as { _id: string })._id,
       date: date.value,
@@ -101,13 +134,13 @@ const Form = ({
     try {
       if (onTabs === "income") {
         const response = isUpdate
-          ? await updateIncomeService(formData)
+          ? await updateIncomeService({...formData, ba: (user as { _id: string })._id})
           : await AddIncomeService(formData);
 
         const data = await response?.json();
 
         if (!isUpdate) {
-          fetchIncome((user as { _id: string })._id,);
+          fetchIncome((user as { _id: string })._id);
         }
         if (data.invalidToken) {
           updateToast({
@@ -125,7 +158,7 @@ const Form = ({
         }
         if (response?.ok) {
           if (isUpdate) {
-            fetchIncome((user as { _id: string })._id,);
+            fetchIncome((user as { _id: string })._id);
           } else {
             setIncomeData((prev: ICombinedDataType[]) => {
               const updatedData = [
@@ -134,6 +167,7 @@ const Form = ({
               ];
 
               const newData = [{ ...formData }];
+        
               // Calculate overall income and expense
               const overAllIncome = getTotalAmount(
                 updatedData as ITransaction[]
@@ -182,7 +216,7 @@ const Form = ({
           : await AddExpenseService(formData);
         const data = await response?.json();
         if (!isUpdate) {
-          fetchIncome((user as { _id: string })._id,);
+          fetchIncome((user as { _id: string })._id);
         }
         if (data.invalidToken) {
           updateToast({
