@@ -1,6 +1,7 @@
 import { ENDPOINTS } from "../../../../apiConfig";
 
 export const fetchIncomeService = async (userId: string) => {
+
   try {
     const response = await fetch(ENDPOINTS.fetch_income, {
       method: "POST",

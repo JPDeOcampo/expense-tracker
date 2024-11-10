@@ -107,7 +107,7 @@ const Form = ({
         const data = await response?.json();
 
         if (!isUpdate) {
-          fetchIncome();
+          fetchIncome((user as { _id: string })._id,);
         }
         if (data.invalidToken) {
           updateToast({
@@ -125,7 +125,7 @@ const Form = ({
         }
         if (response?.ok) {
           if (isUpdate) {
-            fetchIncome();
+            fetchIncome((user as { _id: string })._id,);
           } else {
             setIncomeData((prev: ICombinedDataType[]) => {
               const updatedData = [
@@ -182,7 +182,7 @@ const Form = ({
           : await AddExpenseService(formData);
         const data = await response?.json();
         if (!isUpdate) {
-          fetchIncome();
+          fetchIncome((user as { _id: string })._id,);
         }
         if (data.invalidToken) {
           updateToast({

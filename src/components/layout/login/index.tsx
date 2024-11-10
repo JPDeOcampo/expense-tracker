@@ -63,7 +63,7 @@ const Login = () => {
         handleSetError("login-error", response?.message);
       } else {
         router.push("/pages/dashboard");
-        fetchIncome();
+        fetchIncome(response?.id);
         fetchUser(response?.id);
         handleResetFormValues();
       }

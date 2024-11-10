@@ -5,7 +5,6 @@ import {
   FC,
   ReactNode,
   useEffect,
-  useContext,
 } from "react";
 import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeService";
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
@@ -15,8 +14,8 @@ import { fetchUserService } from "@/service/api/fetchUserService";
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 
 interface GlobalContextType {
-  fetchIncome: () => Promise<Response | undefined>;
-  fetchExpense: (currentBalance: number) => Promise<Response | undefined>;
+  fetchIncome: (id: string) => Promise<Response | undefined>;
+  fetchExpense: (currentBalance: number, id: string) => Promise<Response | undefined>;
   fetchUser: (id: number) => Promise<Response | undefined>;
 }
 export const GlobalContext = createContext<GlobalContextType | undefined>(
@@ -32,7 +31,6 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setOverAllExpenseData,
     setCurrentBalance,
     setUser,
-    user,
   } = shareContext;
 
   const { getTotalAmount } = useTotalHooks();
@@ -40,11 +38,11 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const pathname = usePathname();
 
   const fetchExpense = async (
-    currentBalance: number
+    currentBalance: number,
+    id: string,
   ): Promise<Response | undefined> => {
-    console.log('fetchExpense');
     try {
-      const response = await fetchExpenseService((user as { _id: string })._id);
+      const response = await fetchExpenseService(id);
       const data = await response?.json();
       if (response?.ok) {
         setExpenseData(data.expense);
@@ -66,9 +64,9 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const fetchIncome = async (): Promise<Response | undefined> => {
+  const fetchIncome = async (id: string): Promise<Response | undefined> => {
     try {
-      const response = await fetchIncomeService((user as { _id: string })._id);
+      const response = await fetchIncomeService(id);
       const data = await response?.json();
       if (response?.ok) {
         setIncomeData(data.income);
@@ -78,7 +76,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setOverAllIncomeData(overAllAmount);
         setCurrentBalance(overAllAmount);
 
-        fetchExpense(overAllAmount);
+        fetchExpense(overAllAmount, id);
 
         sessionStorage.setItem("income", JSON.stringify(data.income));
         sessionStorage.setItem("overAllIncome", JSON.stringify(overAllAmount));
