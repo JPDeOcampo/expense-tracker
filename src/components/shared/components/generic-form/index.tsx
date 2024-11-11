@@ -15,7 +15,7 @@ interface IPropTypes {
   isReEnterReq?: boolean;
   isProfileUpdate?: boolean;
   isChangePass?: boolean;
-  isDeleteAccount?: boolean
+  isDeleteAccount?: boolean;
 }
 
 const GenericForm = ({
@@ -27,20 +27,20 @@ const GenericForm = ({
   isReEnterReq,
   isProfileUpdate,
   isChangePass,
-  isDeleteAccount
+  isDeleteAccount,
 }: IPropTypes) => {
   const { shareContext } = useShareContextHooks();
   const { focusState, handleFocus, handleBlur } = shareContext;
 
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [isVisibleNewPassword, setIsVisibleNewPassword] =
-  useState<boolean>(false);
+    useState<boolean>(false);
   const [isVisibleReEnterPassword, setIsVisibleReEnterPassword] =
     useState<boolean>(false);
 
   return (
     <>
-      {(!isChangePass && !isDeleteAccount) && (
+      {!isChangePass && !isDeleteAccount && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <GroupField
             label="First Name"
@@ -79,7 +79,7 @@ const GenericForm = ({
             handleBlur={handleBlur}
             isEmailRegister={true}
           />
-          {(!isProfileUpdate) && (
+          {!isProfileUpdate && (
             <>
               <div className="relative">
                 <GroupField
@@ -99,9 +99,9 @@ const GenericForm = ({
                   aria-label="toggle password visibility"
                 >
                   {isVisiblePassword ? (
-                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                  ) : (
                     <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                   )}
                 </button>
               </div>
@@ -125,9 +125,9 @@ const GenericForm = ({
                   aria-label="toggle password visibility"
                 >
                   {isVisibleReEnterPassword ? (
-                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                  ) : (
                     <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                   )}
                 </button>
               </div>
@@ -158,9 +158,9 @@ const GenericForm = ({
                 aria-label="toggle password visibility"
               >
                 {isVisiblePassword ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
                   <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                 )}
               </button>
             </div>
@@ -177,15 +177,13 @@ const GenericForm = ({
               <button
                 className="absolute top-10 right-3 focus:outline-none"
                 type="button"
-                onClick={() =>
-                  setIsVisibleNewPassword(!isVisibleNewPassword)
-                }
+                onClick={() => setIsVisibleNewPassword(!isVisibleNewPassword)}
                 aria-label="toggle password visibility"
               >
                 {isVisibleNewPassword ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
                   <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                 )}
               </button>
             </div>
@@ -209,9 +207,9 @@ const GenericForm = ({
                 aria-label="toggle password visibility"
               >
                 {isVisibleReEnterPassword ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
                   <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                 )}
               </button>
             </div>
@@ -240,9 +238,9 @@ const GenericForm = ({
                 aria-label="toggle password visibility"
               >
                 {isVisiblePassword ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
                   <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                 )}
               </button>
             </div>
@@ -266,9 +264,9 @@ const GenericForm = ({
                 aria-label="toggle password visibility"
               >
                 {isVisibleReEnterPassword ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
                   <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                 )}
               </button>
             </div>

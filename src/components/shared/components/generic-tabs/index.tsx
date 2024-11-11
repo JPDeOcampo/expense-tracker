@@ -134,7 +134,7 @@ const Form = ({
     try {
       if (onTabs === "income") {
         const response = isUpdate
-          ? await updateIncomeService({...formData, ba: (user as { _id: string })._id})
+          ? await updateIncomeService(formData)
           : await AddIncomeService(formData);
 
         const data = await response?.json();
@@ -167,7 +167,7 @@ const Form = ({
               ];
 
               const newData = [{ ...formData }];
-        
+
               // Calculate overall income and expense
               const overAllIncome = getTotalAmount(
                 updatedData as ITransaction[]

@@ -41,8 +41,8 @@ const Calendar = () => {
 
   const sortedData = combinedData.sort((a, b) => {
     return (
-      new Date(b.createdAt ?? "").getTime() -
-      new Date(a.createdAt ?? "").getTime()
+      new Date(b.updatedAt ?? "").getTime() -
+      new Date(a.updatedAt ?? "").getTime()
     );
   });
 

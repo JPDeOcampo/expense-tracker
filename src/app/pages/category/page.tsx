@@ -136,15 +136,15 @@ const CategoryList = ({
     const updatedData = filteredData.map((item: ICombinedDataType) => ({
       ...item,
       date: new Date(item.date).toISOString().split("T")[0],
-      createdAt: item.createdAt
-        ? new Date(item.createdAt).toLocaleString()
+      updatedAt: item.updatedAt
+        ? new Date(item.updatedAt).toLocaleString()
         : "",
     }));
 
     const sortedData = updatedData.sort((a, b) => {
       return (
-        new Date(b.createdAt ?? "").getTime() -
-        new Date(a.createdAt ?? "").getTime()
+        new Date(b.updatedAt ?? "").getTime() -
+        new Date(a.updatedAt ?? "").getTime()
       );
     }) as ITableDataType[];
 
@@ -187,7 +187,7 @@ const CategoryList = ({
           <TableColumn key="amount">Amount</TableColumn>
           <TableColumn key="paymentMethod">Payment Method</TableColumn>
           <TableColumn key="date">Date</TableColumn>
-          <TableColumn key="createdAt">Created</TableColumn>
+          <TableColumn key="updatedAt">Activity Timestamp</TableColumn>
           <TableColumn key="action">Action</TableColumn>
         </TableHeader>
         {displayedData.length === 0 ? (
@@ -201,7 +201,7 @@ const CategoryList = ({
                     <div>
                       <p
                         className={`capitalize text-base text-quaternary ${
-                          columnKey === "createdAt" ? "text-secondary-500" : ""
+                          columnKey === "updatedAt" ? "text-secondary-500" : ""
                         }`}
                       >
                         {columnKey === "amount"
@@ -212,7 +212,7 @@ const CategoryList = ({
                           : item[columnKey]}
                       </p>
                       {columnKey === "action" && (
-                        <div className="flex gap-2">
+                        <div className="flex gap-4">
                           <div className="flex items-center justify-center">
                             <Tooltip content="Edit">
                               <button

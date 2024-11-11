@@ -49,7 +49,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [overAllIncomeData, setOverAllIncomeData] = useState<number>(0);
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
   const [overAllExpenseData, setOverAllExpenseData] = useState<number>(0);
-  const [currency, setCurrency] = useState<string | null>("PHP");
+  const [currency, setCurrency] = useState<string | null>("USD");
   const [selectedTabs, setSelectedTabs] = useState<string | null>("expense");
   const [isGenericModal, setIsGenericModal] = useState<string | null>("");
   const [modalHeader, setModalHeader] = useState<string | null>("");

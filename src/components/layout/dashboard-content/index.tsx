@@ -215,7 +215,7 @@ const Category = () => {
   );
 };
 
-const RecentTransaction = () => {
+const RecentActivity = () => {
   const { shareContext } = useShareContextHooks();
   const { combinedData, currency } = shareContext;
   const [displayedData, setDisplayedData] = useState<ICombinedDataType[]>([]);
@@ -229,15 +229,15 @@ const RecentTransaction = () => {
       ...item,
       amount: handleFormatAmount(Number(item.amount), String(currency)),
       date: new Date(item.date).toISOString().split("T")[0],
-      createdAt: item.createdAt
-        ? new Date(item.createdAt).toLocaleString()
+      updatedAt: item.updatedAt
+        ? new Date(item.updatedAt).toLocaleString()
         : "",
     }));
 
     const sortedData = updatedData.sort((a, b) => {
       return (
-        new Date(b.createdAt ?? "").getTime() -
-        new Date(a.createdAt ?? "").getTime()
+        new Date(b.updatedAt ?? "").getTime() -
+        new Date(a.updatedAt ?? "").getTime()
       );
     }) as ITableDataType[];
 
@@ -253,7 +253,7 @@ const RecentTransaction = () => {
 
   return (
     <div className="card h-auto lg:min-h-[500px]">
-      <h2 className="card-header">Transaction History</h2>
+      <h2 className="card-header">Recent Activity</h2>
       <Table
         isHeaderSticky
         aria-label="transaction-history"
@@ -276,7 +276,7 @@ const RecentTransaction = () => {
           <TableColumn key="category">Category</TableColumn>
           <TableColumn key="amount">Amount</TableColumn>
           <TableColumn key="date">Date</TableColumn>
-          <TableColumn key="createdAt">Created</TableColumn>
+          <TableColumn key="updatedAt">Activity Timestamp</TableColumn>
         </TableHeader>
         {displayedData.length === 0 ? (
           <TableBody emptyContent={"No transaction history."}>{[]}</TableBody>
@@ -288,7 +288,7 @@ const RecentTransaction = () => {
                   <TableCell className="h-6">
                     <p
                       className={`capitalize text-base text-quaternary ${
-                        columnKey === "createdAt" ? "text-secondary-500" : ""
+                        columnKey === "updatedAt" ? "text-secondary-500" : ""
                       }`}
                     >
                       {item[columnKey]}
@@ -315,7 +315,7 @@ const DashboardContent = () => {
         </div>
         <div className="w-full h-full grid grid-cols-1 xl:grid-cols-2 gap-6">
           <Category />
-          <RecentTransaction />
+          <RecentActivity />
         </div>
       </div>
     </div>
