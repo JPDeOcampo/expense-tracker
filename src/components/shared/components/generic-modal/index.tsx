@@ -326,7 +326,9 @@ const DeleteAccount = ({
 
   return (
     <>
-       <p className="text-base text-quaternary">Please enter your password to delete this account.</p>
+      <p className="text-base text-quaternary">
+        Please enter your password to delete this account.
+      </p>
       <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
         <GenericForm
           isDeleteAccount={true}
@@ -401,7 +403,9 @@ const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
   };
   return (
     <div className="flex flex-col gap-4 py-3">
-      <p className="text-base text-quaternary">Are you sure you want to delete?</p>
+      <p className="text-base text-quaternary">
+        Are you sure you want to delete?
+      </p>
       <ul className="bg-secondary p-4 rounded-md h-50 overflow-y-auto">
         {updateData &&
           Object.entries(updateData)
@@ -460,6 +464,7 @@ const GenericModal = ({
         onOpenChange={() => handleCloseModal()}
         aria-modal="true"
         scrollBehavior={"inside"}
+        className="pr-3 py-4"
       >
         <ModalContent>
           {() => (
@@ -467,7 +472,7 @@ const GenericModal = ({
               <ModalHeader className="flex flex-col gap-1">
                 {header}
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="pr-3">
                 {isGenericModal === "add-item" ? (
                   <GenericTabs
                     handleCloseModal={handleCloseModal}

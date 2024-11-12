@@ -23,7 +23,6 @@ const useGlobalHooks = () => {
     setIsGenericModal,
     setSelectedTabs,
     setModalHeader,
-    user,
   } = shareContext;
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -87,7 +86,7 @@ const useGlobalHooks = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await logoutService((user as { _id: string })._id);
+      const response = await logoutService();
       if (response?.ok) {
         router.push("/");
         sessionStorage.clear();

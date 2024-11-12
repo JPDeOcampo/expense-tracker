@@ -11,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        '3xl': '1540px',
+      },
       colors: {
         secondary: "#E0E0E0",
         background: "hsl(var(--background))",

@@ -15,7 +15,13 @@ const App = () => {
     <div className="grid grid-cols-1 lg:grid-cols-2 h-auto lg:h-lvh w-full">
       <div className="bg-primary w-full h-full flex flex-col items-center justify-center gap-6 px-6 py-8">
         <div className="w-56 h-56">
-          <Image src="/images/graph-people.svg" alt="graph-people" width={224} height={224}/>
+          <Image
+            src="/images/graph-people.svg"
+            alt="graph-people"
+            width={500}
+            height={500}
+            style={{ width: "100%", height: "100%" }}
+          />
         </div>
         <div>
           <h1 className="text-neutral-light font-bold text-3xl xs:text-4xl lg:text-5xl">

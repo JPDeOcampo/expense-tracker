@@ -68,7 +68,7 @@ const Calendar = () => {
     return (
       <div className="w-full overflow-auto">
         <Popover placement="top" offset={20} showArrow>
-          <div className="w-full h-full bg-primary flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+          <div className="w-full h-full bg-primary flex flex-wrap 3xl:flex-nowrap gap-2 3xl:gap-4">
             <PopoverTrigger>
               <Button className="w-full h-full p-2 border-0 rounded-none justify-start bg-transparent">
                 <div className="w-full h-full flex flex-col items-start gap-0 justify-start">
@@ -81,7 +81,7 @@ const Calendar = () => {
                 </div>
               </Button>
             </PopoverTrigger>
-            <div className="flex gap-2 p-2">
+            <div className="flex gap-2 p-2 justify-end w-full 3xl:w-auto">
               <div className="flex items-center justify-center">
                 <button onClick={() => handleEdit(type, combineUpdateData)}>
                   <span className="text-success-300 text-lg hover:text-neutral-light80">

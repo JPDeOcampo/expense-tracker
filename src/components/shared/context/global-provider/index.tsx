@@ -1,11 +1,5 @@
 "use client";
-import {
-  createContext,
-  useMemo,
-  FC,
-  ReactNode,
-  useEffect,
-} from "react";
+import { createContext, useMemo, FC, ReactNode, useEffect } from "react";
 import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeService";
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
 import { usePathname } from "next/navigation";
@@ -15,7 +9,10 @@ import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 
 interface GlobalContextType {
   fetchIncome: (id: string) => Promise<Response | undefined>;
-  fetchExpense: (currentBalance: number, id: string) => Promise<Response | undefined>;
+  fetchExpense: (
+    currentBalance: number,
+    id: string
+  ) => Promise<Response | undefined>;
   fetchUser: (id: number) => Promise<Response | undefined>;
 }
 export const GlobalContext = createContext<GlobalContextType | undefined>(
@@ -39,7 +36,7 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const fetchExpense = async (
     currentBalance: number,
-    id: string,
+    id: string
   ): Promise<Response | undefined> => {
     try {
       const response = await fetchExpenseService(id);
@@ -68,6 +65,9 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const response = await fetchIncomeService(id);
       const data = await response?.json();
+
+      if (data.invalidToken) return;
+      
       if (response?.ok) {
         setIncomeData(data.income);
 

@@ -6,7 +6,6 @@ export interface IUsers extends Document {
   email: string;
   username: string;
   password: string;
-  sessionId: string;
   resetToken: string;
   resetTokenExpires: Date;
 }
@@ -17,7 +16,6 @@ const UsersSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true },
   username: { type: String, required: true }, 
   password: { type: String, required: true },
-  sessionId: { type: String },
   resetToken: { type: String },
   resetTokenExpires: { type: Date },
 });

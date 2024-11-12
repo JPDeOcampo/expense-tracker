@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Users from "../../../../../models/users";
 import * as cookie from "cookie";
-import { v4 as uuidv4 } from 'uuid';
 
 const SECRET_KEY = process.env.JWT_SECRET || "your-secure-default-secret";
 
@@ -34,17 +33,10 @@ export const POST = async (request: Request) => {
         invalidPassword: true,
       });
     }
-    const sessionId = uuidv4();
-    const token = jwt.sign(
-      { id: user._id, email: user.email, sessionId: sessionId },
-      SECRET_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
-    
-    user.sessionId = sessionId;
-    await user.save();
+
+    const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
 
     const response = NextResponse.json(
       { token, id: user._id },
@@ -61,16 +53,7 @@ export const POST = async (request: Request) => {
         path: "/",
       })
     );
-    response.headers.append(
-      "Set-Cookie",
-      cookie.serialize("sessionId", sessionId.toString(), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 3600, // 1 hour
-        sameSite: "strict",
-        path: "/",
-      })
-    );
+
     return response;
   } catch (error) {
     console.log(error);

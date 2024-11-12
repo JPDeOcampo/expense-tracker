@@ -7,6 +7,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { MouseEvent } from "react";
 import MenuHeader from "@/components/shared/components/menu-header";
 import useGlobalHooks from "@/components/shared/hooks/global-hooks";
+import Image from "next/image";
 
 interface MenuItemProps {
   icon: JSX.Element; // Adjust if your icon is a string or a specific component
@@ -42,7 +43,7 @@ const MenuDrawer = () => {
   const { shareContext } = useShareContextHooks();
   const { setIsMenuDrawer, isMenuDrawer } = shareContext;
   const { handleMenuClick } = useGlobalHooks();
-  
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (event: Event) => {
@@ -81,11 +82,13 @@ const MenuDrawer = () => {
       document.body.classList.remove("overflow-hidden");
     };
   }, [isMenuDrawer]);
-  
+
   return (
     <>
       {isMenuDrawer && (
-        <div className={`h-full w-full bg-[#33333380] fixed z-20 block inset-0`}></div>
+        <div
+          className={`h-full w-full bg-[#33333380] fixed z-20 block inset-0`}
+        ></div>
       )}
       <div
         className={`${
@@ -107,7 +110,18 @@ const MenuDrawer = () => {
                 isMenuDrawer={isMenuDrawer}
                 handleClick={handleMenuClick}
               /> */}
-              <button onClick={handleMenuClick} className="w-6 h-6 cursor-pointer"><img src="/images/icons/arrow-left.svg"/></button>
+              <button
+                onClick={handleMenuClick}
+                className="w-6 h-6 cursor-pointer"
+              >
+                <Image
+                  src="/images/icons/arrow-left.svg"
+                  alt="arrow-left"
+                  width={500}
+                  height={500}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </button>
             </div>
           </div>
           <div className="flex flex-col">

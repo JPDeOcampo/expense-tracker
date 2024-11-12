@@ -166,7 +166,7 @@ const Category = () => {
           ) : null
         }
         classNames={{
-          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0",
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:p-0",
           table: "",
         }}
       >
@@ -267,7 +267,7 @@ const RecentActivity = () => {
           ) : null
         }
         classNames={{
-          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0 [&>div]:min-w-[768px] [&>div]:2xl:min-w-0",
+          base: "max-h-[520px] overflow-auto [&>div]:shadow-none [&>div]:pt-0 [&>div]:pl-0 [&>div]:pr-2 [&>div]:min-w-[768px] [&>div]:2xl:min-w-0",
           table: "",
         }}
       >
@@ -313,7 +313,7 @@ const DashboardContent = () => {
           <Overview />
           <BalanceSpent />
         </div>
-        <div className="w-full h-full grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="w-full h-full grid grid-cols-1 2xl:grid-cols-[35%_1fr] 3xl:grid-cols-2 gap-6">
           <Category />
           <RecentActivity />
         </div>

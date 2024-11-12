@@ -1,14 +1,11 @@
 import { ENDPOINTS } from "../../../apiConfig";
-export const logoutService = async (userId : string) => {
+export const logoutService = async () => {
   try {
     const response = await fetch(ENDPOINTS.logout, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        userId: userId,
-      }),
     });
 
     return response;

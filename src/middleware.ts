@@ -7,18 +7,16 @@ const SECRET_KEY = new TextEncoder().encode(
 
 export const validateToken = async (request: NextRequest) => {
   const cookiesToken = request.cookies.get("token");
-  const cookiesSessionId = request.cookies.get("sessionId");
 
-  if (!cookiesToken || !cookiesSessionId) {
+  if (!cookiesToken) {
     return {
       error: { message: "No authentication token", invalidToken: true },
     };
   }
 
   const token = cookiesToken.value;
-  const sessionIdToken = cookiesSessionId.value;
 
-  if (!token || !sessionIdToken) {
+  if (!token) {
     return { error: { message: "Token not found", invalidToken: true } };
   }
 
@@ -26,13 +24,12 @@ export const validateToken = async (request: NextRequest) => {
     const { payload } = await jose.jwtVerify(token, SECRET_KEY);
 
     const userId = payload.id;
-    const sessionId = payload.sessionId;
 
     if (!userId) {
       return { error: { message: "Invalid token", invalidToken: true } };
     }
 
-    return { userId, sessionId, sessionIdToken};
+    return { userId };
   } catch (error) {
     return { error: { message: "Token verification failed" } };
   }
@@ -42,16 +39,12 @@ export async function middleware(request: NextRequest) {
   const validationResult = await validateToken(request);
 
   if (validationResult.error) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/api/income:path*",
-    "/api/expense:path*",
-    "/pages/:path*",
-  ],
+  matcher: ["/api/income:path*", "/api/expense:path*", "/pages/:path*"],
 };
