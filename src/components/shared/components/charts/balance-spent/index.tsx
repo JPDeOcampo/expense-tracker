@@ -1,5 +1,4 @@
 "use client";
-import { useState, useMemo, useEffect, Dispatch, SetStateAction } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -9,16 +8,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import {
-  Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/react";
-import type { Selection } from "@nextui-org/react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
+import YearFilter from "../../filter-year";
+import { months } from "@/components/shared/constant";
 
 const chartConfig = {
   balance: {
@@ -30,99 +23,15 @@ const chartConfig = {
     color: "#b2e1d6",
   },
 } satisfies ChartConfig;
+
 interface IEntry {
   type?: string;
   amount: string | number;
 }
 
-const YearFilter = ({
-  setFilterYear,
-}: {
-  setFilterYear: Dispatch<SetStateAction<string | number>>;
-}) => {
-  const { shareContext } = useShareContextHooks();
-  const { combinedData } = shareContext;
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["All"]));
-
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
-
-  const currentYear = new Date().getFullYear();
-
-  const [years, setYears] = useState<number[]>([]);
-  const [startYear, setStartYear] = useState<number>(currentYear);
-  const [endYear, setEndYear] = useState<number>(currentYear);
-
-  useEffect(() => {
-    const yearsFromData = combinedData.map((entry) =>
-      new Date(entry.date).getFullYear()
-    );
-
-    const minYear = Math.min(...yearsFromData);
-    const maxYear = Math.max(...yearsFromData);
-
-    setStartYear(minYear);
-    setEndYear(maxYear);
-  }, [combinedData]);
-
-  useEffect(() => {
-    const yearArray: number[] = [];
-    for (let year = startYear; year <= endYear; year++) {
-      yearArray.push(year);
-    }
-    setYears(yearArray);
-    setSelectedKeys(new Set([currentYear]));
-  }, [startYear, endYear]);
-
-  useEffect(() => {
-    const selectedKey = Array.from(selectedKeys)[0];
-    setFilterYear(selectedKey);
-  }, [selectedKeys]);
-
-  return (
-    <Dropdown>
-      <DropdownTrigger>
-        <Button variant="bordered" className="capitalize">
-          {selectedValue}
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu
-        aria-label="Single selection example"
-        variant="flat"
-        disallowEmptySelection
-        selectionMode="single"
-        selectedKeys={selectedKeys}
-        onSelectionChange={setSelectedKeys}
-      >
-        {years.map((item)=> (
-          <DropdownItem key={item} value={item}>
-            {item}
-          </DropdownItem>
-        ))}
-      </DropdownMenu>
-    </Dropdown>
-  );
-};
 const BalanceSpent = () => {
   const { shareContext } = useShareContextHooks();
-  const { combinedData } = shareContext;
-  const [filterYear, setFilterYear] = useState<string | number>('');
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const { combinedData, filterYear } = shareContext;
 
   const toNumber = (value: string | number): number => {
     const num = typeof value === "number" ? value : parseFloat(value);
@@ -137,10 +46,14 @@ const BalanceSpent = () => {
 
     const monthlyEntries = combinedData.filter((entry: ICombinedDataType) => {
       const entryDate = new Date(entry.date);
-      return (
-        entryDate.getMonth() === monthIndex &&
-        entryDate.getFullYear() === Number(filterYear)
-      );
+      if (filterYear === String("All") || filterYear === "") {
+        return entryDate.getMonth() === monthIndex && entryDate.getFullYear();
+      } else {
+        return (
+          entryDate.getMonth() === monthIndex &&
+          entryDate.getFullYear() === Number(filterYear)
+        );
+      }
     });
 
     monthlyEntries.forEach((entry: IEntry) => {
@@ -165,7 +78,7 @@ const BalanceSpent = () => {
     <div className="card">
       <div className="flex w-full justify-between">
         <h2 className="card-header">Balance vs Spent</h2>
-        <YearFilter setFilterYear={setFilterYear} />
+        <YearFilter />
       </div>
 
       <ChartContainer config={chartConfig} className="h-[200px] w-full">

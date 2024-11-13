@@ -1,7 +1,7 @@
 import { ITransaction } from "@/components/interface/global-interface";
 const useTotalHooks = () => {
   const getTotalAmount = (transactions: ITransaction[]): number => {
-    return transactions.reduce(
+    return transactions?.reduce(
       (sum, transaction) => sum +  Number(transaction.amount),
       0
     );

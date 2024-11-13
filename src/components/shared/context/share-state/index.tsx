@@ -1,14 +1,24 @@
 "use client";
-import { createContext, useState, useMemo, FC, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  useMemo,
+  FC,
+  ReactNode,
+  useEffect,
+} from "react";
 import {
   ICombinedDataType,
   FocusStateType,
   ShareContextType,
+  ITransaction,
 } from "@/components/interface/global-interface";
 import GenericToast from "../../components/generic-toast";
 import { IToastTypes } from "@/components/interface/global-interface";
 import toast from "react-hot-toast";
 import { IUserTypes } from "@/components/interface/global-interface";
+import useTotalHooks from "../../hooks/total-hooks";
+import type { Selection } from "@nextui-org/react";
 
 const initialFocusState: FocusStateType = {
   firstName: false,
@@ -61,7 +71,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     error: "",
     message: "",
   });
-
+  const [filterYear, setFilterYear] = useState<string | number>("All");
   const [focusState, setFocusState] =
     useState<FocusStateType>(initialFocusState);
 
@@ -84,6 +94,8 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     to: "",
     from: "",
   });
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set(["All"]));
+  const { getTotalAmount } = useTotalHooks();
 
   // Textfield Focus
   const handleFocus = (field: string) => {
@@ -95,7 +107,7 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   // Combine income and expense data
-  const combinedData = useMemo(
+  const defaultCombinedData = useMemo(
     () => [
       ...(Array.isArray(incomeData)
         ? incomeData.map((event: ICombinedDataType) => ({
@@ -110,8 +122,59 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
           }))
         : []),
     ],
-    [incomeData, expenseData]
+    [incomeData, expenseData, filterYear]
   );
+
+  const combinedData = useMemo(
+    () => [
+      ...(Array.isArray(incomeData)
+        ? incomeData
+            .filter((entry: ICombinedDataType) => {
+              const entryDate = new Date(entry.date);
+              if (filterYear === String("All") || filterYear === "")
+                return true;
+              return entryDate.getFullYear() === Number(filterYear);
+            })
+            .map((event: ICombinedDataType) => ({
+              ...event,
+              type: "income",
+            }))
+        : []),
+      ...(Array.isArray(expenseData)
+        ? expenseData
+            .filter((entry: ICombinedDataType) => {
+              const entryDate = new Date(entry.date);
+              if (filterYear === String("All") || filterYear === "")
+                return true;
+              return entryDate.getFullYear() === Number(filterYear);
+            })
+            .map((event: ICombinedDataType) => ({
+              ...event,
+              type: "expense",
+            }))
+        : []),
+    ],
+    [defaultCombinedData]
+  );
+
+  const calculateBalance = (
+    overAllIncomeAmount: number,
+    overAllExpenseAmount: number
+  ) => {
+    if (
+      typeof currentBalance === "number" &&
+      overAllExpenseAmount !== undefined
+    ) {
+      setCurrentBalance(overAllIncomeAmount - overAllExpenseAmount);
+    }
+  };
+  useEffect(() => {
+    const overAllIncomeAmount = getTotalAmount(incomeData as ITransaction[]);
+    const overAllExpenseAmount = getTotalAmount(expenseData as ITransaction[]);
+    setOverAllIncomeData(overAllIncomeAmount);
+    setOverAllExpenseData(overAllExpenseAmount);
+    calculateBalance(overAllIncomeAmount, overAllExpenseAmount);
+  }, [combinedData]);
 
   const updateToast = ({
     isToast,
@@ -167,6 +230,11 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsMenuDrawer,
       isSelectedList,
       setIsSelectedList,
+      filterYear,
+      setFilterYear,
+      defaultCombinedData,
+      selectedKeys,
+      setSelectedKeys,
     }),
     [
       isLoginState,
@@ -203,6 +271,11 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       setIsMenuDrawer,
       isSelectedList,
       setIsSelectedList,
+      filterYear,
+      setFilterYear,
+      defaultCombinedData,
+      selectedKeys,
+      setSelectedKeys,
     ]
   );
   return (

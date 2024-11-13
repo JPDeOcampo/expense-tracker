@@ -32,12 +32,17 @@ const Calendar = () => {
     setIsModalOpen,
   } = useGlobalHooks();
   const { shareContext } = useShareContextHooks();
-  const {
-    combinedData,
-    currency,
-    isGenericModal,
-    modalHeader,
-  } = shareContext;
+  const { combinedData, currency, isGenericModal, modalHeader, filterYear } =
+    shareContext;
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+
+  const newDate =
+    filterYear === String("All") || filterYear === ""
+      ? new Date(currentYear, currentMonth, 1)
+      : new Date(Number(filterYear), currentMonth, 1);
 
   const sortedData = combinedData.sort((a, b) => {
     return (
@@ -45,7 +50,7 @@ const Calendar = () => {
       new Date(a.updatedAt ?? "").getTime()
     );
   });
-
+  console.log(sortedData);
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
@@ -151,6 +156,7 @@ const Calendar = () => {
           weekends={true}
           events={sortedData}
           eventContent={renderEventContent}
+          initialDate={newDate.toISOString().split("T")[0]}
         />
         <GenericModal
           isGenericModal={isGenericModal}

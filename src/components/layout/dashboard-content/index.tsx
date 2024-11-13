@@ -256,7 +256,7 @@ const RecentActivity = () => {
       <h2 className="card-header">Recent Activity</h2>
       <Table
         isHeaderSticky
-        aria-label="transaction-history"
+        aria-label="recent-activity"
         bottomContent={
           hasMore ? (
             <div className="flex w-full justify-center">

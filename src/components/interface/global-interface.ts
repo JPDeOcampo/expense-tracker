@@ -1,4 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
+import type { Selection } from "@nextui-org/react";
+
 export interface IBaseData {
   amount: number | string;
   date: string;
@@ -75,6 +77,7 @@ export interface IFieldValueTypes {
   from: string;
 }
 export interface ShareContextType {
+  defaultCombinedData: ICombinedDataType[] | [];
   combinedData: ICombinedDataType[] | [];
   isLoginState: string | null;
   setIsLoginState: (isLoginState: string | null) => void;
@@ -126,6 +129,10 @@ export interface ShareContextType {
     category: string;
   };
   setIsSelectedList: (isSelectedList: { type: string; category: string }) => void;
+  filterYear: string | number;
+  setFilterYear: (filterYear: string | number) => void;
+  selectedKeys: Selection;
+  setSelectedKeys: (selectedKeys: Selection) => void;
 }
 
 // Income, Expense, and Transfer

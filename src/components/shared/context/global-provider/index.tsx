@@ -9,10 +9,7 @@ import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 
 interface GlobalContextType {
   fetchIncome: (id: string) => Promise<Response | undefined>;
-  fetchExpense: (
-    currentBalance: number,
-    id: string
-  ) => Promise<Response | undefined>;
+  fetchExpense: (id: string) => Promise<Response | undefined>;
   fetchUser: (id: number) => Promise<Response | undefined>;
 }
 export const GlobalContext = createContext<GlobalContextType | undefined>(
@@ -34,26 +31,14 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const pathname = usePathname();
 
-  const fetchExpense = async (
-    currentBalance: number,
-    id: string
-  ): Promise<Response | undefined> => {
+  const fetchExpense = async (id: string): Promise<Response | undefined> => {
     try {
       const response = await fetchExpenseService(id);
       const data = await response?.json();
       if (response?.ok) {
         setExpenseData(data.expense);
         sessionStorage.setItem("expense", JSON.stringify(data.expense));
-        const overAllAmount = getTotalAmount(data.expense);
-        setOverAllExpenseData(overAllAmount);
-        sessionStorage.setItem("overAllExpense", JSON.stringify(overAllAmount));
-        if (typeof currentBalance === "number" && overAllAmount !== undefined) {
-          setCurrentBalance(currentBalance - overAllAmount);
-          sessionStorage.setItem(
-            "currentBalance",
-            JSON.stringify(currentBalance - overAllAmount)
-          );
-        }
+
         return response;
       }
     } catch (error) {
@@ -67,19 +52,12 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const data = await response?.json();
 
       if (data.invalidToken) return;
-      
+
       if (response?.ok) {
         setIncomeData(data.income);
-
-        const overAllAmount = getTotalAmount(data.income);
-
-        setOverAllIncomeData(overAllAmount);
-        setCurrentBalance(overAllAmount);
-
-        fetchExpense(overAllAmount, id);
-
         sessionStorage.setItem("income", JSON.stringify(data.income));
-        sessionStorage.setItem("overAllIncome", JSON.stringify(overAllAmount));
+        fetchExpense(id);
+
         return response;
       }
     } catch (error) {
@@ -104,23 +82,10 @@ const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const income = JSON.parse(sessionStorage.getItem("income") ?? "null");
     const expense = JSON.parse(sessionStorage.getItem("expense") ?? "null");
     const user = JSON.parse(sessionStorage.getItem("user") ?? "null");
-    const currentBalance = JSON.parse(
-      sessionStorage.getItem("currentBalance") ?? "null"
-    );
-    const overAllIncome = JSON.parse(
-      sessionStorage.getItem("overAllIncome") ?? "null"
-    );
-    const overAllExpense = JSON.parse(
-      sessionStorage.getItem("overAllExpense") ?? "null"
-    );
 
     setUser(user);
     setIncomeData(income);
     setExpenseData(expense);
-
-    setOverAllIncomeData(overAllIncome);
-    setOverAllExpenseData(overAllExpense);
-    setCurrentBalance(currentBalance);
   }, []);
 
   const contextValue = useMemo(

@@ -165,7 +165,8 @@ const CategoryList = ({
     <>
       <Table
         isHeaderSticky
-        aria-label="transaction-history"
+        aria-label="category-table"
+        selectionMode="single" 
         bottomContent={
           hasMore ? (
             <div className="flex w-full justify-center">
@@ -176,11 +177,12 @@ const CategoryList = ({
           ) : null
         }
         classNames={{
-          base: "max-h-[750px] overflow-auto [&>div]:shadow-none [&>div]:pt-0 [&>div]:w-auto",
+          base: "max-h-[750px] overflow-auto [&>div]:shadow-none [&>div]:pt-0 [&>div]:pl-0 [&>div]:pr-2 [&>div]:w-auto",
           table: "",
         }}
       >
         <TableHeader>
+          <TableColumn key="index">No.</TableColumn>
           <TableColumn key="type">Type</TableColumn>
           <TableColumn key="category">Category</TableColumn>
           <TableColumn key="frequency">Frequency</TableColumn>
@@ -191,7 +193,7 @@ const CategoryList = ({
           <TableColumn key="action">Action</TableColumn>
         </TableHeader>
         {displayedData.length === 0 ? (
-         <TableBody emptyContent={"No category record."}>{[]}</TableBody>
+          <TableBody emptyContent={"No category record."}>{[]}</TableBody>
         ) : (
           <TableBody>
             {displayedData.map((item: ICombinedDataType, i) => (
@@ -199,6 +201,7 @@ const CategoryList = ({
                 {(columnKey) => (
                   <TableCell className="h-6">
                     <div>
+                      {columnKey === "index" && <p>{i + 1}.</p>}
                       <p
                         className={`capitalize text-base text-quaternary ${
                           columnKey === "updatedAt" ? "text-secondary-500" : ""

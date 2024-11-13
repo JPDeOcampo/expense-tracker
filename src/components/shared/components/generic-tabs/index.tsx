@@ -166,34 +166,8 @@ const Form = ({
                 ...prev,
               ];
 
-              const newData = [{ ...formData }];
-
-              // Calculate overall income and expense
-              const overAllIncome = getTotalAmount(
-                updatedData as ITransaction[]
-              );
-              const updateCurrentBalance = getTotalAmount(
-                newData as ITransaction[]
-              );
-
               // Store the updated data in sessionStorage
               sessionStorage.setItem("income", JSON.stringify(updatedData));
-
-              // Update state with overall income and expense
-              setOverAllIncomeData(overAllIncome);
-              sessionStorage.setItem(
-                "overAllIncome",
-                JSON.stringify(overAllIncome)
-              );
-
-              const addNewBalance =
-                (currentBalance ?? 0) + updateCurrentBalance;
-              // Update state with current balance
-              setCurrentBalance(addNewBalance);
-              sessionStorage.setItem(
-                "currentBalance",
-                JSON.stringify(addNewBalance)
-              );
 
               return updatedData;
             });
@@ -235,7 +209,7 @@ const Form = ({
         if (response?.ok) {
           setExpenseData((prev: ICombinedDataType[]) => {
             const addNewData = [
-              { ...formData, createdAt: new Date().toISOString() },
+              { ...formData},
               ...prev,
             ];
 
@@ -251,27 +225,8 @@ const Form = ({
             });
 
             const updatedData = isUpdate ? updateData : addNewData;
-
-            const overAllExpense = getTotalAmount(
-              updatedData as ITransaction[]
-            );
+          
             sessionStorage.setItem("expense", JSON.stringify(updatedData));
-
-            const overAllIncome = getTotalAmount(incomeData as ITransaction[]);
-            const subtractExpense = overAllIncome - overAllExpense;
-
-            setOverAllExpenseData(overAllExpense);
-            sessionStorage.setItem(
-              "overAllExpense",
-              JSON.stringify(overAllExpense)
-            );
-
-            // Update state with current balance
-            setCurrentBalance(subtractExpense);
-            sessionStorage.setItem(
-              "currentBalance",
-              JSON.stringify(subtractExpense)
-            );
 
             return updatedData;
           });
