@@ -25,7 +25,7 @@ export const POST = async (request: Request) => {
     }
     if (password !== reEnterPassword) {
       return NextResponse.json(
-        { message: "Password not match", invalidPassword: true },
+        { message: "Password must match", invalidPassword: true },
       );
     }
 

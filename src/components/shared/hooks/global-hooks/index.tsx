@@ -107,7 +107,7 @@ const useGlobalHooks = () => {
     setSelectedTabs(type);
     setUpdateData(data);
     setIsGenericModal?.("add-item");
-    setModalHeader?.("Update");
+    setModalHeader?.("Update Entry");
   };
 
   const handleDelete = (type: string, data: IEventExtendedProps) => {

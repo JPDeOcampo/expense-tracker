@@ -54,7 +54,13 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoginState, setIsLoginState] = useState<string | null>("login");
   const [isMenuDrawer, setIsMenuDrawer] = useState<boolean>(false);
   const [incomeData, setIncomeData] = useState<ICombinedDataType[]>([]);
+  const [incomeFilteredData, setIncomeFilteredData] = useState<
+    ICombinedDataType[]
+  >([]);
   const [expenseData, setExpenseData] = useState<ICombinedDataType[]>([]);
+  const [expenseFilteredData, setExpenseFilteredData] = useState<
+    ICombinedDataType[]
+  >([]);
   const [user, setUser] = useState<IUserTypes[]>([]);
   const [overAllIncomeData, setOverAllIncomeData] = useState<number>(0);
   const [currentBalance, setCurrentBalance] = useState<number | undefined>(0);
@@ -169,8 +175,24 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
   useEffect(() => {
-    const overAllIncomeAmount = getTotalAmount(incomeData as ITransaction[]);
-    const overAllExpenseAmount = getTotalAmount(expenseData as ITransaction[]);
+    const filteredIncome = incomeData.filter((item: ICombinedDataType) => {
+      const entryDate = new Date(item.date);
+      if (filterYear === "All" || filterYear === "") return true;
+      return entryDate.getFullYear() === Number(filterYear);
+    });
+
+    const filteredExpense = expenseData.filter((item: ICombinedDataType) => {
+      const entryDate = new Date(item.date);
+      if (filterYear === "All" || filterYear === "") return true;
+      return entryDate.getFullYear() === Number(filterYear);
+    });
+
+    const overAllIncomeAmount = getTotalAmount(
+      filteredIncome as ITransaction[]
+    );
+    const overAllExpenseAmount = getTotalAmount(
+      filteredExpense as ITransaction[]
+    );
     setOverAllIncomeData(overAllIncomeAmount);
     setOverAllExpenseData(overAllExpenseAmount);
     calculateBalance(overAllIncomeAmount, overAllExpenseAmount);
@@ -202,8 +224,12 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       handleBlur,
       incomeData,
       setIncomeData,
+      incomeFilteredData,
+      setIncomeFilteredData,
       expenseData,
       setExpenseData,
+      expenseFilteredData,
+      setExpenseFilteredData,
       combinedData,
       overAllIncomeData,
       setOverAllIncomeData,
@@ -245,8 +271,12 @@ const ShareState: FC<{ children: ReactNode }> = ({ children }) => {
       handleBlur,
       incomeData,
       setIncomeData,
+      incomeFilteredData,
+      setIncomeFilteredData,
       expenseData,
       setExpenseData,
+      expenseFilteredData,
+      setExpenseFilteredData,
       combinedData,
       currentBalance,
       setCurrentBalance,

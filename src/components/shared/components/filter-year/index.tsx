@@ -7,12 +7,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import type { Selection } from "@nextui-org/react";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 
 const YearFilter = () => {
   const { shareContext } = useShareContextHooks();
-  const { defaultCombinedData, setFilterYear, selectedKeys, setSelectedKeys } = shareContext;
+  const { defaultCombinedData, setFilterYear, selectedKeys, setSelectedKeys } =
+    shareContext;
 
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
@@ -39,7 +39,7 @@ const YearFilter = () => {
 
   useEffect(() => {
     const yearArray: (number | string)[] = [];
- 
+
     for (let year = startYear; year <= endYear; year++) {
       yearArray.push(year);
     }
@@ -61,7 +61,7 @@ const YearFilter = () => {
         </Button>
       </DropdownTrigger>
       <DropdownMenu
-        aria-label="Single selection example"
+        aria-label="year-filter"
         variant="flat"
         disallowEmptySelection
         selectionMode="single"

@@ -19,6 +19,7 @@ import useGlobalHooks from "@/components/shared/hooks/global-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 import { ITableDataType } from "@/components/interface/global-interface";
 import { useRouter } from "next/navigation";
+import YearFilter from "@/components/shared/components/filter-year";
 
 interface IType extends ICombinedDataType {
   type: string;
@@ -79,7 +80,7 @@ const Overview = () => {
         <GenericModal
           isGenericModal={"add-item"}
           isModalOpen={isModalOpen}
-          header={"Add new item"}
+          header={"Add New Entry"}
           setIsModalOpen={setIsModalOpen}
         />
       </div>
@@ -307,7 +308,16 @@ const RecentActivity = () => {
 const DashboardContent = () => {
   return (
     <div className="flex flex-col w-full h-full gap-8">
-      <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
+      <div className="flex flex-col gap-4 w-full justify-between">
+        <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
+        <div className="flex items-center gap-4 justify-end">
+          <p className="text-base font-semibold text-quaternary">
+            Filter Year:
+          </p>
+          <YearFilter />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-6">
         <div className="w-full h-full grid grid-cols-1 xl:grid-cols-[35%_1fr] gap-6">
           <Overview />

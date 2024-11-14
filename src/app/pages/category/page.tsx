@@ -27,6 +27,7 @@ import {
   IEventExtendedProps,
 } from "@/components/interface/global-interface";
 import { categories } from "@/components/shared/constant";
+import YearFilter from "@/components/shared/components/filter-year";
 
 const CategoryFilter = ({
   isIncome,
@@ -166,7 +167,7 @@ const CategoryList = ({
       <Table
         isHeaderSticky
         aria-label="category-table"
-        selectionMode="single" 
+        selectionMode="single"
         bottomContent={
           hasMore ? (
             <div className="flex w-full justify-center">
@@ -296,7 +297,16 @@ const Category = () => {
   }, [isSelectedList]);
   return (
     <div className="custom-container flex flex-col gap-4">
-      <h1 className="text-3xl font-bold text-primary">Categories</h1>
+      <div className="flex flex-col gap-4 w-full justify-between">
+        <h1 className="text-3xl font-bold text-primary">Category</h1>
+        <div className="flex items-center gap-4 justify-end">
+          <p className="text-base font-semibold text-quaternary">
+            Filter Year:
+          </p>
+          <YearFilter />
+        </div>
+      </div>
+
       <div className="card h-auto lg:min-h-[840px]">
         <h2 className="card-header">Category List</h2>
         <div className="flex flex-col gap-4">

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/chart";
 import useShareContextHooks from "@/components/shared/hooks/context-hooks/share-state-hooks";
 import { ICombinedDataType } from "@/components/interface/global-interface";
-import YearFilter from "../../filter-year";
 import { months } from "@/components/shared/constant";
 
 const chartConfig = {
@@ -76,10 +75,7 @@ const BalanceSpent = () => {
 
   return (
     <div className="card">
-      <div className="flex w-full justify-between">
-        <h2 className="card-header">Balance vs Spent</h2>
-        <YearFilter />
-      </div>
+      <h2 className="card-header">Balance vs Spent</h2>
 
       <ChartContainer config={chartConfig} className="h-[200px] w-full">
         <BarChart accessibilityLayer data={chartData}>

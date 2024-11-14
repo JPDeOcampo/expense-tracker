@@ -89,8 +89,12 @@ export interface ShareContextType {
   handleBlur: (field: string) => void;
   incomeData: ICombinedDataType[];
   setIncomeData: Dispatch<SetStateAction<ICombinedDataType[]>>;
+  incomeFilteredData: ICombinedDataType[];
+  setIncomeFilteredData: Dispatch<SetStateAction<ICombinedDataType[]>>;
   expenseData: ICombinedDataType[];
   setExpenseData: Dispatch<SetStateAction<ICombinedDataType[]>>;
+  expenseFilteredData: ICombinedDataType[];
+  setExpenseFilteredData: Dispatch<SetStateAction<ICombinedDataType[]>>;
   overAllIncomeData: string | number;
   setOverAllIncomeData: (data: number) => void;
   currentBalance: number | undefined;
@@ -128,7 +132,10 @@ export interface ShareContextType {
     type: string;
     category: string;
   };
-  setIsSelectedList: (isSelectedList: { type: string; category: string }) => void;
+  setIsSelectedList: (isSelectedList: {
+    type: string;
+    category: string;
+  }) => void;
   filterYear: string | number;
   setFilterYear: (filterYear: string | number) => void;
   selectedKeys: Selection;

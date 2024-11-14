@@ -42,7 +42,7 @@ export const DELETE = async (request: NextRequest) => {
 
     if (password !== reEnterPassword) {
       return NextResponse.json(
-        { message: "Passwords do not match", invalidMatchPassword: true },
+        { message: "Passwords must match", invalidMatchPassword: true },
       );
     }
 

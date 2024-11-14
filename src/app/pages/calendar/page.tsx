@@ -1,4 +1,5 @@
 "use client";
+import { useRef, useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import {
@@ -13,6 +14,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import GenericModal from "@/components/shared/components/generic-modal";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
+import YearFilter from "@/components/shared/components/filter-year";
 
 interface Event {
   extendedProps: IEventExtendedProps;
@@ -32,17 +34,44 @@ const Calendar = () => {
     setIsModalOpen,
   } = useGlobalHooks();
   const { shareContext } = useShareContextHooks();
-  const { combinedData, currency, isGenericModal, modalHeader, filterYear } =
-    shareContext;
-
+  const {
+    combinedData,
+    currency,
+    isGenericModal,
+    modalHeader,
+    filterYear,
+    setSelectedKeys,
+    setFilterYear,
+  } = shareContext;
+  const [calendarMonth, setCalendarMonth] = useState<number>();
+  const calendarRef = useRef<FullCalendar | null>(null);
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
+  const currentMonth =
+    calendarMonth === 0 ? currentDate.getMonth() + 1 : currentDate.getMonth();
 
   const newDate =
     filterYear === String("All") || filterYear === ""
-      ? new Date(currentYear, currentMonth, 1)
-      : new Date(Number(filterYear), currentMonth, 1);
+      ? new Date(
+          currentYear,
+          calendarMonth !== undefined ? calendarMonth : currentMonth,
+          1
+        )
+      : new Date(
+          Number(filterYear),
+          calendarMonth !== undefined ? calendarMonth : currentMonth,
+          1
+        );
+
+  useEffect(() => {
+    if (calendarRef.current) {
+      requestAnimationFrame(() => {
+        const calendarApi = calendarRef.current?.getApi();
+        calendarApi?.gotoDate(newDate);
+        console.log(calendarApi);
+      });
+    }
+  }, [newDate]);
 
   const sortedData = combinedData.sort((a, b) => {
     return (
@@ -50,7 +79,31 @@ const Calendar = () => {
       new Date(a.updatedAt ?? "").getTime()
     );
   });
-  console.log(sortedData);
+
+  const customTodayButton = {
+    text: "Go to Today",
+    click: () => {
+      if (calendarRef.current) {
+        const calendarApi = calendarRef.current?.getApi();
+        calendarApi?.gotoDate(currentDate);
+        setFilterYear("All");
+        setSelectedKeys(new Set(["All"]));
+      }
+    },
+  };
+
+  const handleDatesSet = () => {
+    if (filterYear === "All") return;
+    if (calendarRef.current) {
+      requestAnimationFrame(() => {
+        const calendarApi = calendarRef.current?.getApi();
+        const date = calendarApi?.getDate();
+        const month = date?.getMonth();
+        setCalendarMonth(month);
+      });
+    }
+  };
+
   const renderEventContent = (eventInfo: EventInfo) => {
     const { type, amount, category, frequency, paymentMethod, note } =
       eventInfo.event.extendedProps;
@@ -146,17 +199,32 @@ const Calendar = () => {
       </div>
     );
   };
+
   return (
     <div className="custom-container flex flex-col gap-8">
-      <h1 className="text-3xl font-bold text-primary">Calendar</h1>
+      <div className="flex flex-col gap-4 w-full justify-between">
+        <h1 className="text-3xl font-bold text-primary">Calendar</h1>
+        <div className="flex items-center gap-4 justify-end">
+          <p className="text-base font-semibold text-quaternary">
+            Filter Year:
+          </p>
+          <YearFilter />
+        </div>
+      </div>
+
       <div className="card">
         <FullCalendar
+          ref={calendarRef}
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
           weekends={true}
           events={sortedData}
           eventContent={renderEventContent}
           initialDate={newDate.toISOString().split("T")[0]}
+          customButtons={{
+            today: customTodayButton,
+          }}
+          datesSet={handleDatesSet}
         />
         <GenericModal
           isGenericModal={isGenericModal}

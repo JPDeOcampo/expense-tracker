@@ -38,7 +38,7 @@ export const PUT = async (request: NextRequest) => {
 
     if (newPassword !== reEnterPassword) {
       return NextResponse.json(
-        { message: "Password not match", invalidMatchPassword: true },
+        { message: "Password must match", invalidMatchPassword: true },
       );
     }
   

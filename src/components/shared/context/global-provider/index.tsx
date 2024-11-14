@@ -3,7 +3,6 @@ import { createContext, useMemo, FC, ReactNode, useEffect } from "react";
 import { fetchIncomeService } from "@/service/api/incomeServices/fetchIncomeService";
 import { fetchExpenseService } from "@/service/api/expenseServices/fetchExpenseService";
 import { usePathname } from "next/navigation";
-import useTotalHooks from "../../hooks/total-hooks";
 import { fetchUserService } from "@/service/api/fetchUserService";
 import useShareContextHooks from "../../hooks/context-hooks/share-state-hooks";
 
@@ -18,16 +17,7 @@ export const GlobalContext = createContext<GlobalContextType | undefined>(
 
 const GlobalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { shareContext } = useShareContextHooks();
-  const {
-    setIncomeData,
-    setExpenseData,
-    setOverAllIncomeData,
-    setOverAllExpenseData,
-    setCurrentBalance,
-    setUser,
-  } = shareContext;
-
-  const { getTotalAmount } = useTotalHooks();
+  const { setIncomeData, setExpenseData, setUser } = shareContext;
 
   const pathname = usePathname();
 

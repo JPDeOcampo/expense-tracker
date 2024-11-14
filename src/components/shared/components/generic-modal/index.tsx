@@ -135,7 +135,12 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
 
   return (
     <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
-      <GenericForm isProfileUpdate={true} />
+      <GenericForm
+        isProfileUpdate={true}
+        isFirstNameReq={true}
+        isLastNameReq={true}
+        isEmailReq={true}
+      />
       <div className="w-full flex gap-3 mt-4 justify-end">
         <Button color="danger" variant="light" onClick={handleCloseModal}>
           Cancel
