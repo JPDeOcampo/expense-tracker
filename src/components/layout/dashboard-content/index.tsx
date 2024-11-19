@@ -80,7 +80,7 @@ const Overview = () => {
         <GenericModal
           isGenericModal={"add-item"}
           isModalOpen={isModalOpen}
-          header={"Add New Entry"}
+          header={"Add New Item"}
           setIsModalOpen={setIsModalOpen}
         />
       </div>

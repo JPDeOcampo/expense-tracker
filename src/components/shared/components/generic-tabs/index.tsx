@@ -8,7 +8,6 @@ import { AddIncomeService } from "@/service/api/incomeServices/AddIncomeService"
 import { AddExpenseService } from "@/service/api/expenseServices/AddExpenseService";
 import { ICombinedDataType } from "@/components/interface/global-interface";
 import useTotalHooks from "../../hooks/total-hooks";
-import { ITransaction } from "@/components/interface/global-interface";
 import { Spinner } from "@nextui-org/react";
 import { IEventExtendedProps } from "@/components/interface/global-interface";
 import { updateExpenseService } from "@/service/api/expenseServices/updateExpenseService";
@@ -37,17 +36,12 @@ const Form = ({
     handleBlur,
     setIncomeData,
     setExpenseData,
-    setOverAllIncomeData,
-    setOverAllExpenseData,
-    setCurrentBalance,
-    incomeData,
-    currentBalance,
     updateToast,
     setFormValues,
     user,
     setFocusState,
   } = shareContext;
-  const { getTotalAmount } = useTotalHooks();
+
   const { globalContext } = useGlobalContextHooks();
   const { handleLogout, handleResetErrorFocus } = useGlobalHooks();
   const { fetchIncome } = globalContext;
@@ -208,10 +202,7 @@ const Form = ({
         }
         if (response?.ok) {
           setExpenseData((prev: ICombinedDataType[]) => {
-            const addNewData = [
-              { ...formData},
-              ...prev,
-            ];
+            const addNewData = [{ ...formData }, ...prev];
 
             const updateData = prev.map((expense) => {
               if (expense._id === _id) {
@@ -225,7 +216,7 @@ const Form = ({
             });
 
             const updatedData = isUpdate ? updateData : addNewData;
-          
+
             sessionStorage.setItem("expense", JSON.stringify(updatedData));
 
             return updatedData;
@@ -381,6 +372,7 @@ const GenericTabs = ({
               key="income"
               title="Income"
               isDisabled={isUpdate && selectedTabs !== "income"}
+              className="pb-0"
             >
               <Form
                 handleCloseModal={handleCloseModal}
@@ -393,6 +385,7 @@ const GenericTabs = ({
               key="expense"
               title="Expense"
               isDisabled={isUpdate && selectedTabs !== "expense"}
+              className="pb-0"
             >
               <Form
                 handleCloseModal={handleCloseModal}
@@ -401,18 +394,6 @@ const GenericTabs = ({
                 updateData={updateData}
               />
             </Tab>
-            {/* <Tab
-              key="transfer"
-              title="Transfer"
-              isDisabled={isUpdate && selectedTabs !== "transfer"}
-            >
-              <Form
-                handleCloseModal={handleCloseModal}
-                onTabs="transfer"
-                isUpdate={isUpdate}
-                updateData={updateData}
-              />
-            </Tab> */}
           </Tabs>
         </CardBody>
       </Card>

@@ -102,12 +102,19 @@ const useGlobalHooks = () => {
     setIsMenuDrawer(!isMenuDrawer);
   };
 
+  
+  const capitalizeFirstLetter = (string: string) => {
+    if (!string) return string;
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   const handleEdit = (type: string, data: IEventExtendedProps) => {
+    const capitalizeType = capitalizeFirstLetter(type);
     setIsModalOpen(true);
     setSelectedTabs(type);
     setUpdateData(data);
     setIsGenericModal?.("add-item");
-    setModalHeader?.("Update Entry");
+    setModalHeader?.(`Update ${capitalizeType}`);
   };
 
   const handleDelete = (type: string, data: IEventExtendedProps) => {
@@ -116,17 +123,13 @@ const useGlobalHooks = () => {
       amount: handleFormatAmount(Number(data.amount), String(currency)),
       date: new Date(data.date ?? "").toISOString().split("T")[0],
     };
-
+    const capitalizeType = capitalizeFirstLetter(type);
     setUpdateData(updatedData);
     setIsModalOpen(true);
     setIsGenericModal?.("delete-item");
-    setModalHeader?.(`Delete ${type}`);
+    setModalHeader?.(`Delete ${capitalizeType}`);
   };
 
-  const capitalizeFirstLetter = (string: string) => {
-    if (!string) return string;
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
 
   return {
     handleResetFormValues,

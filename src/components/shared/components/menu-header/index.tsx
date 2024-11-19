@@ -3,7 +3,7 @@ import Image from "next/image";
 const MenuHeader = () => {
   return (
     <div className="lg:py-6 lg:px-4 w-full flex items-center gap-2">
-      <div className="w-9 lg:w-10 h-9 lg:h-10 shrink-0 relative -top-2">
+      <div className="w-9 lg:w-10 h-9 lg:h-10 shrink-0 relative -top-[6px]">
         <Image
           src="/images/piggy-bank.svg"
           alt="piggy-bank"

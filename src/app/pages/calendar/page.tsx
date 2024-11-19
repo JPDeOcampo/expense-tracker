@@ -68,7 +68,6 @@ const Calendar = () => {
       requestAnimationFrame(() => {
         const calendarApi = calendarRef.current?.getApi();
         calendarApi?.gotoDate(newDate);
-        console.log(calendarApi);
       });
     }
   }, [newDate]);

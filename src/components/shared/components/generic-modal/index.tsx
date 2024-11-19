@@ -134,7 +134,7 @@ const MyProfile = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
   };
 
   return (
-    <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <GenericForm
         isProfileUpdate={true}
         isFirstNameReq={true}
@@ -235,7 +235,7 @@ const ChangePassword = ({
   };
 
   return (
-    <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <GenericForm
         isProfileUpdate={true}
         isChangePass={true}
@@ -331,10 +331,10 @@ const DeleteAccount = ({
 
   return (
     <>
-      <p className="text-base text-quaternary">
+      <p className="text-base text-quaternary mb-2">
         Please enter your password to delete this account.
       </p>
-      <form className="flex flex-col gap-4 py-4" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <GenericForm
           isDeleteAccount={true}
           isPasswordReq={true}
@@ -407,9 +407,9 @@ const DeleteModal = ({ handleCloseModal, updateData }: IPropTypes) => {
     }
   };
   return (
-    <div className="flex flex-col gap-4 py-3">
+    <div className="flex flex-col gap-4">
       <p className="text-base text-quaternary">
-        Are you sure you want to delete?
+        Are you sure you want to delete the item below?
       </p>
       <ul className="bg-secondary p-4 rounded-md h-50 overflow-y-auto">
         {updateData &&
